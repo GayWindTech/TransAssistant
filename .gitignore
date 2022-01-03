@@ -1,0 +1,7 @@
+.history
+test
+.vscode
+__pycache__
+build
+dist
+*.spec

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OCR_Window</class>
+ <widget class="QMainWindow" name="OCR_Window">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>546</height>
+   </rect>
+  </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::DefaultContextMenu</enum>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="animated">
+   <bool>true</bool>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPlainTextEdit" name="OCRResultTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>60</y>
+      <width>721</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>思源黑体</family>
+      <pointsize>18</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="plainTextEdit_2">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>160</y>
+      <width>721</width>
+      <height>71</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="plainTextEdit_3">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>260</y>
+      <width>721</width>
+      <height>71</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ChooseAreaButton">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>12</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>选取区域</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ChosenTitleText">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>10</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>已选择的区域</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="PosText">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>30</y>
+      <width>141</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>(0,0),(0,0)</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="OCRButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>10</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>OCR</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>ChooseAreaButton</sender>
+   <signal>clicked()</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>getScreenPos()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>633</x>
+     <y>28</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>766</x>
+     <y>21</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>OCRButton</sender>
+   <signal>clicked()</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>getOCRText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>102</x>
+     <y>27</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>184</x>
+     <y>36</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>OCR_Window</sender>
+   <signal>ocrHotkeyPressed()</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>getOCRText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>301</x>
+     <y>396</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>312</x>
+     <y>404</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <signal>ocrHotkeyPressed()</signal>
+  <slot>getScreenPos()</slot>
+  <slot>getOCRText()</slot>
+ </slots>
+</ui>
