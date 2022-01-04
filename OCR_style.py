@@ -27,9 +27,13 @@ class Ui_OCR_Window(object):
         font.setPointSize(18)
         self.OCRResultTextEdit.setFont(font)
         self.OCRResultTextEdit.setObjectName("OCRResultTextEdit")
-        self.plainTextEdit_2 = QtWidgets.QPlainTextEdit(self.centralwidget)
-        self.plainTextEdit_2.setGeometry(QtCore.QRect(30, 160, 721, 71))
-        self.plainTextEdit_2.setObjectName("plainTextEdit_2")
+        self.TransResult_1 = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.TransResult_1.setGeometry(QtCore.QRect(30, 160, 721, 71))
+        font = QtGui.QFont()
+        font.setFamily("思源黑体")
+        font.setPointSize(18)
+        self.TransResult_1.setFont(font)
+        self.TransResult_1.setObjectName("TransResult_1")
         self.plainTextEdit_3 = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.plainTextEdit_3.setGeometry(QtCore.QRect(30, 260, 721, 71))
         self.plainTextEdit_3.setObjectName("plainTextEdit_3")
@@ -53,6 +57,7 @@ class Ui_OCR_Window(object):
         self.ChooseAreaButton.clicked.connect(OCR_Window.getScreenPos) # type: ignore
         self.OCRButton.clicked.connect(OCR_Window.getOCRText) # type: ignore
         OCR_Window.ocrHotkeyPressed.connect(OCR_Window.getOCRText) # type: ignore
+        self.OCRResultTextEdit.textChanged.connect(OCR_Window.updateResult_1) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(OCR_Window)
 
     def retranslateUi(self, OCR_Window):

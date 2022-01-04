@@ -9,7 +9,7 @@ from PyQt5 import QtGui
 from OCR_style import Ui_OCR_Window
 from Screenshot import getScreenPos,getScreenshot
 from OCR import getOCRResult
-
+from YoudaoAPI import YoudaoTranslator
 
 class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
     ocrHotkeyPressed = pyqtSignal()
@@ -49,6 +49,10 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.OCRText = getOCRResult(getScreenshot(self.ScreenPos))
         # print(self.OCRText)
         self.OCRResultTextEdit.setPlainText(self.OCRText)
+        
+    def updateResult_1(self):
+        translatorResult = YoudaoTranslator(self.OCRResultTextEdit.toPlainText())
+        self.TransResult_1.setPlainText(translatorResult)
     
 def runGUI():
     GUI_APP=QtWidgets.QApplication(sys.argv)
