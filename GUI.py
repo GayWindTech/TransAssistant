@@ -10,6 +10,8 @@ from OCR_style import Ui_OCR_Window
 from Screenshot import getScreenPos,getScreenshot
 from OCR import getOCRResult
 from YoudaoAPI import YoudaoTranslator
+from CaiYunAPI import CaiYunTranslator
+from Segmentation import splitWords
 
 class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
     ocrHotkeyPressed = pyqtSignal()
@@ -25,6 +27,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         # self.hk_start, self.hk_stop = SystemHotkey(),SystemHotkey()
         self.ScreenPos = [(0,0),(0,0)]
         self.OCRText = str()
+        self.SplitMode = "sudachi"
         #4. 绑定快捷键和对应的信号发送函数
         self.Hotkey_OCR = ('control','space')
         SystemHotkey().register(self.Hotkey_OCR,callback=lambda x:self.sendHotkeyPressedSig(self.Hotkey_OCR))
@@ -50,9 +53,30 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         # print(self.OCRText)
         self.OCRResultTextEdit.setPlainText(self.OCRText)
         
-    def updateResult_1(self):
-        translatorResult = YoudaoTranslator(self.OCRResultTextEdit.toPlainText())
+    def updateResult_1(self,source):
+        translatorResult = YoudaoTranslator(source)
         self.TransResult_1.setPlainText(translatorResult)
+    
+    def updateResult_2(self,source):
+        translatorResult = CaiYunTranslator(source)
+        self.TransResult_2.setPlainText(translatorResult)
+    
+    def updateResults(self):
+        source = self.OCRResultTextEdit.toPlainText()
+        if(source != ''):
+            self.updateSplitTextEdit(source)
+            self.updateResult_1(source)
+            self.updateResult_2(source)
+        
+    def updateSplitMode(self,mode):
+        self.SplitMode = mode
+        source = self.OCRResultTextEdit.toPlainText()
+        if(source != ''):
+            self.updateSplitTextEdit(source)
+        
+    def updateSplitTextEdit(self,source):
+        # print(self.SplitMode)
+        self.splitTextEdit.setPlainText(splitWords(source,self.SplitMode))
     
 def runGUI():
     GUI_APP=QtWidgets.QApplication(sys.argv)

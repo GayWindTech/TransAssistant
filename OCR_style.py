@@ -15,7 +15,7 @@ class Ui_OCR_Window(object):
     def setupUi(self, OCR_Window):
         OCR_Window.setObjectName("OCR_Window")
         OCR_Window.setEnabled(True)
-        OCR_Window.resize(800, 546)
+        OCR_Window.resize(864, 546)
         OCR_Window.setContextMenuPolicy(QtCore.Qt.DefaultContextMenu)
         OCR_Window.setAnimated(True)
         self.centralwidget = QtWidgets.QWidget(OCR_Window)
@@ -28,15 +28,19 @@ class Ui_OCR_Window(object):
         self.OCRResultTextEdit.setFont(font)
         self.OCRResultTextEdit.setObjectName("OCRResultTextEdit")
         self.TransResult_1 = QtWidgets.QPlainTextEdit(self.centralwidget)
-        self.TransResult_1.setGeometry(QtCore.QRect(30, 160, 721, 71))
+        self.TransResult_1.setGeometry(QtCore.QRect(30, 180, 721, 71))
         font = QtGui.QFont()
         font.setFamily("思源黑体")
         font.setPointSize(18)
         self.TransResult_1.setFont(font)
         self.TransResult_1.setObjectName("TransResult_1")
-        self.plainTextEdit_3 = QtWidgets.QPlainTextEdit(self.centralwidget)
-        self.plainTextEdit_3.setGeometry(QtCore.QRect(30, 260, 721, 71))
-        self.plainTextEdit_3.setObjectName("plainTextEdit_3")
+        self.TransResult_2 = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.TransResult_2.setGeometry(QtCore.QRect(30, 280, 721, 71))
+        font = QtGui.QFont()
+        font.setFamily("思源黑体")
+        font.setPointSize(18)
+        self.TransResult_2.setFont(font)
+        self.TransResult_2.setObjectName("TransResult_2")
         self.ChooseAreaButton = QtWidgets.QPushButton(self.centralwidget)
         self.ChooseAreaButton.setGeometry(QtCore.QRect(530, 12, 111, 31))
         self.ChooseAreaButton.setObjectName("ChooseAreaButton")
@@ -51,13 +55,30 @@ class Ui_OCR_Window(object):
         self.OCRButton = QtWidgets.QPushButton(self.centralwidget)
         self.OCRButton.setGeometry(QtCore.QRect(30, 10, 111, 31))
         self.OCRButton.setObjectName("OCRButton")
+        self.splitTextEdit = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.splitTextEdit.setGeometry(QtCore.QRect(30, 130, 721, 41))
+        font = QtGui.QFont()
+        font.setFamily("思源黑体")
+        font.setPointSize(16)
+        self.splitTextEdit.setFont(font)
+        self.splitTextEdit.setObjectName("splitTextEdit")
+        self.SplitChooseBox = QtWidgets.QComboBox(self.centralwidget)
+        self.SplitChooseBox.setGeometry(QtCore.QRect(760, 150, 91, 21))
+        self.SplitChooseBox.setObjectName("SplitChooseBox")
+        self.SplitChooseBox.addItem("")
+        self.SplitChooseBox.addItem("")
+        self.SplitChooseTitle = QtWidgets.QLabel(self.centralwidget)
+        self.SplitChooseTitle.setGeometry(QtCore.QRect(770, 130, 71, 16))
+        self.SplitChooseTitle.setAlignment(QtCore.Qt.AlignCenter)
+        self.SplitChooseTitle.setObjectName("SplitChooseTitle")
         OCR_Window.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(OCR_Window)
         self.ChooseAreaButton.clicked.connect(OCR_Window.getScreenPos) # type: ignore
         self.OCRButton.clicked.connect(OCR_Window.getOCRText) # type: ignore
         OCR_Window.ocrHotkeyPressed.connect(OCR_Window.getOCRText) # type: ignore
-        self.OCRResultTextEdit.textChanged.connect(OCR_Window.updateResult_1) # type: ignore
+        self.OCRResultTextEdit.textChanged.connect(OCR_Window.updateResults) # type: ignore
+        self.SplitChooseBox.currentTextChanged['QString'].connect(OCR_Window.updateSplitMode) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(OCR_Window)
 
     def retranslateUi(self, OCR_Window):
@@ -67,3 +88,6 @@ class Ui_OCR_Window(object):
         self.ChosenTitleText.setText(_translate("OCR_Window", "已选择的区域"))
         self.PosText.setText(_translate("OCR_Window", "(0,0),(0,0)"))
         self.OCRButton.setText(_translate("OCR_Window", "OCR"))
+        self.SplitChooseBox.setItemText(0, _translate("OCR_Window", "sudachi"))
+        self.SplitChooseBox.setItemText(1, _translate("OCR_Window", "MeCab"))
+        self.SplitChooseTitle.setText(_translate("OCR_Window", "分词库选择"))

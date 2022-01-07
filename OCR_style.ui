@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>864</width>
     <height>546</height>
    </rect>
   </property>
@@ -43,7 +43,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>160</y>
+      <y>180</y>
       <width>721</width>
       <height>71</height>
      </rect>
@@ -55,14 +55,20 @@
      </font>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="plainTextEdit_3">
+   <widget class="QPlainTextEdit" name="TransResult_2">
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>260</y>
+      <y>280</y>
       <width>721</width>
       <height>71</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>思源黑体</family>
+      <pointsize>18</pointsize>
+     </font>
     </property>
    </widget>
    <widget class="QPushButton" name="ChooseAreaButton">
@@ -123,6 +129,58 @@
      <string>OCR</string>
     </property>
    </widget>
+   <widget class="QPlainTextEdit" name="splitTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>130</y>
+      <width>721</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>思源黑体</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="SplitChooseBox">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>150</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>sudachi</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>MeCab</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="SplitChooseTitle">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>130</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>分词库选择</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
@@ -179,7 +237,7 @@
    <sender>OCRResultTextEdit</sender>
    <signal>textChanged()</signal>
    <receiver>OCR_Window</receiver>
-   <slot>updateResult_1()</slot>
+   <slot>updateResults()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>231</x>
@@ -191,11 +249,28 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>SplitChooseBox</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>updateSplitMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>781</x>
+     <y>167</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>797</x>
+     <y>191</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>ocrHotkeyPressed()</signal>
   <slot>getScreenPos()</slot>
   <slot>getOCRText()</slot>
-  <slot>updateResult_1()</slot>
+  <slot>updateResults()</slot>
+  <slot>updateSplitMode()</slot>
  </slots>
 </ui>
