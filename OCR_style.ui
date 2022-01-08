@@ -17,7 +17,7 @@
    <enum>Qt::DefaultContextMenu</enum>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>TransAssistant</string>
   </property>
   <property name="animated">
    <bool>true</bool>
@@ -37,6 +37,9 @@
       <family>思源黑体</family>
       <pointsize>18</pointsize>
      </font>
+    </property>
+    <property name="plainText">
+     <string>使用前请先选取OCR区域，在弹出窗口中按回车确认↑</string>
     </property>
    </widget>
    <widget class="QPlainTextEdit" name="TransResult_1">
@@ -59,7 +62,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>280</y>
+      <y>260</y>
       <width>721</width>
       <height>71</height>
      </rect>
@@ -75,16 +78,33 @@
     <property name="geometry">
      <rect>
       <x>530</x>
-      <y>12</y>
+      <y>20</y>
       <width>111</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;按Enter确认选取区域&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="statusTip">
+     <string/>
+    </property>
+    <property name="whatsThis">
+     <string/>
+    </property>
+    <property name="accessibleDescription">
+     <string/>
     </property>
     <property name="text">
      <string>选取区域</string>
     </property>
    </widget>
-   <widget class="QLabel" name="ChosenTitleText">
+   <widget class="QLabel" name="ChosenTitleTitle">
     <property name="geometry">
      <rect>
       <x>680</x>
@@ -92,6 +112,11 @@
       <width>81</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>已选择的区域</string>
@@ -109,6 +134,11 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>(0,0),(0,0)</string>
     </property>
@@ -120,10 +150,15 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>10</y>
+      <y>20</y>
       <width>111</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>OCR</string>
@@ -141,7 +176,7 @@
     <property name="font">
      <font>
       <family>思源黑体</family>
-      <pointsize>16</pointsize>
+      <pointsize>14</pointsize>
      </font>
     </property>
    </widget>
@@ -153,6 +188,11 @@
       <width>91</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
     </property>
     <item>
      <property name="text">
@@ -174,6 +214,11 @@
       <height>16</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>分词库选择</string>
     </property>
@@ -181,6 +226,113 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <widget class="QLabel" name="ShortcutKeyTitle">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>10</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>当前全局OCR快捷键</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ShortcutKeyText">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>30</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>control + space</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="TransResult_3">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>340</y>
+      <width>721</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>思源黑体</family>
+      <pointsize>18</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="TransResult_4">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>420</y>
+      <width>721</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>思源黑体</family>
+      <pointsize>18</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="OCRButtonPlus">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>20</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>OCR+</string>
+    </property>
+   </widget>
+   <zorder>OCRResultTextEdit</zorder>
+   <zorder>TransResult_1</zorder>
+   <zorder>TransResult_2</zorder>
+   <zorder>ChooseAreaButton</zorder>
+   <zorder>ChosenTitleTitle</zorder>
+   <zorder>PosText</zorder>
+   <zorder>splitTextEdit</zorder>
+   <zorder>SplitChooseBox</zorder>
+   <zorder>SplitChooseTitle</zorder>
+   <zorder>ShortcutKeyTitle</zorder>
+   <zorder>ShortcutKeyText</zorder>
+   <zorder>OCRButton</zorder>
+   <zorder>TransResult_3</zorder>
+   <zorder>TransResult_4</zorder>
+   <zorder>OCRButtonPlus</zorder>
   </widget>
  </widget>
  <resources/>
@@ -265,12 +417,31 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>OCRButtonPlus</sender>
+   <signal>clicked()</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>appendOCRText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>205</x>
+     <y>35</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>16</x>
+     <y>31</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>ocrHotkeyPressed()</signal>
+  <signal>keyPressEvent()</signal>
   <slot>getScreenPos()</slot>
   <slot>getOCRText()</slot>
   <slot>updateResults()</slot>
   <slot>updateSplitMode()</slot>
+  <slot>updateOCRHotkey()</slot>
+  <slot>appendOCRText()</slot>
  </slots>
 </ui>
