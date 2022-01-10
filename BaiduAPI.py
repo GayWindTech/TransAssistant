@@ -6,7 +6,7 @@ import urllib
 import random
 import json
 
-def BaiduTranslator(q):
+def BaiduTranslator(q: str) -> str:
     appid = '20210821000923587'  # 填写你的appid
     secretKey = ''  # 填写你的密钥
 

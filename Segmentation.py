@@ -3,25 +3,26 @@
 import requests
 import json
 from urllib3 import disable_warnings
+
 disable_warnings()
 
-def _kuromoji(s):
+
+def _kuromoji(s: str) -> list:
     output = list()
     url = "https://www.atilika.org/kuromoji/rest/tokenizer/tokenize"
-    datas = {
-        'text': s,
-        'mode': 0
-    }
-    req = requests.post(url,data=datas,verify=False)
+    datas = {"text": s, "mode": 0}
+    req = requests.post(url, data=datas, verify=False)
     # var_dump(json.loads(req.content.decode('utf-8'))['tokens'])
-    for each in json.loads(req.content.decode('utf-8'))['tokens']:
-        output.append(each['surface'])
+    for each in json.loads(req.content.decode("utf-8"))["tokens"]:
+        output.append(each["surface"])
     return output
+
 
 # _MeCab = Tagger("-Owakati")
 # _sudachi = dictionary.Dictionary(dict="full").create()
 
-def splitWords(s,m):
+
+def splitWords(s, m):
     output = str()
     # if(m == "MeCab"):
     #     temp = _MeCab.parse(s).split()
@@ -38,8 +39,9 @@ def splitWords(s,m):
     #     return output
     temp = _kuromoji(s)
     for each in temp:
-        if(each != " " and each != None):
+        if each != " " and each != None:
             output += each + " | "
     return output
 
-print(splitWords('DIR EN GREYのライブ行きたい','sudachi'))
+
+# print(splitWords("DIR EN GREYのライブ行きたい", "sudachi"))

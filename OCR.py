@@ -9,9 +9,11 @@ from urllib.parse import urlencode
 import json
 import requests
 import cv2
+from urllib3 import disable_warnings
+disable_warnings()
 
 
-def getOCRResult(img):
+def getOCRResult(img) -> str:
     def cv2ImgToBytes(img):
         # 如果直接tobytes写入文件会导致无法打开，需要编码成一种图片文件格式(jpg或png)，再tobytes
         # 这里得到的bytes 和 with open("","rb") as f: bytes=f.read()的bytes可能不一样，如果用这里得到的bytes保存过一次，下次就f.read()和cv2ImgToBytes(img)会一样
@@ -135,7 +137,7 @@ def getOCRResult(img):
 
     request_url = assemble_ws_auth_url(url, "POST", APIKey, APISecret)
     headers = {'content-type': "application/json", 'host': 'api.xf-yun.com', 'app_id': APPId}
-    response = requests.post(request_url, data=json.dumps(body), headers=headers)
+    response = requests.post(request_url, data=json.dumps(body), headers=headers,verify=False)
     tempResult = json.loads(response.content.decode())
     finalResult = base64.b64decode(tempResult['payload']['result']['text']).decode()
     finalResult = finalResult.replace(" ", "").replace("\n", "").replace("\t", "").strip()
