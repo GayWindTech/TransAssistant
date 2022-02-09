@@ -8,10 +8,7 @@ from PyQt5 import QtGui
 from OCR_style import Ui_OCR_Window
 from Screenshot import getScreenPos, getScreenshot
 from OCR import getOCRResult
-from YoudaoAPI import YoudaoTranslator
-from CaiYunAPI import CaiYunTranslator
-from BaiduAPI import BaiduTranslator
-from TencentAPI import TencentTranslator
+from TranslatorAPI import YoudaoTranslator, CaiYunTranslator, BaiduTranslator, TencentTranslator
 from Segmentation import splitWords
 
 global ZhNameDict, JPNameDict
