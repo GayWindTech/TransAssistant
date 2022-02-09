@@ -22,9 +22,8 @@ def _kuromoji(s: str) -> list:
 
 _MeCab = Tagger("-Owakati")
 if(isPacked):
-    sudachi_dict_path = path.abspath(path.join(path.dirname(__file__), r'sudachidict_full\resources\system.dic'))
     sudachi_config_path = path.abspath(path.join(path.dirname(__file__), r'sudachipy\resources\sudachi.json'))
-    _sudachi = dictionary.Dictionary(dict=sudachi_dict_path,config_path=sudachi_config_path).create()
+    _sudachi = dictionary.Dictionary(dict='full',config_path=sudachi_config_path).create()
 else:
     _sudachi = dictionary.Dictionary(dict="full").create()
 
