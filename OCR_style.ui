@@ -42,7 +42,7 @@
      <string>使用前请先选取OCR区域，在弹出窗口中按回车确认↑</string>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="TransResult_1">
+   <widget class="QPlainTextEdit" name="TransResult_0">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -58,7 +58,7 @@
      </font>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="TransResult_2">
+   <widget class="QPlainTextEdit" name="TransResult_1">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -268,7 +268,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="TransResult_3">
+   <widget class="QPlainTextEdit" name="TransResult_2">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -284,7 +284,7 @@
      </font>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="TransResult_4">
+   <widget class="QPlainTextEdit" name="TransResult_3">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -319,8 +319,8 @@
     </property>
    </widget>
    <zorder>OCRResultTextEdit</zorder>
+   <zorder>TransResult_0</zorder>
    <zorder>TransResult_1</zorder>
-   <zorder>TransResult_2</zorder>
    <zorder>ChooseAreaButton</zorder>
    <zorder>ChosenTitleTitle</zorder>
    <zorder>PosText</zorder>
@@ -330,8 +330,8 @@
    <zorder>ShortcutKeyTitle</zorder>
    <zorder>ShortcutKeyText</zorder>
    <zorder>OCRButton</zorder>
+   <zorder>TransResult_2</zorder>
    <zorder>TransResult_3</zorder>
-   <zorder>TransResult_4</zorder>
    <zorder>OCRButtonPlus</zorder>
   </widget>
  </widget>

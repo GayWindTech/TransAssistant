@@ -1,17 +1,15 @@
 import sys
 from system_hotkey import SystemHotkey
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QFileDialog, QMessageBox, QApplication
+from PyQt5.QtWidgets import QApplication
 import PyQt5.QtCore as QtCore
-from PyQt5.QtCore import pyqtSignal, QEventLoop
-from PyQt5 import QtGui
+from PyQt5.QtCore import pyqtSignal, QThread, QMutex
 from OCR_style import Ui_OCR_Window
 from Screenshot import getScreenPos, getScreenshot
 from OCR import getOCRResult
 from TranslatorAPI import YoudaoTranslator, CaiYunTranslator, BaiduTranslator, TencentTranslator
 from Segmentation import splitWords
 
-global ZhNameDict, JPNameDict
 JPNameDict = {
     "モブ美": "林品如",
     "モブ男": "洪世贤",
@@ -68,6 +66,21 @@ def nameReplace(string: str, reverse=False):
     _dict = ZhNameDict if reverse else JPNameDict
     return keymap_replace(string, _dict)
 
+MutexList = [QMutex(),QMutex(),QMutex(),QMutex()]
+
+class TranslatorThread(QThread):
+    _signal =pyqtSignal(int,str)
+    def __init__(self,source:str,translatorType:int,aimTextEdit:int):
+        super().__init__()
+        self.TranslatorList = [YoudaoTranslator,CaiYunTranslator,BaiduTranslator,TencentTranslator]
+        self.source = source
+        self.translatorType = translatorType
+        self.aimTextEdit = aimTextEdit
+    def run(self):
+        MutexList[self.aimTextEdit].lock()
+        result = self.TranslatorList[self.translatorType](self.source)
+        self._signal.emit(self.aimTextEdit,result)
+        MutexList[self.aimTextEdit].unlock()
 
 class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
     ocrHotkeyPressed = pyqtSignal()
@@ -94,10 +107,8 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
             callback=lambda x: self.sendHotkeyPressedSig(self.Hotkey_OCR),
         )
         self.setupUi(self)
+        self.resultTextEditList = self.TransResult_0,self.TransResult_1,self.TransResult_2,self.TransResult_3
 
-        def keyPressEvent(self, e):
-            if e.key() == QtCore.Qt.Key_Escape:
-                self.close()
 
     def sendHotkeyPressedSig(self, Hotkeys):
         if Hotkeys is self.Hotkey_OCR:
@@ -123,31 +134,24 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
             self.OCRText += getOCRResult(getScreenshot(self.ScreenPos))
             self.OCRResultTextEdit.setPlainText(self.OCRText)
 
-    def updateResult_1(self, source):
-        translatorResult = nameReplace(YoudaoTranslator(source), True)
-        self.TransResult_1.setPlainText(translatorResult)
-
-    def updateResult_2(self, source):
-        translatorResult = nameReplace(CaiYunTranslator(source), True)
-        self.TransResult_2.setPlainText(translatorResult)
-
-    def updateResult_3(self, source):
-        translatorResult = nameReplace(BaiduTranslator(source), True)
-        self.TransResult_3.setPlainText(translatorResult)
-
-    def updateResult_4(self, source):
-        translatorResult = nameReplace(TencentTranslator(source), True)
-        self.TransResult_4.setPlainText(translatorResult)
+    def updateResultTextEdit(self,aimTextEdit:int,text:str):
+        text = nameReplace(text,True)
+        self.resultTextEditList[aimTextEdit].setPlainText(text)
 
     def updateResults(self):
         source = self.OCRResultTextEdit.toPlainText()
         if source != "":
             self.updateSplitTextEdit(source)
             source = nameReplace(source)
-            self.updateResult_1(source)
-            self.updateResult_2(source)
-            self.updateResult_3(source)
-            self.updateResult_4(source)
+            self.t0,self.t1,self.t2,self.t3 = TranslatorThread(source,0,0),TranslatorThread(source,1,1),TranslatorThread(source,2,2),TranslatorThread(source,3,3)
+            self.t0._signal.connect(self.updateResultTextEdit)
+            self.t1._signal.connect(self.updateResultTextEdit)
+            self.t2._signal.connect(self.updateResultTextEdit)
+            self.t3._signal.connect(self.updateResultTextEdit)
+            self.t0.start()
+            self.t1.start()
+            self.t2.start()
+            self.t3.start()
 
     def updateSplitMode(self, mode):
         self.SplitMode = mode
