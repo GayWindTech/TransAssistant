@@ -129,15 +129,21 @@ def getOCRResult(img) -> str:
         for eachPages in JsonRawDict['pages']:
             for eachLines in eachPages['lines']:
                 lineWordsStr = str()
-                for eachWords in eachLines['words']:
-                    lineWordsStr += eachWords['content']
-                    # print(repr(eachWords['content']))
-                return(lineWordsStr)
+                try:
+                    for eachWords in eachLines['words']:
+                        lineWordsStr += eachWords['content']
+                        # print(repr(eachWords['content']))
+                    return(lineWordsStr)
+                except KeyError:
+                    return 'OCR出错,请重试~'
 
 
     request_url = assemble_ws_auth_url(url, "POST", APIKey, APISecret)
     headers = {'content-type': "application/json", 'host': 'api.xf-yun.com', 'app_id': APPId}
-    response = requests.post(request_url, data=json.dumps(body), headers=headers,verify=False)
+    try:
+        response = requests.post(request_url, data=json.dumps(body), headers=headers,verify=False)
+    except Exception as err:
+        return str(err)
     tempResult = json.loads(response.content.decode())
     finalResult = base64.b64decode(tempResult['payload']['result']['text']).decode()
     finalResult = finalResult.replace(" ", "").replace("\n", "").replace("\t", "").strip()
