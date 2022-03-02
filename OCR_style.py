@@ -126,6 +126,9 @@ class Ui_OCR_Window(object):
         font.setPointSize(14)
         self.OCRButtonPlus.setFont(font)
         self.OCRButtonPlus.setObjectName("OCRButtonPlus")
+        self.showChild = QtWidgets.QPushButton(self.centralwidget)
+        self.showChild.setGeometry(QtCore.QRect(770, 240, 75, 23))
+        self.showChild.setObjectName("showChild")
         self.OCRResultTextEdit.raise_()
         self.TransResult_0.raise_()
         self.TransResult_1.raise_()
@@ -141,6 +144,7 @@ class Ui_OCR_Window(object):
         self.TransResult_2.raise_()
         self.TransResult_3.raise_()
         self.OCRButtonPlus.raise_()
+        self.showChild.raise_()
         OCR_Window.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(OCR_Window)
@@ -150,6 +154,7 @@ class Ui_OCR_Window(object):
         self.OCRResultTextEdit.textChanged.connect(OCR_Window.updateResults) # type: ignore
         self.SplitChooseBox.currentTextChanged['QString'].connect(OCR_Window.updateSplitMode) # type: ignore
         self.OCRButtonPlus.clicked.connect(OCR_Window.appendOCRText) # type: ignore
+        self.showChild.clicked.connect(OCR_Window.showDictWindow) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(OCR_Window)
 
     def retranslateUi(self, OCR_Window):
@@ -167,3 +172,4 @@ class Ui_OCR_Window(object):
         self.ShortcutKeyTitle.setText(_translate("OCR_Window", "当前全局OCR快捷键"))
         self.ShortcutKeyText.setText(_translate("OCR_Window", "control + space"))
         self.OCRButtonPlus.setText(_translate("OCR_Window", "OCR+"))
+        self.showChild.setText(_translate("OCR_Window", "PushButton"))

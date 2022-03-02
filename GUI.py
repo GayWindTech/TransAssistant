@@ -9,6 +9,7 @@ from Screenshot import getScreenPos, getScreenshot
 from OCR import getOCRResult
 from TranslatorAPI import YoudaoTranslator, CaiYunTranslator, BaiduTranslator, TencentTranslator
 from Segmentation import splitWords
+from dict_style import Ui_dict_Window
 
 JPNameDict = {
     "モブ美": "林品如",
@@ -66,20 +67,33 @@ def nameReplace(string: str, reverse=False):
     _dict = ZhNameDict if reverse else JPNameDict
     return keymap_replace(string, _dict)
 
+class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
+    def __init__(self):
+        super(dictWindow_class, self).__init__()
+        self.setupUi(self)
+
+    def setupUi(self, dictMain):
+        super(dictWindow_class, self).setupUi(dictMain)
+        dictMain.setWindowOpacity(0.8)
+        dictMain.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+
 MutexList = [QMutex(),QMutex(),QMutex(),QMutex()]
 
 class TranslatorThread(QThread):
-    _signal =pyqtSignal(int,str)
-    def __init__(self,source:str,translatorType:int,aimTextEdit:int):
+    _signal = pyqtSignal(int, str)
+
+    def __init__(self, source: str, translatorType: int, aimTextEdit: int):
         super().__init__()
-        self.TranslatorList = [YoudaoTranslator,CaiYunTranslator,BaiduTranslator,TencentTranslator]
+        self.TranslatorList = [
+            YoudaoTranslator, CaiYunTranslator, BaiduTranslator, TencentTranslator]
         self.source = source
         self.translatorType = translatorType
         self.aimTextEdit = aimTextEdit
+
     def run(self):
         MutexList[self.aimTextEdit].lock()
         result = self.TranslatorList[self.translatorType](self.source)
-        self._signal.emit(self.aimTextEdit,result)
+        self._signal.emit(self.aimTextEdit, result)
         MutexList[self.aimTextEdit].unlock()
 
 class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
@@ -109,6 +123,8 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.setupUi(self)
         self.resultTextEditList = self.TransResult_0,self.TransResult_1,self.TransResult_2,self.TransResult_3
 
+    def closeEvent(self, event):
+        self.dictWindow.close()
 
     def sendHotkeyPressedSig(self, Hotkeys):
         if Hotkeys is self.Hotkey_OCR:
@@ -166,10 +182,18 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         print(text)
         self.keyPressEvent
 
+    def defineDictWindow(self, _class):
+        self.dictWindow = _class
+
+    def showDictWindow(self):
+        self.dictWindow.show()
+
 
 def runGUI():
     GUI_APP = QtWidgets.QApplication(sys.argv)
     GUI_mainWindow = TransAssistant_class()
+    Dict_Window = dictWindow_class()
+    GUI_mainWindow.defineDictWindow(Dict_Window)
     GUI_mainWindow.setFixedSize(GUI_mainWindow.width(), GUI_mainWindow.height())
     GUI_mainWindow.show()
     GUI_APP.exec_()

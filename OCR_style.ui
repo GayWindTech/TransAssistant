@@ -318,6 +318,19 @@
      <string>OCR+</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="showChild">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>240</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
+    </property>
+   </widget>
    <zorder>OCRResultTextEdit</zorder>
    <zorder>TransResult_0</zorder>
    <zorder>TransResult_1</zorder>
@@ -333,6 +346,7 @@
    <zorder>TransResult_2</zorder>
    <zorder>TransResult_3</zorder>
    <zorder>OCRButtonPlus</zorder>
+   <zorder>showChild</zorder>
   </widget>
  </widget>
  <resources/>
@@ -433,6 +447,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>showChild</sender>
+   <signal>clicked()</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>showDictWindow()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>810</x>
+     <y>261</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>810</x>
+     <y>301</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>ocrHotkeyPressed()</signal>
@@ -443,5 +473,6 @@
   <slot>updateSplitMode()</slot>
   <slot>updateOCRHotkey()</slot>
   <slot>appendOCRText()</slot>
+  <slot>showDictWindow()</slot>
  </slots>
 </ui>
