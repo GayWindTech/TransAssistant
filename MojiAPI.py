@@ -22,9 +22,12 @@ def searchWord(word: str) -> list:
         "_ApplicationId": "E62VyFVLMiW7kvbtVq3p",
     }
     req = requests.post(APIURL, json=JsonDict, headers=hd, verify=False)
-    resultTemp = json.loads(req.content.decode("utf-8"))
-    return resultTemp["result"]["searchResults"]
-
+    try:
+        resultTemp = json.loads(req.content.decode("utf-8"))["result"]["searchResults"]
+        wordToIdList = [(eachWordDict['title'].replace('◎','⓪'),eachWordDict['tarId']) for eachWordDict in resultTemp if 'http' not in eachWordDict['tarId']]
+        return wordToIdList
+    except KeyError:
+        return ('发生了错误','0')
 
 def fetchWord(id: str) -> dict:
     APIURL = "https://api.mojidict.com/parse/functions/fetchWord_v2"
@@ -41,6 +44,3 @@ def fetchWord(id: str) -> dict:
     req = requests.post(APIURL, json=JsonDict, headers=hd, verify=False)
     resultTemp = json.loads(req.content.decode("utf-8"))
     var_dump(resultTemp["result"])
-
-
-fetchWord("19893555")

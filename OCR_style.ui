@@ -463,6 +463,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>OCRResultTextEdit</sender>
+   <signal>selectionChanged()</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>updateSelectionText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>731</x>
+     <y>117</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>823</x>
+     <y>92</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>splitTextEdit</sender>
+   <signal>selectionChanged()</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>updateSelectionText()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>718</x>
+     <y>134</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>770</x>
+     <y>121</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>ocrHotkeyPressed()</signal>
@@ -474,5 +506,6 @@
   <slot>updateOCRHotkey()</slot>
   <slot>appendOCRText()</slot>
   <slot>showDictWindow()</slot>
+  <slot>updateSelectionText()</slot>
  </slots>
 </ui>

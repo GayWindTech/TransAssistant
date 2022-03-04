@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>701</width>
-    <height>386</height>
+    <width>761</width>
+    <height>322</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,10 +18,20 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>40</y>
-      <width>241</width>
-      <height>331</height>
+      <y>50</y>
+      <width>261</width>
+      <height>261</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>思源黑体</family>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+      <underline>false</underline>
+      <stylestrategy>PreferAntialias</stylestrategy>
+     </font>
     </property>
    </widget>
    <widget class="QComboBox" name="dictSourceChoose">
@@ -33,6 +43,16 @@
       <height>21</height>
      </rect>
     </property>
+    <item>
+     <property name="text">
+      <string>MojiDict</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>沪江小D词典</string>
+     </property>
+    </item>
    </widget>
    <widget class="QLabel" name="DictSourceLabel">
     <property name="geometry">
@@ -55,25 +75,86 @@
    <widget class="QPlainTextEdit" name="inputTextEdit">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>280</x>
       <y>10</y>
-      <width>431</width>
-      <height>41</height>
+      <width>471</width>
+      <height>51</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>思源黑体</family>
+      <pointsize>19</pointsize>
+      <kerning>true</kerning>
+     </font>
+    </property>
+    <property name="plainText">
+     <string/>
     </property>
    </widget>
    <widget class="QTextBrowser" name="resultText">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>60</y>
-      <width>431</width>
-      <height>311</height>
+      <x>280</x>
+      <y>70</y>
+      <width>471</width>
+      <height>241</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>20</y>
+      <width>31</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
     </property>
    </widget>
   </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>dict_Window</receiver>
+   <slot>searchWord()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>71</x>
+     <y>26</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>256</x>
+     <y>75</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dict_Window</sender>
+   <signal>selectionTextChange()</signal>
+   <receiver>dict_Window</receiver>
+   <slot>setQueryWord()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>238</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>254</x>
+     <y>21</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <signal>selectionTextChange()</signal>
+  <slot>searchWord()</slot>
+  <slot>setQueryWord()</slot>
+ </slots>
 </ui>

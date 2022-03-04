@@ -8,6 +8,7 @@ from OCR_style import Ui_OCR_Window
 from Screenshot import getScreenPos, getScreenshot
 from OCR import getOCRResult
 from TranslatorAPI import YoudaoTranslator, CaiYunTranslator, BaiduTranslator, TencentTranslator
+from MojiAPI import searchWord
 from Segmentation import splitWords
 from dict_style import Ui_dict_Window
 
@@ -68,6 +69,8 @@ def nameReplace(string: str, reverse=False):
     return keymap_replace(string, _dict)
 
 class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
+    selectionTextChange = pyqtSignal(str)
+
     def __init__(self):
         super(dictWindow_class, self).__init__()
         self.setupUi(self)
@@ -76,6 +79,15 @@ class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
         super(dictWindow_class, self).setupUi(dictMain)
         dictMain.setWindowOpacity(0.8)
         dictMain.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+
+    def searchWord(self):
+        self.wordsList.clear()
+        source = self.inputTextEdit.toPlainText()
+        tempList = (each[0] for each in searchWord(source))
+        self.wordsList.addItems(tempList)
+
+    def setQueryWord(self,word):
+        self.inputTextEdit.setPlainText(word)
 
 MutexList = [QMutex(),QMutex(),QMutex(),QMutex()]
 
@@ -113,6 +125,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         super(TransAssistant_class, self).__init__()
         self.AreaInit = False
         self.ScreenPos = [(0, 0), (0, 0)]
+        self.selectionText = str()
         self.OCRText = str()
         self.SplitMode = "sudachi"
         self.Hotkey_OCR = ["control", "space"]
@@ -120,8 +133,17 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
             self.Hotkey_OCR,
             callback=lambda x: self.sendHotkeyPressedSig(self.Hotkey_OCR),
         )
+        Dict_Window = dictWindow_class()
+        self.selectionTextChange = Dict_Window.selectionTextChange
+        self.dictWindow = Dict_Window
         self.setupUi(self)
         self.resultTextEditList = self.TransResult_0,self.TransResult_1,self.TransResult_2,self.TransResult_3
+
+    def updateSelectionText(self):
+        if(self.OCRResultTextEdit.hasFocus()):
+            self.selectionText = self.OCRResultTextEdit.textCursor().selectedText()
+        elif(self.splitTextEdit.hasFocus()):
+            self.selectionText = self.splitTextEdit.textCursor().selectedText()
 
     def closeEvent(self, event):
         self.dictWindow.close()
@@ -182,18 +204,14 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         print(text)
         self.keyPressEvent
 
-    def defineDictWindow(self, _class):
-        self.dictWindow = _class
-
     def showDictWindow(self):
         self.dictWindow.show()
+        self.selectionTextChange.emit(self.selectionText)
 
 
 def runGUI():
     GUI_APP = QtWidgets.QApplication(sys.argv)
     GUI_mainWindow = TransAssistant_class()
-    Dict_Window = dictWindow_class()
-    GUI_mainWindow.defineDictWindow(Dict_Window)
     GUI_mainWindow.setFixedSize(GUI_mainWindow.width(), GUI_mainWindow.height())
     GUI_mainWindow.show()
     GUI_APP.exec_()

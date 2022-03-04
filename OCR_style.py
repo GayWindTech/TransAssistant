@@ -155,6 +155,8 @@ class Ui_OCR_Window(object):
         self.SplitChooseBox.currentTextChanged['QString'].connect(OCR_Window.updateSplitMode) # type: ignore
         self.OCRButtonPlus.clicked.connect(OCR_Window.appendOCRText) # type: ignore
         self.showChild.clicked.connect(OCR_Window.showDictWindow) # type: ignore
+        self.OCRResultTextEdit.selectionChanged.connect(OCR_Window.updateSelectionText) # type: ignore
+        self.splitTextEdit.selectionChanged.connect(OCR_Window.updateSelectionText) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(OCR_Window)
 
     def retranslateUi(self, OCR_Window):
