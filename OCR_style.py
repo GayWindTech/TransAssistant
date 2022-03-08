@@ -20,12 +20,13 @@ class Ui_OCR_Window(object):
         OCR_Window.setAnimated(True)
         self.centralwidget = QtWidgets.QWidget(OCR_Window)
         self.centralwidget.setObjectName("centralwidget")
-        self.OCRResultTextEdit = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.OCRResultTextEdit = betterSelectionQPlainTextEdit(self.centralwidget)
         self.OCRResultTextEdit.setGeometry(QtCore.QRect(30, 60, 721, 71))
         font = QtGui.QFont()
         font.setFamily("思源黑体")
         font.setPointSize(18)
         self.OCRResultTextEdit.setFont(font)
+        self.OCRResultTextEdit.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.IBeamCursor))
         self.OCRResultTextEdit.setObjectName("OCRResultTextEdit")
         self.TransResult_0 = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.TransResult_0.setGeometry(QtCore.QRect(30, 180, 721, 71))
@@ -33,6 +34,9 @@ class Ui_OCR_Window(object):
         font.setFamily("思源黑体")
         font.setPointSize(18)
         self.TransResult_0.setFont(font)
+        self.TransResult_0.setFocusPolicy(QtCore.Qt.StrongFocus)
+        self.TransResult_0.setAutoFillBackground(False)
+        self.TransResult_0.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.TransResult_0.setObjectName("TransResult_0")
         self.TransResult_1 = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.TransResult_1.setGeometry(QtCore.QRect(30, 260, 721, 71))
@@ -40,6 +44,7 @@ class Ui_OCR_Window(object):
         font.setFamily("思源黑体")
         font.setPointSize(18)
         self.TransResult_1.setFont(font)
+        self.TransResult_1.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.TransResult_1.setObjectName("TransResult_1")
         self.ChooseAreaButton = QtWidgets.QPushButton(self.centralwidget)
         self.ChooseAreaButton.setGeometry(QtCore.QRect(530, 20, 111, 31))
@@ -70,12 +75,13 @@ class Ui_OCR_Window(object):
         font.setPointSize(14)
         self.OCRButton.setFont(font)
         self.OCRButton.setObjectName("OCRButton")
-        self.splitTextEdit = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.splitTextEdit = betterSelectionQPlainTextEdit(self.centralwidget)
         self.splitTextEdit.setGeometry(QtCore.QRect(30, 130, 721, 41))
         font = QtGui.QFont()
         font.setFamily("思源黑体")
         font.setPointSize(14)
         self.splitTextEdit.setFont(font)
+        self.splitTextEdit.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.IBeamCursor))
         self.splitTextEdit.setObjectName("splitTextEdit")
         self.SplitChooseBox = QtWidgets.QComboBox(self.centralwidget)
         self.SplitChooseBox.setGeometry(QtCore.QRect(760, 150, 91, 21))
@@ -112,6 +118,7 @@ class Ui_OCR_Window(object):
         font.setFamily("思源黑体")
         font.setPointSize(18)
         self.TransResult_2.setFont(font)
+        self.TransResult_2.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.TransResult_2.setObjectName("TransResult_2")
         self.TransResult_3 = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.TransResult_3.setGeometry(QtCore.QRect(30, 420, 721, 71))
@@ -119,6 +126,7 @@ class Ui_OCR_Window(object):
         font.setFamily("思源黑体")
         font.setPointSize(18)
         self.TransResult_3.setFont(font)
+        self.TransResult_3.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.TransResult_3.setObjectName("TransResult_3")
         self.OCRButtonPlus = QtWidgets.QPushButton(self.centralwidget)
         self.OCRButtonPlus.setGeometry(QtCore.QRect(150, 20, 111, 31))
@@ -126,9 +134,18 @@ class Ui_OCR_Window(object):
         font.setPointSize(14)
         self.OCRButtonPlus.setFont(font)
         self.OCRButtonPlus.setObjectName("OCRButtonPlus")
-        self.showChild = QtWidgets.QPushButton(self.centralwidget)
-        self.showChild.setGeometry(QtCore.QRect(770, 240, 75, 23))
-        self.showChild.setObjectName("showChild")
+        self.showDictWindowButton = QtWidgets.QPushButton(self.centralwidget)
+        self.showDictWindowButton.setGeometry(QtCore.QRect(760, 60, 91, 31))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        self.showDictWindowButton.setFont(font)
+        self.showDictWindowButton.setObjectName("showDictWindowButton")
+        self.autoDictCheckBox = QtWidgets.QCheckBox(self.centralwidget)
+        self.autoDictCheckBox.setGeometry(QtCore.QRect(760, 90, 91, 21))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.autoDictCheckBox.setFont(font)
+        self.autoDictCheckBox.setObjectName("autoDictCheckBox")
         self.OCRResultTextEdit.raise_()
         self.TransResult_0.raise_()
         self.TransResult_1.raise_()
@@ -144,7 +161,8 @@ class Ui_OCR_Window(object):
         self.TransResult_2.raise_()
         self.TransResult_3.raise_()
         self.OCRButtonPlus.raise_()
-        self.showChild.raise_()
+        self.showDictWindowButton.raise_()
+        self.autoDictCheckBox.raise_()
         OCR_Window.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(OCR_Window)
@@ -154,9 +172,12 @@ class Ui_OCR_Window(object):
         self.OCRResultTextEdit.textChanged.connect(OCR_Window.updateResults) # type: ignore
         self.SplitChooseBox.currentTextChanged['QString'].connect(OCR_Window.updateSplitMode) # type: ignore
         self.OCRButtonPlus.clicked.connect(OCR_Window.appendOCRText) # type: ignore
-        self.showChild.clicked.connect(OCR_Window.showDictWindow) # type: ignore
-        self.OCRResultTextEdit.selectionChanged.connect(OCR_Window.updateSelectionText) # type: ignore
-        self.splitTextEdit.selectionChanged.connect(OCR_Window.updateSelectionText) # type: ignore
+        self.showDictWindowButton.clicked.connect(OCR_Window.showDictWindow) # type: ignore
+        self.OCRResultTextEdit.selectedFinish.connect(OCR_Window.updateSelectionText) # type: ignore
+        self.splitTextEdit.selectedFinish.connect(OCR_Window.updateSelectionText) # type: ignore
+        self.OCRResultTextEdit.focusOut.connect(self.OCRResultTextEdit.clearSelection) # type: ignore
+        self.splitTextEdit.focusOut.connect(self.splitTextEdit.clearSelection) # type: ignore
+        self.autoDictCheckBox.clicked['bool'].connect(OCR_Window.updateAutoDictBool) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(OCR_Window)
 
     def retranslateUi(self, OCR_Window):
@@ -174,4 +195,6 @@ class Ui_OCR_Window(object):
         self.ShortcutKeyTitle.setText(_translate("OCR_Window", "当前全局OCR快捷键"))
         self.ShortcutKeyText.setText(_translate("OCR_Window", "control + space"))
         self.OCRButtonPlus.setText(_translate("OCR_Window", "OCR+"))
-        self.showChild.setText(_translate("OCR_Window", "PushButton"))
+        self.showDictWindowButton.setText(_translate("OCR_Window", "查词"))
+        self.autoDictCheckBox.setText(_translate("OCR_Window", "自动查词"))
+from betterSelectionQPlainTextEdit import betterSelectionQPlainTextEdit

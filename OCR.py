@@ -12,6 +12,7 @@ import cv2
 from urllib3 import disable_warnings
 disable_warnings()
 
+#http://xf.aka.today/v3/user_info.php?open_id=11111111111111111111111111111111
 
 def getOCRResult(img) -> str:
     def cv2ImgToBytes(img):

@@ -11,6 +11,7 @@ from TranslatorAPI import YoudaoTranslator, CaiYunTranslator, BaiduTranslator, T
 from MojiAPI import searchWord
 from Segmentation import splitWords
 from dict_style import Ui_dict_Window
+from var_dump import var_dump
 
 JPNameDict = {
     "モブ美": "林品如",
@@ -74,6 +75,7 @@ class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
     def __init__(self):
         super(dictWindow_class, self).__init__()
         self.setupUi(self)
+        self._wordList = []
 
     def setupUi(self, dictMain):
         super(dictWindow_class, self).setupUi(dictMain)
@@ -83,11 +85,15 @@ class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
     def searchWord(self):
         self.wordsList.clear()
         source = self.inputTextEdit.toPlainText()
-        tempList = (each[0] for each in searchWord(source))
-        self.wordsList.addItems(tempList)
+        self._wordList = searchWord(source)
+        tempItemList = (each[0] for each in searchWord(source))
+        self.wordsList.addItems(tempItemList)
 
     def setQueryWord(self,word):
         self.inputTextEdit.setPlainText(word)
+
+    def showWordDetails(self,index):
+        print(self._wordList[index])
 
 MutexList = [QMutex(),QMutex(),QMutex(),QMutex()]
 
@@ -137,6 +143,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.selectionTextChange = Dict_Window.selectionTextChange
         self.dictWindow = Dict_Window
         self.setupUi(self)
+        self.autoDict = self.autoDictCheckBox.isChecked()
         self.resultTextEditList = self.TransResult_0,self.TransResult_1,self.TransResult_2,self.TransResult_3
 
     def updateSelectionText(self):
@@ -144,6 +151,11 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
             self.selectionText = self.OCRResultTextEdit.textCursor().selectedText()
         elif(self.splitTextEdit.hasFocus()):
             self.selectionText = self.splitTextEdit.textCursor().selectedText()
+        if(self.autoDict):
+            self.showDictWindow()
+
+    def updateAutoDictBool(self,_bool):
+        self.autoDict = _bool
 
     def closeEvent(self, event):
         self.dictWindow.close()
@@ -155,7 +167,16 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
     def getScreenPos(self):
         self.hide()
         self.ScreenPos = getScreenPos()
-        self.PosText.setText(str((self.ScreenPos[0],self.ScreenPos[1]))+","+str((self.ScreenPos[0]+self.ScreenPos[2],self.ScreenPos[1]+self.ScreenPos[3],)))
+        self.PosText.setText(
+            f'{(self.ScreenPos[0], self.ScreenPos[1])},'
+            + str(
+                (
+                    self.ScreenPos[0] + self.ScreenPos[2],
+                    self.ScreenPos[1] + self.ScreenPos[3],
+                )
+            )
+        )
+
         self.show()
         self.AreaInit = True
         self.OCRButton.setEnabled(self.AreaInit)

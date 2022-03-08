@@ -23,7 +23,7 @@
    <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPlainTextEdit" name="OCRResultTextEdit">
+   <widget class="betterSelectionQPlainTextEdit" name="OCRResultTextEdit">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -37,6 +37,9 @@
       <family>思源黑体</family>
       <pointsize>18</pointsize>
      </font>
+    </property>
+    <property name="cursor" stdset="0">
+     <cursorShape>IBeamCursor</cursorShape>
     </property>
     <property name="plainText">
      <string>使用前请先选取OCR区域，在弹出窗口中按回车确认↑</string>
@@ -57,6 +60,15 @@
       <pointsize>18</pointsize>
      </font>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::StrongFocus</enum>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="textInteractionFlags">
+     <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+    </property>
    </widget>
    <widget class="QPlainTextEdit" name="TransResult_1">
     <property name="geometry">
@@ -72,6 +84,9 @@
       <family>思源黑体</family>
       <pointsize>18</pointsize>
      </font>
+    </property>
+    <property name="textInteractionFlags">
+     <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
     </property>
    </widget>
    <widget class="QPushButton" name="ChooseAreaButton">
@@ -164,7 +179,7 @@
      <string>OCR</string>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="splitTextEdit">
+   <widget class="betterSelectionQPlainTextEdit" name="splitTextEdit">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -178,6 +193,9 @@
       <family>思源黑体</family>
       <pointsize>14</pointsize>
      </font>
+    </property>
+    <property name="cursor" stdset="0">
+     <cursorShape>IBeamCursor</cursorShape>
     </property>
    </widget>
    <widget class="QComboBox" name="SplitChooseBox">
@@ -283,6 +301,9 @@
       <pointsize>18</pointsize>
      </font>
     </property>
+    <property name="textInteractionFlags">
+     <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+    </property>
    </widget>
    <widget class="QPlainTextEdit" name="TransResult_3">
     <property name="geometry">
@@ -298,6 +319,9 @@
       <family>思源黑体</family>
       <pointsize>18</pointsize>
      </font>
+    </property>
+    <property name="textInteractionFlags">
+     <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
     </property>
    </widget>
    <widget class="QPushButton" name="OCRButtonPlus">
@@ -318,17 +342,40 @@
      <string>OCR+</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="showChild">
+   <widget class="QPushButton" name="showDictWindowButton">
     <property name="geometry">
      <rect>
-      <x>770</x>
-      <y>240</y>
-      <width>75</width>
-      <height>23</height>
+      <x>760</x>
+      <y>60</y>
+      <width>91</width>
+      <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>查词</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="autoDictCheckBox">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>90</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>自动查词</string>
     </property>
    </widget>
    <zorder>OCRResultTextEdit</zorder>
@@ -346,9 +393,22 @@
    <zorder>TransResult_2</zorder>
    <zorder>TransResult_3</zorder>
    <zorder>OCRButtonPlus</zorder>
-   <zorder>showChild</zorder>
+   <zorder>showDictWindowButton</zorder>
+   <zorder>autoDictCheckBox</zorder>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>betterSelectionQPlainTextEdit</class>
+   <extends>QPlainTextEdit</extends>
+   <header>betterSelectionQPlainTextEdit</header>
+   <slots>
+    <signal>selectedFinish()</signal>
+    <signal>focusOut()</signal>
+    <slot>clearSelection()</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
@@ -448,14 +508,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>showChild</sender>
+   <sender>showDictWindowButton</sender>
    <signal>clicked()</signal>
    <receiver>OCR_Window</receiver>
    <slot>showDictWindow()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>810</x>
-     <y>261</y>
+     <x>800</x>
+     <y>81</y>
     </hint>
     <hint type="destinationlabel">
      <x>810</x>
@@ -465,7 +525,7 @@
   </connection>
   <connection>
    <sender>OCRResultTextEdit</sender>
-   <signal>selectionChanged()</signal>
+   <signal>selectedFinish()</signal>
    <receiver>OCR_Window</receiver>
    <slot>updateSelectionText()</slot>
    <hints>
@@ -481,7 +541,7 @@
   </connection>
   <connection>
    <sender>splitTextEdit</sender>
-   <signal>selectionChanged()</signal>
+   <signal>selectedFinish()</signal>
    <receiver>OCR_Window</receiver>
    <slot>updateSelectionText()</slot>
    <hints>
@@ -492,6 +552,54 @@
     <hint type="destinationlabel">
      <x>770</x>
      <y>121</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>OCRResultTextEdit</sender>
+   <signal>focusOut()</signal>
+   <receiver>OCRResultTextEdit</receiver>
+   <slot>clearSelection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>701</x>
+     <y>76</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>651</x>
+     <y>84</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>splitTextEdit</sender>
+   <signal>focusOut()</signal>
+   <receiver>splitTextEdit</receiver>
+   <slot>clearSelection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>606</x>
+     <y>159</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>550</x>
+     <y>151</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>autoDictCheckBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>updateAutoDictBool(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>829</x>
+     <y>102</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>851</x>
+     <y>20</y>
     </hint>
    </hints>
   </connection>
@@ -507,5 +615,6 @@
   <slot>appendOCRText()</slot>
   <slot>showDictWindow()</slot>
   <slot>updateSelectionText()</slot>
+  <slot>updateAutoDictBool(bool)</slot>
  </slots>
 </ui>

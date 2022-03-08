@@ -59,6 +59,7 @@ class Ui_dict_Window(object):
         self.retranslateUi(dict_Window)
         self.pushButton.clicked.connect(dict_Window.searchWord) # type: ignore
         dict_Window.selectionTextChange.connect(dict_Window.setQueryWord) # type: ignore
+        self.wordsList.currentRowChanged['int'].connect(dict_Window.showWordDetails) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(dict_Window)
 
     def retranslateUi(self, dict_Window):
