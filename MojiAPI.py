@@ -24,10 +24,9 @@ def searchWord(word: str) -> list:
     req = requests.post(APIURL, json=JsonDict, headers=hd, verify=False)
     try:
         resultTemp = json.loads(req.content.decode("utf-8"))["result"]["searchResults"]
-        wordToIdList = [(eachWordDict['title'].replace('◎','⓪'),eachWordDict['tarId']) for eachWordDict in resultTemp if 'http' not in eachWordDict['tarId']]
-        return wordToIdList
+        return [(eachWordDict['title'].replace('◎','⓪'),eachWordDict['tarId']) for eachWordDict in resultTemp if 'http' not in eachWordDict['tarId']]
     except KeyError:
-        return ('发生了错误','0')
+        return [('发生了错误','0')]
 
 def fetchWord(id: str) -> dict:
     APIURL = "https://api.mojidict.com/parse/functions/fetchWord_v2"
@@ -42,5 +41,20 @@ def fetchWord(id: str) -> dict:
         "wordId": str(id),
     }
     req = requests.post(APIURL, json=JsonDict, headers=hd, verify=False)
-    resultTemp = json.loads(req.content.decode("utf-8"))
-    var_dump(resultTemp["result"])
+    return parseFetchResult(json.loads(req.content.decode("utf-8"))["result"])
+
+def parseFetchResult(resultTemp: dict) -> tuple:
+    excerpt = resultTemp['word']['excerpt']
+    spell = resultTemp['word']['spell']
+    accent = resultTemp['word']['accent']
+    pron = resultTemp['word']['pron']
+    detailDict = [[eachDetail['objectId'] for eachDetail in resultTemp['details']],{eachDetail['objectId']: [eachDetail['title'],[],{}] for eachDetail in resultTemp['details']}]
+    for eachSubDetails in resultTemp['subdetails']:
+        if(eachSubDetails['detailsId'] in detailDict[1]):
+            detailDict[1][eachSubDetails['detailsId']][1].append(eachSubDetails['objectId'])
+            detailDict[1][eachSubDetails['detailsId']][2][eachSubDetails['objectId']] = [eachSubDetails['title'],[]]
+    for eachExample in resultTemp['examples']:
+        for eachDetailId in detailDict[0]:
+            if(eachExample['subdetailsId'] in detailDict[1][eachDetailId][1]):
+                detailDict[1][eachDetailId][2][eachExample['subdetailsId']][1].append((eachExample['title'],eachExample['trans']))
+    return ((spell,excerpt,pron,accent),detailDict)
