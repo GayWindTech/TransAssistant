@@ -8,7 +8,7 @@ from OCR_style import Ui_OCR_Window
 from Screenshot import getScreenPos, getScreenshot
 from OCR import getOCRResult
 from TranslatorAPI import YoudaoTranslator, CaiYunTranslator, BaiduTranslator, TencentTranslator
-from MojiAPI import searchWord
+from MojiAPI import searchWord, fetchWord
 from Segmentation import splitWords
 from dict_style import Ui_dict_Window
 from var_dump import var_dump
@@ -79,21 +79,36 @@ class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
 
     def setupUi(self, dictMain):
         super(dictWindow_class, self).setupUi(dictMain)
-        dictMain.setWindowOpacity(0.8)
+        dictMain.setWindowOpacity(0.9)
         dictMain.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
     def searchWord(self):
-        self.wordsList.clear()
         source = self.inputTextEdit.toPlainText()
         self._wordList = searchWord(source)
         tempItemList = (each[0] for each in searchWord(source))
         self.wordsList.addItems(tempItemList)
+        self.wordsList.setCurrentItem(self.wordsList.item(0))
 
     def setQueryWord(self,word):
         self.inputTextEdit.setPlainText(word)
 
+    def fromtHtml(self,sourceList) -> str:
+        try:
+            html = f'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"><html><head><meta name="qrichtext" content="1" /><style type="text/css">p, li {{ white-space: pre-wrap; }}</style></head><body><p style="margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="font-family:\'微软雅黑\'; font-size:25pt; font-weight:600; color:#111111;">{sourceList[0][0]}</span></p><p style="margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="font-family:\'微软雅黑\'; font-size:15pt; color:#111111;">{sourceList[0][2]} {sourceList[0][3]}</span></p><p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'微软雅黑\'; font-size:10pt; color:#111111;"><br /></p>'
+            for eachId in sourceList[1][0]:
+                html += '<p style="margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="font-family:\'微软雅黑\'; font-size:23px; font-weight:600; color:#111111;">'+ sourceList[1][1][eachId][0] +'：</span></p><ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;">'
+                for eachSubId in sourceList[1][1][eachId][1]:
+                    html += '<li style="margin-top:6px; margin-bottom:6px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="font-family:\'微软雅黑\'; font-size:17px; color:#111111; text-decoration: underline;">'+ sourceList[1][1][eachId][2][eachSubId][0] +'</span></li><ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;">'
+                    for eachExampleList in sourceList[1][1][eachId][2][eachSubId][1]:
+                        html += '<li style="margin-top:6px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="font-family:\'微软雅黑\'; font-size:17px; color:#111111;">'+ eachExampleList[0] +'</span></li><p style="margin-top:0px; margin-bottom:6px; margin-left:0px; margin-right:0px; -qt-block-indent:2; text-indent:0px;"><span style="font-family:\'微软雅黑\'; font-size:17px; color:#444444;">'+ eachExampleList[1] +'</span></p>'
+                    html += '</ul>'
+            html += '<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'微软雅黑\'; font-size:10pt; color:#111111;"><br /></p><p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'微软雅黑\'; font-size:10pt; color:#111111;"><br /></p><p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'微软雅黑\'; font-size:10pt; color:#111111;"><br /></p></ul></body></html>'
+        except Exception:
+            return sourceList
+        return html
+
     def showWordDetails(self,index):
-        print(self._wordList[index])
+        self.resultText.setHtml(self.fromtHtml(fetchWord(self._wordList[index][1])))
 
 MutexList = [QMutex(),QMutex(),QMutex(),QMutex()]
 

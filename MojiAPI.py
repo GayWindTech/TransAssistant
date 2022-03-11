@@ -44,17 +44,21 @@ def fetchWord(id: str) -> dict:
     return parseFetchResult(json.loads(req.content.decode("utf-8"))["result"])
 
 def parseFetchResult(resultTemp: dict) -> tuple:
-    excerpt = resultTemp['word']['excerpt']
-    spell = resultTemp['word']['spell']
-    accent = resultTemp['word']['accent']
-    pron = resultTemp['word']['pron']
-    detailDict = [[eachDetail['objectId'] for eachDetail in resultTemp['details']],{eachDetail['objectId']: [eachDetail['title'],[],{}] for eachDetail in resultTemp['details']}]
-    for eachSubDetails in resultTemp['subdetails']:
-        if(eachSubDetails['detailsId'] in detailDict[1]):
-            detailDict[1][eachSubDetails['detailsId']][1].append(eachSubDetails['objectId'])
-            detailDict[1][eachSubDetails['detailsId']][2][eachSubDetails['objectId']] = [eachSubDetails['title'],[]]
-    for eachExample in resultTemp['examples']:
-        for eachDetailId in detailDict[0]:
-            if(eachExample['subdetailsId'] in detailDict[1][eachDetailId][1]):
-                detailDict[1][eachDetailId][2][eachExample['subdetailsId']][1].append((eachExample['title'],eachExample['trans']))
-    return ((spell,excerpt,pron,accent),detailDict)
+    try:
+        excerpt = resultTemp['word']['excerpt']
+        spell = resultTemp['word']['spell']
+        accent = resultTemp['word']['accent']
+        pron = resultTemp['word']['pron']
+        detailDict = [[eachDetail['objectId'] for eachDetail in resultTemp['details']],{eachDetail['objectId']: [eachDetail['title'],[],{}] for eachDetail in resultTemp['details']}]
+        for eachSubDetails in resultTemp['subdetails']:
+            if(eachSubDetails['detailsId'] in detailDict[1]):
+                detailDict[1][eachSubDetails['detailsId']][1].append(eachSubDetails['objectId'])
+                detailDict[1][eachSubDetails['detailsId']][2][eachSubDetails['objectId']] = [eachSubDetails['title'],[]]
+        if('examples' in resultTemp):
+            for eachExample in resultTemp['examples']:
+                for eachDetailId in detailDict[0]:
+                    if(eachExample['subdetailsId'] in detailDict[1][eachDetailId][1]):
+                        detailDict[1][eachDetailId][2][eachExample['subdetailsId']][1].append((eachExample['title'],eachExample['trans']))
+        return ((spell,excerpt,pron,accent.replace('◎','⓪')),detailDict)
+    except Exception as err:
+        return f'发生了错误，请向开发者报告：{str(err)}'

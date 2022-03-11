@@ -14,14 +14,14 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_dict_Window(object):
     def setupUi(self, dict_Window):
         dict_Window.setObjectName("dict_Window")
-        dict_Window.resize(761, 322)
+        dict_Window.resize(809, 420)
         self.dictMain = QtWidgets.QWidget(dict_Window)
         self.dictMain.setObjectName("dictMain")
         self.wordsList = QtWidgets.QListWidget(self.dictMain)
-        self.wordsList.setGeometry(QtCore.QRect(10, 50, 261, 261))
+        self.wordsList.setGeometry(QtCore.QRect(10, 50, 261, 361))
         font = QtGui.QFont()
-        font.setFamily("思源黑体")
-        font.setPointSize(10)
+        font.setFamily("微软雅黑")
+        font.setPointSize(12)
         font.setBold(False)
         font.setUnderline(False)
         font.setWeight(50)
@@ -40,7 +40,7 @@ class Ui_dict_Window(object):
         self.DictSourceLabel.setFont(font)
         self.DictSourceLabel.setObjectName("DictSourceLabel")
         self.inputTextEdit = QtWidgets.QPlainTextEdit(self.dictMain)
-        self.inputTextEdit.setGeometry(QtCore.QRect(280, 10, 471, 51))
+        self.inputTextEdit.setGeometry(QtCore.QRect(280, 10, 521, 51))
         font = QtGui.QFont()
         font.setFamily("思源黑体")
         font.setPointSize(19)
@@ -49,10 +49,18 @@ class Ui_dict_Window(object):
         self.inputTextEdit.setPlainText("")
         self.inputTextEdit.setObjectName("inputTextEdit")
         self.resultText = QtWidgets.QTextBrowser(self.dictMain)
-        self.resultText.setGeometry(QtCore.QRect(280, 70, 471, 241))
+        self.resultText.setGeometry(QtCore.QRect(280, 70, 521, 341))
+        font = QtGui.QFont()
+        font.setFamily("等线")
+        font.setBold(False)
+        font.setWeight(50)
+        font.setStrikeOut(False)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.resultText.setFont(font)
         self.resultText.setObjectName("resultText")
         self.pushButton = QtWidgets.QPushButton(self.dictMain)
-        self.pushButton.setGeometry(QtCore.QRect(50, 20, 31, 23))
+        self.pushButton.setGeometry(QtCore.QRect(230, 20, 31, 23))
         self.pushButton.setObjectName("pushButton")
         dict_Window.setCentralWidget(self.dictMain)
 
@@ -68,4 +76,9 @@ class Ui_dict_Window(object):
         self.dictSourceChoose.setItemText(0, _translate("dict_Window", "MojiDict"))
         self.dictSourceChoose.setItemText(1, _translate("dict_Window", "沪江小D词典"))
         self.DictSourceLabel.setText(_translate("dict_Window", "词典来源:"))
+        self.resultText.setHtml(_translate("dict_Window", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'等线\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.pushButton.setText(_translate("dict_Window", "PushButton"))
