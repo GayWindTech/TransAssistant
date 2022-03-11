@@ -44,15 +44,13 @@ def getOCRResult(img) -> str:
             this.host = host
             this.path = path
             this.schema = schema
-            pass
 
 
     # calculate sha256 and encode to base64
     def sha256base64(data):
         sha256 = hashlib.sha256()
         sha256.update(data)
-        digest = base64.b64encode(sha256.digest()).decode(encoding='utf-8')
-        return digest
+        return base64.b64encode(sha256.digest()).decode(encoding='utf-8')
 
 
     def parse_url(requset_url):
@@ -61,11 +59,10 @@ def getOCRResult(img) -> str:
         schema = requset_url[:stidx + 3]
         edidx = host.index("/")
         if edidx <= 0:
-            raise AssembleHeaderException("invalid request url:" + requset_url)
+            raise AssembleHeaderException(f"invalid request url:{requset_url}")
         path = host[edidx:]
         host = host[:edidx]
-        u = Url(host, path, schema)
-        return u
+        return Url(host, path, schema)
 
 
     # build websocket auth request url
@@ -94,7 +91,7 @@ def getOCRResult(img) -> str:
             "authorization": authorization
         }
 
-        return requset_url + "?" + urlencode(values)
+        return f'{requset_url}?{urlencode(values)}'
 
 
     url = 'https://api.xf-yun.com/v1/private/s00b65163'

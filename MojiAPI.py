@@ -38,8 +38,9 @@ def fetchWord(id: str) -> dict:
         "_ApplicationId": "E62VyFVLMiW7kvbtVq3p",
         "_ClientVersion": "js2.12.0",
         "_InstallationId": "f8bd75b5-9499-e4ec-634b-1a5544681285",
-        "wordId": str(id),
+        "wordId": id,
     }
+
     req = requests.post(APIURL, json=JsonDict, headers=hd, verify=False)
     return parseFetchResult(json.loads(req.content.decode("utf-8"))["result"])
 

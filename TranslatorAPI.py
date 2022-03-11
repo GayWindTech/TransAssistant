@@ -23,7 +23,7 @@ def truncate(input):
     if input is None:
         return None
     size = len(input)
-    return input if size <= 20 else input[0:10] + str(size) + input[size - 10: size]
+    return input if size <= 20 else input[:10] + str(size) + input[size - 10: size]
 
 
 YOUDAO_ERRORCODE_DICT = {
@@ -100,8 +100,9 @@ def CaiYunTranslator(QueryText: str) -> str:
     }
     headers = {
         "content-type": "application/json",
-        "x-authorization": "token " + CAIYUN_TOKEN,
+        "x-authorization": f"token {CAIYUN_TOKEN}",
     }
+
     try:
         response = requests.post(url, data=json.dumps(payload), headers=headers, verify=False)
     except Exception as err:
@@ -120,7 +121,18 @@ def BaiduTranslator(QueryText:str) -> str:
     salt = random.randint(32768, 65536)
     sign = BAIDU_APPID + QueryText + str(salt) + BAIDU_SECRETKEY
     sign = hashlib.md5(sign.encode()).hexdigest()
-    request_url = BAIDU_URL + '?appid=' + BAIDU_APPID + '&q=' + urllib.parse.quote(QueryText) + '&from=' + fromLang + '&to=' + toLang + '&salt=' + str(salt) + '&sign=' + sign
+    request_url = (
+        f'{BAIDU_URL}?appid={BAIDU_APPID}&q={urllib.parse.quote(QueryText)}'
+        + '&from='
+        + fromLang
+        + '&to='
+        + toLang
+        + '&salt='
+        + str(salt)
+        + '&sign='
+        + sign
+    )
+
     response = requests.get(request_url, verify=False)
     return_dict = json.loads(response.content.decode('utf-8'))
     try:
