@@ -222,6 +222,11 @@
       <string>MeCab</string>
      </property>
     </item>
+    <item>
+     <property name="text">
+      <string>kuromoji</string>
+     </property>
+    </item>
    </widget>
    <widget class="QLabel" name="SplitChooseTitle">
     <property name="geometry">

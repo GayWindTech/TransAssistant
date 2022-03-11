@@ -10,14 +10,11 @@ disable_warnings()
 isPacked = executable == argv[0]
 
 def _kuromoji(s: str) -> list:
-    output = list()
     url = "https://www.atilika.org/kuromoji/rest/tokenizer/tokenize"
     datas = {"text": s, "mode": 0}
     req = requests.post(url, data=datas, verify=False, proxies=None)
     # var_dump(json.loads(req.content.decode('utf-8'))['tokens'])
-    for each in json.loads(req.content.decode("utf-8"))["tokens"]:
-        output.append(each["surface"])
-    return output
+    return (each["surface"] for each in json.loads(req.content.decode("utf-8"))["tokens"] )
 
 
 _MeCab = Tagger("-Owakati")
