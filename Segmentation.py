@@ -26,24 +26,24 @@ else:
 
 def splitWords(s, m):
     output = str()
-    if(m == "MeCab"):
+    if (m == "MeCab"):
         temp = _MeCab.parse(s).split()
         for each in temp:
-            if(each != " " and each != None):
-                output += each + " | "
+            if (each not in [" ", None]):
+                output += f'{each} | '
         return output
-    elif(m == "sudachi"):
+    elif (m == "sudachi"):
         mode = tokenizer.Tokenizer.SplitMode.B
         temp = [m.surface() for m in _sudachi.tokenize(s, mode)]
         for each in temp:
-            if(each != " " and each != None):
-                output += each + " | "
+            if (each not in [" ", None]):
+                output += f'{each} | '
         return output
-    elif(m == "kuromoji"):
+    elif (m == "kuromoji"):
         temp = _kuromoji(s)
         for each in temp:
-            if each != " " and each != None:
-                output += each + " | "
+            if (each not in [" ", None]):
+                output += f'{each} | '
         return output
 
 

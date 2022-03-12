@@ -8,7 +8,7 @@ WindowName = "Please choose the subtitle area"
 
 
 def getScreenPos() -> tuple:
-    PosList = list()
+    PosList = []
     img = pyautogui.screenshot()  # x,y,w,h
     img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
     cv2.namedWindow(WindowName, cv2.WINDOW_NORMAL)
