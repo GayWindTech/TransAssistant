@@ -1,7 +1,7 @@
 # coding=utf-8
 import requests
 import json
-from var_dump import var_dump
+# from var_dump import var_dump
 from urllib3 import disable_warnings
 
 disable_warnings()

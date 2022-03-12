@@ -1,9 +1,23 @@
 [[source]]
-url = "https://pypi.org/simple"
+url = "https://mirrors.cloud.tencent.com/pypi/simple"
 verify_ssl = true
 name = "pypi"
 
 [packages]
+system-hotkey = "*"
+pyqt5 = "*"
+requests = "*"
+unidic = "*"
+sudachidict-full = "*"
+sudachipy = "*"
+opencv-python = "*"
+pyautogui = "*"
+numpy = "*"
+fugashi = "*"
+tencentcloud-sdk-python = "*"
+pyinstaller = "*"
+pypiwin32 = "*"
+mecab-python3 = "*"
 
 [dev-packages]
 
