@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>50</y>
+      <y>70</y>
       <width>261</width>
-      <height>361</height>
+      <height>341</height>
      </rect>
     </property>
     <property name="font">
@@ -39,7 +39,7 @@
      <rect>
       <x>100</x>
       <y>10</y>
-      <width>121</width>
+      <width>111</width>
       <height>21</height>
      </rect>
     </property>
@@ -72,26 +72,6 @@
      <string>词典来源:</string>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="inputTextEdit">
-    <property name="geometry">
-     <rect>
-      <x>280</x>
-      <y>10</y>
-      <width>521</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>思源黑体</family>
-      <pointsize>19</pointsize>
-      <kerning>true</kerning>
-     </font>
-    </property>
-    <property name="plainText">
-     <string/>
-    </property>
-   </widget>
    <widget class="QTextBrowser" name="resultText">
     <property name="geometry">
      <rect>
@@ -119,39 +99,45 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QCheckBox" name="autoSearchCheckBox">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>20</y>
-      <width>31</width>
-      <height>23</height>
+      <x>140</x>
+      <y>40</y>
+      <width>71</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>自动查词</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="inputLineEdit">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>10</y>
+      <width>521</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>思源黑体</family>
+      <pointsize>19</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>
  </widget>
  <resources/>
  <connections>
-  <connection>
-   <sender>pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>dict_Window</receiver>
-   <slot>searchWord()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>71</x>
-     <y>26</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>256</x>
-     <y>75</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>dict_Window</sender>
    <signal>selectionTextChange()</signal>
@@ -184,11 +170,62 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>autoSearchCheckBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>dict_Window</receiver>
+   <slot>updateAutoSearch(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>165</x>
+     <y>55</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>145</x>
+     <y>62</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>inputLineEdit</sender>
+   <signal>editingFinished()</signal>
+   <receiver>dict_Window</receiver>
+   <slot>editingFinished()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>501</x>
+     <y>13</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>497</x>
+     <y>3</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>inputLineEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>dict_Window</receiver>
+   <slot>returnPressed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>309</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>310</x>
+     <y>3</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>selectionTextChange()</signal>
   <slot>searchWord()</slot>
   <slot>setQueryWord()</slot>
   <slot>showWordDetails()</slot>
+  <slot>updateAutoSearch(bool)</slot>
+  <slot>editingFinished()</slot>
+  <slot>returnPressed()</slot>
  </slots>
 </ui>

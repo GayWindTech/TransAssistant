@@ -11,7 +11,7 @@ from TranslatorAPI import YoudaoTranslator, CaiYunTranslator, BaiduTranslator, T
 from MojiAPI import searchWord, fetchWord
 from Segmentation import splitWords
 from dict_style import Ui_dict_Window
-from var_dump import var_dump
+# from var_dump import var_dump
 
 JPNameDict = {
     "モブ美": "林品如",
@@ -75,22 +75,40 @@ class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
     def __init__(self):
         super(dictWindow_class, self).__init__()
         self.setupUi(self)
+        self.autoSearch = self.autoSearchCheckBox.isChecked()
         self._wordList = []
+        self.needToSearch = False
 
     def setupUi(self, dictMain):
         super(dictWindow_class, self).setupUi(dictMain)
         dictMain.setWindowOpacity(0.9)
         dictMain.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
+    def updateAutoSearch(self,_bool):
+        self.autoSearch = _bool
+
+    def showEvent(self,event):
+        super(dictWindow_class,self).showEvent(event)
+
     def searchWord(self):
-        source = self.inputTextEdit.toPlainText()
-        self._wordList = searchWord(source)
-        tempItemList = (each[0] for each in searchWord(source))
-        self.wordsList.addItems(tempItemList)
-        self.wordsList.setCurrentItem(self.wordsList.item(0))
+        self.wordsList.clear()
+        source = self.inputLineEdit.text()
+        if(source):
+            self._wordList = searchWord(source)
+            tempItemList = (each[0] for each in searchWord(source))
+            self.wordsList.addItems(tempItemList)
+            self.wordsList.setCurrentItem(self.wordsList.item(0))
 
     def setQueryWord(self,word):
-        self.inputTextEdit.setPlainText(word)
+        self.inputLineEdit.setText(word)
+
+    def editingFinished(self):
+        if(self.autoSearch):
+            self.searchWord()
+
+    def returnPressed(self):
+        if(not self.autoSearch):
+            self.searchWord()
 
     def fromtHtml(self,sourceList) -> str:
         try:
@@ -241,9 +259,9 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.keyPressEvent
 
     def showDictWindow(self):
-        self.dictWindow.show()
         self.selectionTextChange.emit(self.selectionText)
-
+        self.dictWindow.inputLineEdit.editingFinished.emit()
+        self.dictWindow.show()
 
 def runGUI():
     GUI_APP = QtWidgets.QApplication(sys.argv)
