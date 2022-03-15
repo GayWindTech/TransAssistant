@@ -34,29 +34,30 @@
     </property>
     <property name="font">
      <font>
-      <family>思源黑体</family>
+      <family>Microsoft YaHei UI</family>
       <pointsize>18</pointsize>
+      <kerning>true</kerning>
      </font>
     </property>
     <property name="cursor" stdset="0">
      <cursorShape>IBeamCursor</cursorShape>
     </property>
     <property name="plainText">
-     <string>使用前请先选取OCR区域，在弹出窗口中按回车确认↑</string>
+     <string>请先选取OCR区域，使用鼠标划选后按回车确认↑</string>
     </property>
    </widget>
    <widget class="QPlainTextEdit" name="TransResult_0">
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>180</y>
+      <y>190</y>
       <width>721</width>
       <height>71</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>思源黑体</family>
+      <family>Microsoft YaHei UI</family>
       <pointsize>18</pointsize>
      </font>
     </property>
@@ -74,14 +75,14 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>260</y>
+      <y>270</y>
       <width>721</width>
       <height>71</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>思源黑体</family>
+      <family>Microsoft YaHei UI</family>
       <pointsize>18</pointsize>
      </font>
     </property>
@@ -190,8 +191,9 @@
     </property>
     <property name="font">
      <font>
-      <family>思源黑体</family>
-      <pointsize>14</pointsize>
+      <family>Microsoft YaHei UI</family>
+      <pointsize>13</pointsize>
+      <kerning>false</kerning>
      </font>
     </property>
     <property name="cursor" stdset="0">
@@ -254,13 +256,13 @@
      <rect>
       <x>280</x>
       <y>10</y>
-      <width>111</width>
+      <width>151</width>
       <height>20</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>11</pointsize>
      </font>
     </property>
     <property name="text">
@@ -273,7 +275,7 @@
    <widget class="QLabel" name="ShortcutKeyText">
     <property name="geometry">
      <rect>
-      <x>270</x>
+      <x>290</x>
       <y>30</y>
       <width>131</width>
       <height>20</height>
@@ -281,11 +283,12 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>11</pointsize>
+      <underline>true</underline>
      </font>
     </property>
     <property name="text">
-     <string>control + space</string>
+     <string>Control + Space</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -295,14 +298,14 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>340</y>
+      <y>350</y>
       <width>721</width>
       <height>71</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>思源黑体</family>
+      <family>Microsoft YaHei UI</family>
       <pointsize>18</pointsize>
      </font>
     </property>
@@ -314,14 +317,14 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>420</y>
+      <y>430</y>
       <width>721</width>
       <height>71</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>思源黑体</family>
+      <family>Microsoft YaHei UI</family>
       <pointsize>18</pointsize>
      </font>
     </property>
@@ -383,6 +386,45 @@
      <string>自动查词</string>
     </property>
    </widget>
+   <widget class="QCheckBox" name="autoTransCheckBox">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>220</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>自动翻译</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="doTransButton">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>190</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>翻译</string>
+    </property>
+   </widget>
    <zorder>OCRResultTextEdit</zorder>
    <zorder>TransResult_0</zorder>
    <zorder>TransResult_1</zorder>
@@ -400,6 +442,8 @@
    <zorder>OCRButtonPlus</zorder>
    <zorder>showDictWindowButton</zorder>
    <zorder>autoDictCheckBox</zorder>
+   <zorder>autoTransCheckBox</zorder>
+   <zorder>doTransButton</zorder>
   </widget>
  </widget>
  <customwidgets>
@@ -414,6 +458,22 @@
    </slots>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>TransResult_0</tabstop>
+  <tabstop>ChooseAreaButton</tabstop>
+  <tabstop>OCRButton</tabstop>
+  <tabstop>OCRButtonPlus</tabstop>
+  <tabstop>showDictWindowButton</tabstop>
+  <tabstop>autoDictCheckBox</tabstop>
+  <tabstop>autoTransCheckBox</tabstop>
+  <tabstop>doTransButton</tabstop>
+  <tabstop>SplitChooseBox</tabstop>
+  <tabstop>TransResult_1</tabstop>
+  <tabstop>TransResult_2</tabstop>
+  <tabstop>TransResult_3</tabstop>
+  <tabstop>OCRResultTextEdit</tabstop>
+  <tabstop>splitTextEdit</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -466,12 +526,12 @@
   </connection>
   <connection>
    <sender>OCRResultTextEdit</sender>
-   <signal>textChanged()</signal>
+   <signal>focusOut()</signal>
    <receiver>OCR_Window</receiver>
-   <slot>updateResults()</slot>
+   <slot>doAutoTrans()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>231</x>
+     <x>229</x>
      <y>105</y>
     </hint>
     <hint type="destinationlabel">
@@ -608,6 +668,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>autoTransCheckBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>updateAutoTransBool(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>800</x>
+     <y>230</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>814</x>
+     <y>211</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>doTransButton</sender>
+   <signal>clicked()</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>updateResults()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>805</x>
+     <y>205</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>839</x>
+     <y>253</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>ocrHotkeyPressed()</signal>
@@ -621,5 +713,7 @@
   <slot>showDictWindow()</slot>
   <slot>updateSelectionText()</slot>
   <slot>updateAutoDictBool(bool)</slot>
+  <slot>updateAutoTransBool(bool)</slot>
+  <slot>doAutoTrans()</slot>
  </slots>
 </ui>

@@ -1,9 +1,7 @@
 import sys
 from system_hotkey import SystemHotkey
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QApplication
-import PyQt5.QtCore as QtCore
-from PyQt5.QtCore import pyqtSignal, QThread, QMutex
+from PyQt6 import QtWidgets
+from PyQt6.QtCore import pyqtSignal, QThread, QMutex, Qt
 from OCR_style import Ui_OCR_Window
 from Screenshot import getScreenPos, getScreenshot
 from OCR import getOCRResult
@@ -12,6 +10,7 @@ from MojiAPI import searchWord, fetchWord
 from Segmentation import splitWords
 from dict_style import Ui_dict_Window
 # from var_dump import var_dump
+#QGuiApplication::screens
 
 JPNameDict = {
     "モブ美": "林品如",
@@ -82,7 +81,7 @@ class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
     def setupUi(self, dictMain):
         super(dictWindow_class, self).setupUi(dictMain)
         dictMain.setWindowOpacity(0.9)
-        dictMain.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        dictMain.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
 
     def updateAutoSearch(self,_bool):
         self.autoSearch = _bool
@@ -112,15 +111,15 @@ class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
 
     def fromtHtml(self,sourceList) -> str:
         try:
-            html = f'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"><html><head><meta name="qrichtext" content="1" /><style type="text/css">p, li {{ white-space: pre-wrap; }}</style></head><body><p style="margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="font-family:\'微软雅黑\'; font-size:25pt; font-weight:600; color:#111111;">{sourceList[0][0]}</span></p><p style="margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="font-family:\'微软雅黑\'; font-size:15pt; color:#111111;">{sourceList[0][2]} {sourceList[0][3]}</span></p><p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'微软雅黑\'; font-size:10pt; color:#111111;"><br /></p>'
+            html = f'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"><html><head><meta name="qrichtext" content="1" /><style type="text/css">p, li {{ white-space: pre-wrap; }}</style></head><body><p style="margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="font-family:\'Microsoft Yahei\'; font-size:25pt; font-weight:600; color:#111111;">{sourceList[0][0]}</span></p><p style="margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="font-family:\'Microsoft Yahei\'; font-size:15pt; color:#111111;">{sourceList[0][2]} {sourceList[0][3]}</span></p><p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Microsoft Yahei\'; font-size:10pt; color:#111111;"><br /></p>'
             for eachId in sourceList[1][0]:
-                html += '<p style="margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="font-family:\'微软雅黑\'; font-size:23px; font-weight:600; color:#111111;">'+ sourceList[1][1][eachId][0] +'：</span></p><ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;">'
+                html += '<p style="margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="font-family:\'Microsoft Yahei\'; font-size:23px; font-weight:600; color:#111111;">'+ sourceList[1][1][eachId][0] +'：</span></p><ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;">'
                 for eachSubId in sourceList[1][1][eachId][1]:
-                    html += '<li style="margin-top:6px; margin-bottom:6px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="font-family:\'微软雅黑\'; font-size:17px; color:#111111; text-decoration: underline;">'+ sourceList[1][1][eachId][2][eachSubId][0] +'</span></li><ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;">'
+                    html += '<li style="margin-top:6px; margin-bottom:6px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="font-family:\'Microsoft Yahei\'; font-size:17px; color:#111111; text-decoration: underline;">'+ sourceList[1][1][eachId][2][eachSubId][0] +'</span></li><ul style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;">'
                     for eachExampleList in sourceList[1][1][eachId][2][eachSubId][1]:
-                        html += '<li style="margin-top:6px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="font-family:\'微软雅黑\'; font-size:17px; color:#111111;">'+ eachExampleList[0] +'</span></li><p style="margin-top:0px; margin-bottom:6px; margin-left:0px; margin-right:0px; -qt-block-indent:2; text-indent:0px;"><span style="font-family:\'微软雅黑\'; font-size:17px; color:#444444;">'+ eachExampleList[1] +'</span></p>'
+                        html += '<li style="margin-top:6px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="font-family:\'Microsoft Yahei\'; font-size:17px; color:#111111;">'+ eachExampleList[0] +'</span></li><p style="margin-top:0px; margin-bottom:6px; margin-left:0px; margin-right:0px; -qt-block-indent:2; text-indent:0px;"><span style="font-family:\'Microsoft Yahei\'; font-size:17px; color:#444444;">'+ eachExampleList[1] +'</span></p>'
                     html += '</ul>'
-            html += '<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'微软雅黑\'; font-size:10pt; color:#111111;"><br /></p><p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'微软雅黑\'; font-size:10pt; color:#111111;"><br /></p><p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'微软雅黑\'; font-size:10pt; color:#111111;"><br /></p></ul></body></html>'
+            html += '<p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Microsoft Yahei\'; font-size:10pt; color:#111111;"><br /></p><p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Microsoft Yahei\'; font-size:10pt; color:#111111;"><br /></p><p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Microsoft Yahei\'; font-size:10pt; color:#111111;"><br /></p></ul></body></html>'
         except Exception:
             return sourceList
         return html
@@ -152,11 +151,11 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
 
     def setupUi(self, OCR_Window):
         super(TransAssistant_class, self).setupUi(OCR_Window)
-        OCR_Window.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        OCR_Window.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
         OCR_Window.setWindowOpacity(0.8)
         OCR_Window.OCRButton.setEnabled(self.AreaInit)
         OCR_Window.OCRButtonPlus.setEnabled(self.AreaInit)
-        DesktopSize = QApplication.desktop()
+        DesktopSize = self.screen().availableSize()
         OCR_Window.move(DesktopSize.width() * 0.54, DesktopSize.height() * 0.41)
         # OCR_Window.setAttribute(QtCore.Qt.WA_TranslucentBackground,True)
 
@@ -178,6 +177,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.setupUi(self)
         self.autoDict = self.autoDictCheckBox.isChecked()
         self.resultTextEditList = self.TransResult_0,self.TransResult_1,self.TransResult_2,self.TransResult_3
+        self.autoTrans = True
 
     def updateSelectionText(self):
         if(self.OCRResultTextEdit.hasFocus()):
@@ -186,6 +186,9 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
             self.selectionText = self.splitTextEdit.textCursor().selectedText()
         if(self.autoDict):
             self.showDictWindow()
+
+    def updateAutoTransBool(self,_bool):
+        self.autoTrans = _bool
 
     def updateAutoDictBool(self,_bool):
         self.autoDict = _bool
@@ -216,15 +219,21 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.OCRButtonPlus.setEnabled(self.AreaInit)
         # print(self.ScreenPos)
 
+    def doAutoTrans(self):
+        if(self.autoTrans):
+            self.updateResults()
+
     def getOCRText(self):
         if self.AreaInit:
             self.OCRText = getOCRResult(getScreenshot(self.ScreenPos))
             self.OCRResultTextEdit.setPlainText(self.OCRText)
+        self.updateResults()
 
     def appendOCRText(self):
         if self.AreaInit:
             self.OCRText += getOCRResult(getScreenshot(self.ScreenPos))
             self.OCRResultTextEdit.setPlainText(self.OCRText)
+        self.updateResults()
 
     def updateResultTextEdit(self,aimTextEdit:int,text:str):
         text = nameReplace(text,True)
@@ -268,7 +277,7 @@ def runGUI():
     GUI_mainWindow = TransAssistant_class()
     GUI_mainWindow.setFixedSize(GUI_mainWindow.width(), GUI_mainWindow.height())
     GUI_mainWindow.show()
-    GUI_APP.exec_()
+    GUI_APP.exec()
 
 
 if __name__ == "__main__":

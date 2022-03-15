@@ -1,5 +1,5 @@
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import pyqtSignal, Qt
+from PyQt6 import QtWidgets
+from PyQt6.QtCore import pyqtSignal, Qt
 
 class betterSelectionQPlainTextEdit(QtWidgets.QPlainTextEdit):
     mouseRelease = pyqtSignal()

@@ -170,7 +170,7 @@
             "index": "pypi",
             "version": "==223"
         },
-        "pyqt5": {
+        "PyQt6": {
             "hashes": [
                 "sha256:80343bcab95ffba619f2ed2467fd828ffeb0a251ad7225be5fc06dcc333af452",
                 "sha256:f411ecda52e488e1d3c5cce7563e1b2ca9cf0b7531e3c25b03d9a7e56e07e7fc"
@@ -178,13 +178,13 @@
             "index": "pypi",
             "version": "==5.15.6"
         },
-        "pyqt5-qt5": {
+        "PyQt6-qt5": {
             "hashes": [
                 "sha256:750b78e4dba6bdf1607febedc08738e318ea09e9b10aea9ff0d73073f11f6962"
             ],
             "version": "==5.15.2"
         },
-        "pyqt5-sip": {
+        "PyQt6-sip": {
             "hashes": [
                 "sha256:2f24f299b44c511c23796aafbbb581bfdebf78d0905657b7cee2141b4982030e",
                 "sha256:82c1b3080db7634fa318fddbb3cfaa30e63a67bca1001a76958c31f30b774a9d"

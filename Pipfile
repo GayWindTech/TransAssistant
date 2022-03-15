@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 system-hotkey = "*"
-pyqt5 = "*"
+PyQt6 = "*"
 requests = "*"
 unidic = "*"
 sudachidict-full = "*"
