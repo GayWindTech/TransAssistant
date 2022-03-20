@@ -10,6 +10,9 @@ def initConfig() -> None:
     with open(configPath,mode='w',encoding='utf-8') as f:
         yaml_dump(emptyData,f,CDumper)
 
+if(not os.path.exists(configPath)):
+    initConfig()
+
 def readConfig() -> dict:
     with open(configPath,encoding='utf-8') as f:
         return yaml_load(f,CLoader)
