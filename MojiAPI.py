@@ -1,4 +1,5 @@
 # coding=utf-8
+import itertools
 import requests
 import json
 # from var_dump import var_dump
@@ -55,11 +56,10 @@ def parseFetchResult(resultTemp: dict) -> tuple:
             if(eachSubDetails['detailsId'] in detailDict[1]):
                 detailDict[1][eachSubDetails['detailsId']][1].append(eachSubDetails['objectId'])
                 detailDict[1][eachSubDetails['detailsId']][2][eachSubDetails['objectId']] = [eachSubDetails['title'],[]]
-        if('examples' in resultTemp):
-            for eachExample in resultTemp['examples']:
-                for eachDetailId in detailDict[0]:
-                    if(eachExample['subdetailsId'] in detailDict[1][eachDetailId][1]):
-                        detailDict[1][eachDetailId][2][eachExample['subdetailsId']][1].append((eachExample['title'],eachExample['trans']))
+        if ('examples' in resultTemp):
+            for eachExample, eachDetailId in itertools.product(resultTemp['examples'], detailDict[0]):
+                if(eachExample['subdetailsId'] in detailDict[1][eachDetailId][1]):
+                    detailDict[1][eachDetailId][2][eachExample['subdetailsId']][1].append((eachExample['title'],eachExample['trans']))
         return ((spell,excerpt,pron,accent.replace('◎','⓪')),detailDict)
     except Exception as err:
         return f'发生了错误，请向开发者报告：{str(err)}'
