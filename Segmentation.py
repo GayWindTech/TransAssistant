@@ -5,9 +5,8 @@ import requests
 import json
 from urllib3 import disable_warnings
 from os import path
-from sys import executable,argv
 disable_warnings()
-isPacked = executable == argv[0]
+from Config import isPacked
 
 def _kuromoji(s: str) -> list:
     url = "https://www.atilika.org/kuromoji/rest/tokenizer/tokenize"

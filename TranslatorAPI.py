@@ -1,7 +1,7 @@
 import random
 
 import urllib
-from TranslatorConfig import *
+from Config import readConfig
 import requests
 import time
 import uuid
@@ -18,6 +18,7 @@ from tencentcloud.tmt.v20180321 import tmt_client, models
 from urllib3 import disable_warnings
 disable_warnings()
 
+configs = readConfig()
 
 def truncate(input):
     if input is None:
@@ -62,7 +63,7 @@ def YoudaoTranslator(QueryText: str) -> str:
     YOUDAO_URL = "https://openapi.youdao.com/api"
     curtime = str(int(time.time()))
     salt = str(uuid.uuid1())
-    signStr = YOUDAO_KEY + truncate(QueryText) + salt + curtime + YOUDAO_SECRET
+    signStr = configs['YOUDAO_KEY'] + truncate(QueryText) + salt + curtime + configs['YOUDAO_SECRET']
     hash_algorithm = hashlib.sha256()
     hash_algorithm.update(signStr.encode("utf-8"))
     sign = hash_algorithm.hexdigest()
@@ -71,7 +72,7 @@ def YoudaoTranslator(QueryText: str) -> str:
         "to": "zh-CHS",
         "signType":  "v3",
         "curtime": curtime,
-        "appKey": YOUDAO_KEY,
+        "appKey": configs['YOUDAO_KEY'],
         "q": QueryText,
         "salt": salt,
         "sign": sign,
@@ -100,7 +101,7 @@ def CaiYunTranslator(QueryText: str) -> str:
     }
     headers = {
         "content-type": "application/json",
-        "x-authorization": f"token {CAIYUN_TOKEN}",
+        "x-authorization": f"token {configs['CAIYUN_TOKEN']}",
     }
 
     try:
@@ -119,19 +120,10 @@ def BaiduTranslator(QueryText:str) -> str:
     fromLang = 'auto'
     toLang = 'zh'
     salt = random.randint(32768, 65536)
-    sign = BAIDU_APPID + QueryText + str(salt) + BAIDU_SECRETKEY
+    sign = configs['BAIDU_APPID'] + QueryText + str(salt) + configs['BAIDU_SECRETKEY']
     sign = hashlib.md5(sign.encode()).hexdigest()
-    request_url = (
-        f'{BAIDU_URL}?appid={BAIDU_APPID}&q={urllib.parse.quote(QueryText)}'
-        + '&from='
-        + fromLang
-        + '&to='
-        + toLang
-        + '&salt='
-        + str(salt)
-        + '&sign='
-        + sign
-    )
+    request_url = (f'{BAIDU_URL}?appid=' + configs['BAIDU_APPID']+ '&q=' + urllib.parse.quote(QueryText)+ '&from=' + fromLang+ '&to=' + toLang+ '&salt=' + str(salt)+ '&sign=' + sign)
+
 
     response = requests.get(request_url, verify=False)
     return_dict = json.loads(response.content.decode('utf-8'))
@@ -143,7 +135,7 @@ def BaiduTranslator(QueryText:str) -> str:
 
 def TencentTranslator(QueryText:str) -> str:
     try:
-        cred = credential.Credential(TENCENT_SECERTID, TENCENT_SECERTKEY)
+        cred = credential.Credential(configs['TENCENT_SECERTID'], configs['TENCENT_SECERTKEY'])
         httpProfile = HttpProfile()
         httpProfile.endpoint = "tmt.tencentcloudapi.com"
         clientProfile = ClientProfile()
