@@ -123,7 +123,7 @@
    <widget class="QLabel" name="ChosenTitleTitle">
     <property name="geometry">
      <rect>
-      <x>680</x>
+      <x>700</x>
       <y>10</y>
       <width>81</width>
       <height>20</height>
@@ -146,7 +146,7 @@
      <rect>
       <x>650</x>
       <y>30</y>
-      <width>141</width>
+      <width>181</width>
       <height>20</height>
      </rect>
     </property>
@@ -525,22 +525,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>OCRResultTextEdit</sender>
-   <signal>focusOut()</signal>
-   <receiver>OCR_Window</receiver>
-   <slot>doAutoTrans()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>229</x>
-     <y>105</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>258</x>
-     <y>138</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>SplitChooseBox</sender>
    <signal>currentTextChanged(QString)</signal>
    <receiver>OCR_Window</receiver>
@@ -700,6 +684,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>OCRResultTextEdit</sender>
+   <signal>textChanged()</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>updateSplitTextEdit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>38</x>
+     <y>106</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>19</x>
+     <y>106</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>ocrHotkeyPressed()</signal>
@@ -715,5 +715,6 @@
   <slot>updateAutoDictBool(bool)</slot>
   <slot>updateAutoTransBool(bool)</slot>
   <slot>doAutoTrans()</slot>
+  <slot>updateSplitTextEdit()</slot>
  </slots>
 </ui>

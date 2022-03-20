@@ -218,13 +218,13 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         if(self.AreaInit):
             self.OCRText = getOCRResult(getScreenshot(self.ScreenPos))
             self.OCRResultTextEdit.setPlainText(self.OCRText)
-        self.updateResults()
+        self.doAutoTrans()
 
     def appendOCRText(self):
         if(self.AreaInit):
             self.OCRText += getOCRResult(getScreenshot(self.ScreenPos))
             self.OCRResultTextEdit.setPlainText(self.OCRText)
-        self.updateResults()
+        self.doAutoTrans()
 
     def updateResultTextEdit(self,aimTextEdit:int,text:str):
         text = nameReplace(text,True)
@@ -232,8 +232,8 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
 
     def updateResults(self):
         source = self.OCRResultTextEdit.toPlainText()
+        self.updateSplitTextEdit(True)
         if(source):
-            self.updateSplitTextEdit(source)
             source = nameReplace(source)
             self.t0,self.t1,self.t2,self.t3 = TranslatorThread(source,0,0),TranslatorThread(source,1,1),TranslatorThread(source,2,2),TranslatorThread(source,3,3)
             self.t0._signal.connect(self.updateResultTextEdit)
@@ -247,12 +247,12 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
 
     def updateSplitMode(self, mode):
         self.SplitMode = mode
-        source = self.OCRResultTextEdit.toPlainText()
-        if(source):
-            self.updateSplitTextEdit(source)
+        self.updateSplitTextEdit()
 
-    def updateSplitTextEdit(self, source):
-        self.splitTextEdit.setPlainText(splitWords(source, self.SplitMode))
+    def updateSplitTextEdit(self,Force=False):
+        source = self.OCRResultTextEdit.toPlainText()
+        if(source and (Force or self.SplitMode != 'kuromoji')):
+            self.splitTextEdit.setPlainText(splitWords(source, self.SplitMode))
 
     def updateOCRHotkey(self, text):
         print(text)

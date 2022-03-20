@@ -11,6 +11,7 @@ block_cipher = None
 
 
 a = Analysis(['GUI.py'],
+             pathex=['C:\\Users\\28448\\AppData\\Local\\Programs\\Python\\Python37\\lib\\site-packages\\cv2\\'],
              binaries=[],
              datas=datas,
              hiddenimports=['unidic', 'sudachidict_full'],
