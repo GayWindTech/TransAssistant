@@ -122,18 +122,17 @@ def getOCRResult(img) -> str:
 
 
     def formatJson(JsonRawText):
-        # var_dump(JsonRawText)
         JsonRawDict = json.loads(JsonRawText)
-        for eachPages in JsonRawDict['pages']:
-            for eachLines in eachPages['lines']:
-                lineWordsStr = str()
-                try:
+        try:
+            for eachPages in JsonRawDict['pages']:
+                for eachLines in eachPages['lines']:
+                    lineWordsStr = str()
                     for eachWords in eachLines['words']:
                         lineWordsStr += eachWords['content']
                         # print(repr(eachWords['content']))
                     return(lineWordsStr)
-                except KeyError:
-                    return 'OCR出错,请重试~'
+        except KeyError:
+            return '无法获取有效内容OvO'
 
 
     request_url = assemble_ws_auth_url(url, "POST", APIKey, APISecret)
