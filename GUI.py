@@ -197,40 +197,31 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.dictWindow.close()
 
     def sendHotkeyPressedSig(self, Hotkeys):
-        if Hotkeys is self.Hotkey_OCR:
+        if(Hotkeys is self.Hotkey_OCR):
             self.ocrHotkeyPressed.emit()
 
     def getScreenPos(self):
         self.hide()
         self.ScreenPos = getScreenPos()
-        self.PosText.setText(
-            f'{(self.ScreenPos[0], self.ScreenPos[1])},'
-            + str(
-                (
-                    self.ScreenPos[0] + self.ScreenPos[2],
-                    self.ScreenPos[1] + self.ScreenPos[3],
-                )
-            )
-        )
+        self.PosText.setText(f'{(self.ScreenPos[0], self.ScreenPos[1])},'+ str((self.ScreenPos[0] + self.ScreenPos[2],self.ScreenPos[1] + self.ScreenPos[3],)))
 
         self.show()
         self.AreaInit = True
         self.OCRButton.setEnabled(self.AreaInit)
         self.OCRButtonPlus.setEnabled(self.AreaInit)
-        # print(self.ScreenPos)
 
     def doAutoTrans(self):
         if(self.autoTrans):
             self.updateResults()
 
     def getOCRText(self):
-        if self.AreaInit:
+        if(self.AreaInit):
             self.OCRText = getOCRResult(getScreenshot(self.ScreenPos))
             self.OCRResultTextEdit.setPlainText(self.OCRText)
         self.updateResults()
 
     def appendOCRText(self):
-        if self.AreaInit:
+        if(self.AreaInit):
             self.OCRText += getOCRResult(getScreenshot(self.ScreenPos))
             self.OCRResultTextEdit.setPlainText(self.OCRText)
         self.updateResults()
@@ -241,7 +232,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
 
     def updateResults(self):
         source = self.OCRResultTextEdit.toPlainText()
-        if source != "":
+        if(source):
             self.updateSplitTextEdit(source)
             source = nameReplace(source)
             self.t0,self.t1,self.t2,self.t3 = TranslatorThread(source,0,0),TranslatorThread(source,1,1),TranslatorThread(source,2,2),TranslatorThread(source,3,3)
@@ -257,7 +248,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
     def updateSplitMode(self, mode):
         self.SplitMode = mode
         source = self.OCRResultTextEdit.toPlainText()
-        if source != "":
+        if(source):
             self.updateSplitTextEdit(source)
 
     def updateSplitTextEdit(self, source):
@@ -281,5 +272,4 @@ def runGUI():
 
 
 if __name__ == "__main__":
-    # print(runGUI())
     runGUI()
