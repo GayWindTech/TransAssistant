@@ -4,4 +4,4 @@ test
 __pycache__
 build
 dist
-TranslatorConfig.py
+TranslatorConfig.yaml
