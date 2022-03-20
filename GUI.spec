@@ -11,7 +11,6 @@ block_cipher = None
 
 
 a = Analysis(['GUI.py'],
-             pathex=['C:\\Users\\28448\\AppData\\Local\\Programs\\Python\\Python37\\lib\\site-packages\\cv2\\'],
              binaries=[],
              datas=datas,
              hiddenimports=['unidic', 'sudachidict_full'],
@@ -34,6 +33,7 @@ exe = EXE(pyz,
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
+          datas=[ ('TranslatorConfig.yaml', '.') ],
           upx=True,
           console=True,
           disable_windowed_traceback=False,
