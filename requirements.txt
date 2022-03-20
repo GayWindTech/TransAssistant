@@ -1,0 +1,15 @@
+﻿system-hotkey==1.0.3
+PyQt6==6.1.0
+requests==2.27.1
+unidic==1.1.0
+SudachiDict-full==20211220
+SudachiPy==0.6.3
+opencv-python==4.5.5.64
+PyAutoGUI==0.9.53
+numpy==1.21.5
+fugashi==1.1.2
+tencentcloud-sdk-python==3.0.598
+pyinstaller==4.10
+pypiwin32==223
+mecab-python3==1.0.4
+PyYAML==6.0
