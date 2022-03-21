@@ -12,25 +12,43 @@ from dict_style import Ui_dict_Window
 # from var_dump import var_dump
 #QGuiApplication::screens
 
+# 字典的要求
+# 1.中间词不能是常用词汇
+# 2.中间词要尽量保证在中日互译时不会产生歧义
+# 3.中间词不能在中日互译时发生繁简转换
+# 4.要实现贪婪匹配，子串应在母串之后出现
 JPNameDict = {
-    "モブ美": "林品如",
-    "モブ男": "洪世贤",
-    "モブくん": "陈睿",
-    "失恋フラグ": "武则天",
-    "フラグちゃん": "李旎",
-    "死亡フラグ": "张美玉",
-    "恋愛フラグ": "张作霖",
-    "生存フラグ": "段祺瑞",
+    "モブ美さん": "佐藤",
+    "モブ美": "佐藤",
+    "モブ男さん": "田中",
+    "モブ男くん": "田中",
+    "モブ男": "田中",
+    "モブくん": "中村",
+    "失恋フラグさん": "井上",
+    "失恋フラグ": "井上",
+    "フラグちゃん": "山本",
+    "死亡フラグさん": "小林",
+    "死亡フラグ": "小林",
+    "恋愛フラグさん": "伊藤",
+    "恋愛フラグ": "伊藤",
+    "生存フラグさん": "加藤",
+    "生存フラグ": "加藤",
+    "しーちゃん": "森中",
+    "せーちゃん": "石川",
+    "れんれん": "松下",
 }
 ZhNameDict = {
-    "林品如": "路人美",
-    "洪世贤": "路人男",
-    "陈睿": "路人君",
-    "武则天": "失恋Flag",
-    "李旎": "Flag酱",
-    "张美玉": "死亡Flag",
-    "张作霖": "恋爱Flag",
-    "段祺瑞": "生存Flag",
+    "佐藤": "小美",
+    "田中": "路人男",
+    "中村": "路人君",
+    "井上": "失恋flag",
+    "山本": "flag酱",
+    "小林": "死亡flag",
+    "伊藤": "恋爱flag",
+    "加藤": "生存flag",
+    "森中": "死酱",
+    "石川": "生酱",
+    "松下": "恋恋",
 }
 
 
@@ -222,7 +240,9 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
 
     def appendOCRText(self):
         if(self.AreaInit):
-            self.OCRText += getOCRResult(getScreenshot(self.ScreenPos))
+            # self.OCRText += getOCRResult(getScreenshot(self.ScreenPos))
+            # 逻辑有漏洞，更改为：
+            self.OCRText = self.OCRResultTextEdit.toPlainText() + getOCRResult(getScreenshot(self.ScreenPos))
             self.OCRResultTextEdit.setPlainText(self.OCRText)
         self.doAutoTrans()
 
@@ -234,7 +254,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         source = self.OCRResultTextEdit.toPlainText()
         self.updateSplitTextEdit(True)
         if(source):
-            source = nameReplace(source)
+            source = nameReplace(source, False)
             self.t0,self.t1,self.t2,self.t3 = TranslatorThread(source,0,0),TranslatorThread(source,1,1),TranslatorThread(source,2,2),TranslatorThread(source,3,3)
             self.t0._signal.connect(self.updateResultTextEdit)
             self.t1._signal.connect(self.updateResultTextEdit)
