@@ -38,7 +38,7 @@ YOUDAO_ERRORCODE_DICT = {
     105: '不支持的签名类型',
     106: '不支持的响应类型',
     107: '不支持的传输加密类型',
-    108: '应用 ID 无效' + CONFIG_REMIND,
+    108: f'应用 ID 无效{CONFIG_REMIND}',
     109: 'batchLog格式不正确',
     110: '无相关服务的有效实例',
     111: '开发者账号无效',
@@ -59,13 +59,14 @@ YOUDAO_ERRORCODE_DICT = {
     401: '账户已经欠费，请进行账户充值',
     402: 'offlinesdk 不可用',
     411: '访问频率受限，请稍后访问',
-    412: '长请求过于频繁，请稍后访问'
+    412: '长请求过于频繁，请稍后访问',
 }
+
 
 BAIDU_ERRORCODE_DICT = {
     '52001': '请求超时',
     '52002': '系统错误',
-    '52003': '未授权用户' + CONFIG_REMIND,
+    '52003': f'未授权用户{CONFIG_REMIND}',
     '54000': '必填参数为空',
     '54001': '签名错误',
     '54003': '访问频率受限',
@@ -77,9 +78,10 @@ BAIDU_ERRORCODE_DICT = {
     '90107': '认证未通过或未生效',
 }
 
+
 TENCENT_ERRORCODE_DICT = {
-    'InvalidCredential':'ID无效' + CONFIG_REMIND,
-    'FailedOperation.NoFreeAmount':'本月免费额度已用完',
+    'InvalidCredential': f'ID无效{CONFIG_REMIND}',
+    'FailedOperation.NoFreeAmount': '本月免费额度已用完',
     'FailedOperation.ServiceIsolate': '账号因为欠费停止服务',
     'FailedOperation.UserNotRegistered': '服务未开通',
     'InternalError': '内部错误',
@@ -99,9 +101,8 @@ TENCENT_ERRORCODE_DICT = {
     'UnsupportedOperation.UnsupportedSourceLanguage': '不支持的源语言',
 }
 
-CAIYUN_ERRORCODE_DICT = {
-    'Invalid token': 'Token无效' + CONFIG_REMIND
-}
+
+CAIYUN_ERRORCODE_DICT = {'Invalid token': f'Token无效{CONFIG_REMIND}'}
 
 def YoudaoTranslator(QueryText: str) -> str:
     YOUDAO_URL = "https://openapi.youdao.com/api"
