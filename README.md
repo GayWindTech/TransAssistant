@@ -14,6 +14,7 @@
 2. 在工作目录下执行：
     ``` 
     $ pip install -r requirements.txt
+    $ python -m unidic download
     $ python GUI.py
     ```
 
