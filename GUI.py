@@ -10,6 +10,7 @@ from MojiAPI import searchWord, fetchWord
 from Segmentation import splitWords
 from dict_style import Ui_dict_Window
 # from var_dump import var_dump
+import logging
 #QGuiApplication::screens
 
 JPNameDict = {
@@ -167,17 +168,24 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.OCRText = str()
         self.SplitMode = "sudachi"
         self.Hotkey_OCR = ["control", "space"]
-        SystemHotkey().register(
-            self.Hotkey_OCR,
-            callback=lambda x: self.sendHotkeyPressedSig(self.Hotkey_OCR),
-        )
+        self.registerHotkey(self.Hotkey_OCR)
         Dict_Window = dictWindow_class()
         self.selectionTextChange = Dict_Window.selectionTextChange
         self.dictWindow = Dict_Window
         self.setupUi(self)
+        # self.OCRKeyEdit.hide()
         self.autoDict = self.autoDictCheckBox.isChecked()
         self.resultTextEditList = self.TransResult_0,self.TransResult_1,self.TransResult_2,self.TransResult_3
         self.autoTrans = True
+
+    def registerHotkey(self,hotkeys):
+        SystemHotkey().register(
+            hotkeys,
+            callback=lambda x: self.sendHotkeyPressedSig(hotkeys),
+        )
+
+    def print(self,text):
+        print(self.OCRKeyEdit._string)
 
     def updateSelectionText(self):
         if(self.OCRResultTextEdit.hasFocus()):
@@ -240,10 +248,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
             self.t1._signal.connect(self.updateResultTextEdit)
             self.t2._signal.connect(self.updateResultTextEdit)
             self.t3._signal.connect(self.updateResultTextEdit)
-            self.t0.start()
-            self.t1.start()
-            self.t2.start()
-            self.t3.start()
+            self.t0.start(); self.t1.start(); self.t2.start(); self.t3.start()
 
     def updateSplitMode(self, mode):
         self.SplitMode = mode
@@ -270,6 +275,30 @@ def runGUI():
     GUI_mainWindow.show()
     GUI_APP.exec()
 
+class stdLog(object):
+    def __init__(self, name, log_level=logging.INFO):
+        self.logger = logging.getLogger(name)
+        self.log_level = log_level
+        # self.logger.addHandler(logging.FileHandler('log.log',mode='a+'))
+        self.logger.addHandler(logging.StreamHandler(sys.__stdout__))
+        self.linebuf = ''
+    
+    def write(self, buf):
+        for line in buf.rstrip().splitlines():
+            self.logger.log(self.log_level, line.rstrip())
+    
+    def flush(self):
+        pass
+    
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='[%(asctime)s][%(levelname)s] %(message)s',
+        filename='log.log'
+    )
 
 if __name__ == "__main__":
+    _stdout = stdLog('STDOUT', logging.INFO)
+    sys.stdout = _stdout
+    _stderr = stdLog('STDERR', logging.ERROR)
+    sys.stderr = _stderr
     runGUI()
