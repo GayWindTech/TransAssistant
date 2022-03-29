@@ -173,7 +173,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.selectionTextChange = Dict_Window.selectionTextChange
         self.dictWindow = Dict_Window
         self.setupUi(self)
-        # self.OCRKeyEdit.hide()
+        self.OCRKeyEdit.hide()
         self.autoDict = self.autoDictCheckBox.isChecked()
         self.resultTextEditList = self.TransResult_0,self.TransResult_1,self.TransResult_2,self.TransResult_3
         self.autoTrans = True
@@ -211,10 +211,13 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
     def getScreenPos(self):
         self.hide()
         self.ScreenPos = getScreenPos()
-        self.PosText.setText(f'{(self.ScreenPos[0], self.ScreenPos[1])},'+ str((self.ScreenPos[0] + self.ScreenPos[2],self.ScreenPos[1] + self.ScreenPos[3],)))
+        self.PosText.setText(f'{(self.ScreenPos[0], self.ScreenPos[1])},'+ str((self.ScreenPos[0] + self.ScreenPos[2],self.ScreenPos[1] + self.ScreenPos[3])))
 
         self.show()
-        self.AreaInit = True
+        if(((self.ScreenPos[0], self.ScreenPos[1])==(self.ScreenPos[0] + self.ScreenPos[2],self.ScreenPos[1] + self.ScreenPos[3])) or 0 in (self.ScreenPos[2],self.ScreenPos[3])):
+            print('非法选区，请重选！')
+        else:
+            self.AreaInit = True
         self.OCRButton.setEnabled(self.AreaInit)
         self.OCRButtonPlus.setEnabled(self.AreaInit)
 
