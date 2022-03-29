@@ -109,8 +109,8 @@ class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
 
     def searchWord(self):
         self.wordsList.clear()
-        if source := self.inputLineEdit.text():
-            self._wordList = searchWord(source)
+        source = self.inputLineEdit.text()
+        if(source):
             tempItemList = (each[0] for each in searchWord(source))
             self.wordsList.addItems(tempItemList)
             self.wordsList.setCurrentItem(self.wordsList.item(0))
