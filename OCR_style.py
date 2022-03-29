@@ -162,8 +162,19 @@ class Ui_OCR_Window(object):
         self.doTransButton.setFont(font)
         self.doTransButton.setObjectName("doTransButton")
         self.OCRKeyEdit = oneKeyQKeySequenceEdit(self.centralwidget)
-        self.OCRKeyEdit.setGeometry(QtCore.QRect(300, 30, 113, 20))
+        self.OCRKeyEdit.setGeometry(QtCore.QRect(292, 30, 131, 20))
+        self.OCRKeyEdit.setKeySequence("")
         self.OCRKeyEdit.setObjectName("OCRKeyEdit")
+        self.changeHotKeyButton = QtWidgets.QPushButton(self.centralwidget)
+        self.changeHotKeyButton.setGeometry(QtCore.QRect(420, 30, 21, 21))
+        font = QtGui.QFont()
+        font.setFamily("Microsoft YaHei UI")
+        font.setPointSize(11)
+        self.changeHotKeyButton.setFont(font)
+        self.changeHotKeyButton.setStatusTip("")
+        self.changeHotKeyButton.setWhatsThis("")
+        self.changeHotKeyButton.setAccessibleDescription("")
+        self.changeHotKeyButton.setObjectName("changeHotKeyButton")
         self.OCRResultTextEdit.raise_()
         self.TransResult_0.raise_()
         self.TransResult_1.raise_()
@@ -184,6 +195,7 @@ class Ui_OCR_Window(object):
         self.autoTransCheckBox.raise_()
         self.doTransButton.raise_()
         self.OCRKeyEdit.raise_()
+        self.changeHotKeyButton.raise_()
         OCR_Window.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(OCR_Window)
@@ -201,7 +213,7 @@ class Ui_OCR_Window(object):
         self.autoTransCheckBox.clicked['bool'].connect(OCR_Window.updateAutoTransBool) # type: ignore
         self.doTransButton.clicked.connect(OCR_Window.updateResults) # type: ignore
         self.OCRResultTextEdit.textChanged.connect(OCR_Window.updateSplitTextEdit) # type: ignore
-        self.OCRKeyEdit.keySequenceChanged['QKeySequence'].connect(OCR_Window.print) # type: ignore
+        self.OCRResultTextEdit.textChanged.connect(OCR_Window.updateOCRText) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(OCR_Window)
         OCR_Window.setTabOrder(self.TransResult_0, self.ChooseAreaButton)
         OCR_Window.setTabOrder(self.ChooseAreaButton, self.OCRButton)
@@ -237,5 +249,7 @@ class Ui_OCR_Window(object):
         self.autoDictCheckBox.setText(_translate("OCR_Window", "自动查词"))
         self.autoTransCheckBox.setText(_translate("OCR_Window", "自动翻译"))
         self.doTransButton.setText(_translate("OCR_Window", "翻译"))
+        self.changeHotKeyButton.setToolTip(_translate("OCR_Window", "<html><head/><body><p><span style=\" font-size:10pt;\">按Enter确认选取区域</span></p></body></html>"))
+        self.changeHotKeyButton.setText(_translate("OCR_Window", "√"))
 from betterSelectionQPlainTextEdit import betterSelectionQPlainTextEdit
 from oneKeyQKeySequenceEdit import oneKeyQKeySequenceEdit

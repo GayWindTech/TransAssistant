@@ -190,7 +190,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.selectionTextChange = Dict_Window.selectionTextChange
         self.dictWindow = Dict_Window
         self.setupUi(self)
-        self.OCRKeyEdit.hide()
+        self.OCRKeyEdit.hide(); self.changeHotKeyButton.hide()
         self.autoDict = self.autoDictCheckBox.isChecked()
         self.resultTextEditList = self.TransResult_0,self.TransResult_1,self.TransResult_2,self.TransResult_3
         self.autoTrans = True
@@ -248,11 +248,12 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
             self.OCRResultTextEdit.setPlainText(self.OCRText)
         self.doAutoTrans()
 
+    def updateOCRText(self):
+        self.OCRText = self.OCRResultTextEdit.toPlainText()
+
     def appendOCRText(self):
         if(self.AreaInit):
-            # self.OCRText += getOCRResult(getScreenshot(self.ScreenPos))
-            # 逻辑有漏洞，更改为：
-            self.OCRText = self.OCRResultTextEdit.toPlainText() + getOCRResult(getScreenshot(self.ScreenPos))
+            self.OCRText += getOCRResult(getScreenshot(self.ScreenPos))
             self.OCRResultTextEdit.setPlainText(self.OCRText)
         self.doAutoTrans()
 
