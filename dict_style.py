@@ -22,6 +22,7 @@ class Ui_dict_Window(object):
         font.setPointSize(12)
         font.setBold(False)
         font.setUnderline(False)
+        font.setWeight(50)
         font.setStyleStrategy(QtGui.QFont.StyleStrategy.PreferAntialias)
         self.wordsList.setFont(font)
         self.wordsList.setObjectName("wordsList")
@@ -44,6 +45,7 @@ class Ui_dict_Window(object):
         font = QtGui.QFont()
         font.setFamily("Microsoft YaHei UI")
         font.setBold(False)
+        font.setWeight(50)
         font.setStrikeOut(False)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.StyleStrategy.PreferAntialias)
@@ -80,7 +82,7 @@ class Ui_dict_Window(object):
         self.dictSourceChoose.setItemText(1, _translate("dict_Window", "沪江小D词典"))
         self.DictSourceLabel.setText(_translate("dict_Window", "词典来源:"))
         self.resultText.setHtml(_translate("dict_Window", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Microsoft YaHei UI\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))

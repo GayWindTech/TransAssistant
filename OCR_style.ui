@@ -13,6 +13,11 @@
     <height>546</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Microsoft YaHei UI</family>
+   </font>
+  </property>
   <property name="contextMenuPolicy">
    <enum>Qt::DefaultContextMenu</enum>
   </property>
@@ -101,8 +106,12 @@
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="toolTip">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;按Enter确认选取区域&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -131,6 +140,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI</family>
       <pointsize>10</pointsize>
      </font>
     </property>
@@ -152,7 +162,9 @@
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei</family>
       <pointsize>10</pointsize>
+      <kerning>true</kerning>
      </font>
     </property>
     <property name="text">
@@ -173,8 +185,12 @@
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI</family>
       <pointsize>14</pointsize>
      </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="text">
      <string>OCR</string>
@@ -211,6 +227,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI</family>
       <pointsize>10</pointsize>
      </font>
     </property>
@@ -241,6 +258,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI</family>
       <pointsize>10</pointsize>
      </font>
     </property>
@@ -262,6 +280,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI</family>
       <pointsize>11</pointsize>
      </font>
     </property>
@@ -283,6 +302,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI</family>
       <pointsize>11</pointsize>
       <underline>true</underline>
      </font>
@@ -343,8 +363,12 @@
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI</family>
       <pointsize>14</pointsize>
      </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="text">
      <string>OCR+</string>
@@ -361,8 +385,12 @@
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="text">
      <string>查词</string>
@@ -379,8 +407,12 @@
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI</family>
       <pointsize>10</pointsize>
      </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="text">
      <string>自动查词</string>
@@ -397,8 +429,12 @@
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI</family>
       <pointsize>10</pointsize>
      </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="text">
      <string>自动翻译</string>
@@ -418,8 +454,12 @@
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="text">
      <string>翻译</string>
@@ -452,6 +492,9 @@
       <family>Microsoft YaHei UI</family>
       <pointsize>11</pointsize>
      </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="toolTip">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;按Enter确认选取区域&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -496,7 +539,7 @@
   <customwidget>
    <class>betterSelectionQPlainTextEdit</class>
    <extends>QPlainTextEdit</extends>
-   <header>betterSelectionQPlainTextEdit</header>
+   <header>customerDefineQtClass</header>
    <slots>
     <signal>selectedFinish()</signal>
     <signal>focusOut()</signal>
@@ -506,7 +549,7 @@
   <customwidget>
    <class>oneKeyQKeySequenceEdit</class>
    <extends>QKeySequenceEdit</extends>
-   <header>oneKeyQKeySequenceEdit</header>
+   <header>customerDefineQtClass</header>
   </customwidget>
  </customwidgets>
  <tabstops>

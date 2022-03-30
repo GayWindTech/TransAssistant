@@ -1,5 +1,4 @@
 import sys
-from system_hotkey import SystemHotkey
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import pyqtSignal, QThread, QMutex, Qt
 from OCR_style import Ui_OCR_Window
@@ -9,6 +8,7 @@ from TranslatorAPI import YoudaoTranslator, CaiYunTranslator, BaiduTranslator, T
 from MojiAPI import searchWord, fetchWord
 from Segmentation import splitWords
 from dict_style import Ui_dict_Window
+import keyboard
 # from var_dump import var_dump
 import logging
 #QGuiApplication::screens
@@ -64,8 +64,8 @@ def keymap_replace(
 
     This function takes a string a dictionary of
     replacement mappings. For example, if I supplied
-    the string "Hello world.", and the mappings
-    {"H": "J", ".": "!"}, it would return "Jello world!".
+    the string "Hello.", and the mappings
+    {"He": "Cia", ".": "!"}, it would return " Ciallo!".
 
     Keyword arguments:
     string       -- The string to replace characters in.
@@ -112,7 +112,8 @@ class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
         self.wordsList.clear()
         source = self.inputLineEdit.text()
         if(source):
-            tempItemList = (each[0] for each in searchWord(source))
+            self._wordList = searchWord(source)
+            tempItemList = tuple(each[0] for each in self._wordList)
             self.wordsList.addItems(tempItemList)
             self.wordsList.setCurrentItem(self.wordsList.item(0))
 
@@ -144,6 +145,8 @@ class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
 
     def showWordDetails(self,index):
         self.resultText.setHtml(self.fromtHtml(fetchWord(self._wordList[index][1])))
+
+
 
 MutexList = [QMutex(),QMutex(),QMutex(),QMutex()]
 
@@ -184,7 +187,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.selectionText = str()
         self.OCRText = str()
         self.SplitMode = "sudachi"
-        self.Hotkey_OCR = ["control", "space"]
+        self.Hotkey_OCR = "control + space"
         self.registerHotkey(self.Hotkey_OCR)
         Dict_Window = dictWindow_class()
         self.selectionTextChange = Dict_Window.selectionTextChange
@@ -196,10 +199,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.autoTrans = True
 
     def registerHotkey(self,hotkeys):
-        SystemHotkey().register(
-            hotkeys,
-            callback=lambda x: self.sendHotkeyPressedSig(hotkeys),
-        )
+        keyboard.add_hotkey(hotkeys,lambda: self.sendHotkeyPressedSig(hotkeys))
 
     def print(self,text):
         print(self.OCRKeyEdit._string)
@@ -235,8 +235,8 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
             print('非法选区，请重选！')
         else:
             self.AreaInit = True
-        self.OCRButton.setEnabled(self.AreaInit)
-        self.OCRButtonPlus.setEnabled(self.AreaInit)
+            self.OCRButton.setEnabled(self.AreaInit)
+            self.OCRButtonPlus.setEnabled(self.AreaInit)
 
     def doAutoTrans(self):
         if(self.autoTrans):
@@ -246,7 +246,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         if(self.AreaInit):
             self.OCRText = getOCRResult(getScreenshot(self.ScreenPos))
             self.OCRResultTextEdit.setPlainText(self.OCRText)
-        self.doAutoTrans()
+            self.doAutoTrans()
 
     def updateOCRText(self):
         self.OCRText = self.OCRResultTextEdit.toPlainText()
@@ -255,7 +255,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         if(self.AreaInit):
             self.OCRText += getOCRResult(getScreenshot(self.ScreenPos))
             self.OCRResultTextEdit.setPlainText(self.OCRText)
-        self.doAutoTrans()
+            self.doAutoTrans()
 
     def updateResultTextEdit(self,aimTextEdit:int,text:str):
         text = nameReplace(text,True)
@@ -282,9 +282,9 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         if(source and (Force or self.SplitMode != 'kuromoji')):
             self.splitTextEdit.setPlainText(splitWords(source, self.SplitMode))
 
-    def updateOCRHotkey(self, text):
-        print(text)
-        self.keyPressEvent
+    # def updateOCRHotkey(self, text):
+    #     print(text)
+    #     self.keyPressEvent
 
     def showDictWindow(self):
         self.selectionTextChange.emit(self.selectionText)
