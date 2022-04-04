@@ -3,7 +3,7 @@ from PyInstaller.utils.hooks import collect_data_files
 
 datas = []
 datas += collect_data_files('unidic')
-datas += collect_data_files('sudachidict_full')
+datas += collect_data_files('sudachidict_core')
 datas += collect_data_files('sudachipy')
 
 
