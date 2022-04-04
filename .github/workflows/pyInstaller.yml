@@ -27,7 +27,7 @@ jobs:
         run: certutil -urlcache -split -f https://github.com/upx/upx/releases/download/v3.96/upx-3.96-win64.zip upx.zip ; 7z x upx.zip
       
       - name: pack:full
-        run: pyinstaller --upx-dir upx-3.96-win64 TransAssistant_full.spec -y ; 7z a -t7z TransAssistant-full.7z dist/TransAssistant_full
+        run: pyinstaller --upx-dir upx-3.96-win64 TransAssistant_full.spec -y ; 7z a -t7z TransAssistant_full.7z dist/TransAssistant_full
         
       - name: pack:core
         run: pyinstaller --upx-dir upx-3.96-win64 TransAssistant_core.spec -y ; 7z a -t7z TransAssistant_core.7z dist/TransAssistant_core
