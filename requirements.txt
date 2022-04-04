@@ -2,7 +2,10 @@
 PyQt6==6.1.0
 requests==2.27.1
 unidic==1.1.0
+unidic-lite==1.0.8
 SudachiDict-full==20211220
+SudachiDict-core==20211220
+SudachiDict-small==20211220
 SudachiPy==0.6.3
 opencv-python==4.5.5.64
 PyAutoGUI==0.9.53

@@ -2,8 +2,8 @@
 from PyInstaller.utils.hooks import collect_data_files
 
 datas = []
-datas += collect_data_files('unidic')
-datas += collect_data_files('sudachidict_full')
+datas += collect_data_files('unidic_lite')
+datas += collect_data_files('sudachidict_small')
 datas += collect_data_files('sudachipy')
 
 
@@ -13,7 +13,7 @@ block_cipher = None
 a = Analysis(['GUI.py'],
              binaries=[],
              datas=datas,
-             hiddenimports=['unidic', 'sudachidict_full'],
+             hiddenimports=['unidic_lite', 'sudachidict_small'],
              hookspath=[],
              hooksconfig={},
              runtime_hooks=[],
@@ -47,4 +47,4 @@ coll = COLLECT(exe,
                strip=False,
                upx=True,
                upx_exclude=[],
-               name='GUI')
+               name='TransAssistant_small')

@@ -16,12 +16,29 @@ def _kuromoji(s: str) -> list:
     return (each["surface"] for each in json.loads(req.content.decode("utf-8"))["tokens"] )
 
 
-_MeCab = Tagger("-Owakati")
-if(isPacked):
-    sudachi_config_path = path.abspath(path.join(path.dirname(__file__), r'sudachipy\resources\sudachi.json'))
-    _sudachi = dictionary.Dictionary(dict='full',config_path=sudachi_config_path).create()
-else:
-    _sudachi = dictionary.Dictionary(dict="full").create()
+try:
+    import unidic
+    unidic_dicdir = path.abspath(path.join(path.dirname(__file__), r'unidic\dicdir')) if isPacked else unidic.DICDIR
+    print('SudachiDict: Normal')
+except ModuleNotFoundError:
+    import unidic_lite
+    unidic_dicdir = path.abspath(path.join(path.dirname(__file__), r'unidic_lite\dicdir')) if isPacked else unidic_lite.DICDIR
+    print(unidic_dicdir)
+    print('SudachiDict: Lite')
+print(unidic_dicdir)
+_MeCab = Tagger(f'-Owakati -d "{unidic_dicdir}"')
+
+sudachi_config_path = path.abspath(path.join(path.dirname(__file__), r'sudachipy\resources\sudachi.json')) if isPacked else None
+try:
+    _sudachi = dictionary.Dictionary(dict="full",config_path=sudachi_config_path).create()
+    print('SudachiDict: Full')
+except ModuleNotFoundError:
+    try:
+        _sudachi = dictionary.Dictionary(dict="core",config_path=sudachi_config_path).create()
+        print('SudachiDict: Core')
+    except ModuleNotFoundError:
+        _sudachi = dictionary.Dictionary(dict="small",config_path=sudachi_config_path).create()
+        print('SudachiDict: Small')
 
 def splitWords(s, m):
     output = str()
