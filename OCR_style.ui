@@ -308,7 +308,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Control + Space</string>
+     <string>Ctrl + Space</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -474,14 +474,17 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>摁下快捷键以键入</string>
+    </property>
     <property name="keySequence">
      <string extracomment="请按下组合键"/>
     </property>
    </widget>
-   <widget class="QPushButton" name="changeHotKeyButton">
+   <widget class="QPushButton" name="confirmHotKeyButton">
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>421</x>
       <y>30</y>
       <width>21</width>
       <height>21</height>
@@ -497,7 +500,7 @@
      <enum>Qt::NoFocus</enum>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;按Enter确认选取区域&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;确认更改快捷键&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="statusTip">
      <string/>
@@ -512,6 +515,60 @@
      <string>√</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="changeHotKeyButton">
+    <property name="geometry">
+     <rect>
+      <x>421</x>
+      <y>30</y>
+      <width>21</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;更改快捷键&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="text">
+     <string>⚙️</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="cancelHotKeyButton">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>30</y>
+      <width>21</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Microsoft YaHei UI</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;取消更改快捷键&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="statusTip">
+     <string/>
+    </property>
+    <property name="whatsThis">
+     <string/>
+    </property>
+    <property name="accessibleDescription">
+     <string/>
+    </property>
+    <property name="text">
+     <string>×</string>
+    </property>
+   </widget>
+   <zorder>changeHotKeyButton</zorder>
+   <zorder>confirmHotKeyButton</zorder>
+   <zorder>ShortcutKeyText</zorder>
+   <zorder>OCRKeyEdit</zorder>
    <zorder>OCRResultTextEdit</zorder>
    <zorder>TransResult_0</zorder>
    <zorder>TransResult_1</zorder>
@@ -522,7 +579,6 @@
    <zorder>SplitChooseBox</zorder>
    <zorder>SplitChooseTitle</zorder>
    <zorder>ShortcutKeyTitle</zorder>
-   <zorder>ShortcutKeyText</zorder>
    <zorder>OCRButton</zorder>
    <zorder>TransResult_2</zorder>
    <zorder>TransResult_3</zorder>
@@ -531,8 +587,7 @@
    <zorder>autoDictCheckBox</zorder>
    <zorder>autoTransCheckBox</zorder>
    <zorder>doTransButton</zorder>
-   <zorder>OCRKeyEdit</zorder>
-   <zorder>changeHotKeyButton</zorder>
+   <zorder>cancelHotKeyButton</zorder>
   </widget>
  </widget>
  <customwidgets>
@@ -810,6 +865,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>changeHotKeyButton</sender>
+   <signal>clicked()</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>getIntoHotKeyChangeMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>439</x>
+     <y>34</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>518</x>
+     <y>7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>confirmHotKeyButton</sender>
+   <signal>clicked()</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>confirmHotkey()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>428</x>
+     <y>35</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>284</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cancelHotKeyButton</sender>
+   <signal>clicked()</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>cancelHotKey()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>460</x>
+     <y>35</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>494</x>
+     <y>32</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>ocrHotkeyPressed()</signal>
@@ -828,5 +931,8 @@
   <slot>updateSplitTextEdit()</slot>
   <slot>print()</slot>
   <slot>updateOCRText()</slot>
+  <slot>getIntoHotKeyChangeMode()</slot>
+  <slot>confirmHotkey()</slot>
+  <slot>cancelHotKey()</slot>
  </slots>
 </ui>
