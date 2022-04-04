@@ -5,6 +5,7 @@ import requests
 import json
 from urllib3 import disable_warnings
 from os import path
+import importlib
 disable_warnings()
 from Config import isPacked
 
@@ -16,17 +17,13 @@ def _kuromoji(s: str) -> list:
     return (each["surface"] for each in json.loads(req.content.decode("utf-8"))["tokens"] )
 
 
-try:
-    import unidic
-    unidic_dicdir = path.abspath(path.join(path.dirname(__file__), r'unidic\dicdir')) if isPacked else unidic.DICDIR
+if(importlib.util.find_spec('unidic')):
     print('SudachiDict: Normal')
-except ModuleNotFoundError:
-    import unidic_lite
-    unidic_dicdir = path.abspath(path.join(path.dirname(__file__), r'unidic_lite\dicdir')) if isPacked else unidic_lite.DICDIR
-    print(unidic_dicdir)
+elif(importlib.util.find_spec('unidic_lite')):
     print('SudachiDict: Lite')
-print(unidic_dicdir)
-_MeCab = Tagger(f'-Owakati -d "{unidic_dicdir}"')
+else:
+    raise ModuleNotFoundError
+_MeCab = Tagger('-Owakati')
 
 sudachi_config_path = path.abspath(path.join(path.dirname(__file__), r'sudachipy\resources\sudachi.json')) if isPacked else None
 try:
