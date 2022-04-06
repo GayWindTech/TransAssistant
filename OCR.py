@@ -40,10 +40,10 @@ def getOCRResult(img) -> str:
 
 
     class Url:
-        def __init__(this, host, path, schema):
-            this.host = host
-            this.path = path
-            this.schema = schema
+        def __init__(self, host, path, schema):
+            self.host = host
+            self.path = path
+            self.schema = schema
 
 
     # calculate sha256 and encode to base64
