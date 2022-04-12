@@ -16,3 +16,7 @@ if(not os.path.exists(configPath)):
 def readConfig() -> dict:
     with open(configPath,encoding='utf-8') as f:
         return yaml_load(f,CLoader)
+
+def writeConfig(data:dict) -> None:
+    with open(configPath,mode='w',encoding='utf-8') as f:
+        yaml_dump(data,f,CDumper)

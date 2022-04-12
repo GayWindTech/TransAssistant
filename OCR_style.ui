@@ -193,7 +193,7 @@
      <enum>Qt::NoFocus</enum>
     </property>
     <property name="text">
-     <string>OCR</string>
+     <string>识别</string>
     </property>
    </widget>
    <widget class="betterSelectionQPlainTextEdit" name="splitTextEdit">
@@ -371,7 +371,7 @@
      <enum>Qt::NoFocus</enum>
     </property>
     <property name="text">
-     <string>OCR+</string>
+     <string>识别并拼接</string>
     </property>
    </widget>
    <widget class="QPushButton" name="showDictWindowButton">
@@ -565,6 +565,28 @@
      <string>×</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="doTransButton_2">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>270</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Microsoft YaHei UI</family>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="text">
+     <string>设置</string>
+    </property>
+   </widget>
    <zorder>changeHotKeyButton</zorder>
    <zorder>confirmHotKeyButton</zorder>
    <zorder>ShortcutKeyText</zorder>
@@ -588,6 +610,7 @@
    <zorder>autoTransCheckBox</zorder>
    <zorder>doTransButton</zorder>
    <zorder>cancelHotKeyButton</zorder>
+   <zorder>doTransButton_2</zorder>
   </widget>
  </widget>
  <customwidgets>
@@ -712,12 +735,12 @@
    <slot>showDictWindow()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>800</x>
-     <y>81</y>
+     <x>850</x>
+     <y>79</y>
     </hint>
     <hint type="destinationlabel">
-     <x>810</x>
-     <y>301</y>
+     <x>815</x>
+     <y>362</y>
     </hint>
    </hints>
   </connection>
@@ -913,6 +936,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>doTransButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>showConfig()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>798</x>
+     <y>295</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>772</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>ocrHotkeyPressed()</signal>
@@ -934,5 +973,6 @@
   <slot>getIntoHotKeyChangeMode()</slot>
   <slot>confirmHotkey()</slot>
   <slot>cancelHotKey()</slot>
+  <slot>showConfig()</slot>
  </slots>
 </ui>

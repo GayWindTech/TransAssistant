@@ -9,10 +9,11 @@ from TranslatorAPI import YoudaoTranslator, CaiYunTranslator, BaiduTranslator, T
 from MojiAPI import searchWord, fetchWord
 from Segmentation import splitWords
 from dict_style import Ui_dict_Window
+from config_style import Ui_Config
+from Config import readConfig, writeConfig
 import keyboard
 # from var_dump import var_dump
 import logging
-#QGuiApplication::screens
 
 # 字典的要求
 # 1.中间词不能是常用词汇
@@ -88,6 +89,38 @@ def nameReplace(string: str, reverse=False):
     _dict = ZhNameDict if reverse else JPNameDict
     return keymap_replace(string, _dict)
 
+class configWidget_class(QtWidgets.QWidget, Ui_Config):
+    def __init__(self) -> None:
+        super().__init__()
+        self.setupUi(self)
+    
+    def setupUi(self, Config):
+        super().setupUi(Config)
+        Config.setWindowOpacity(0.9)
+        Config.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
+    
+    def replaceWithCurrentConfig(self):
+        configDict = readConfig()
+        self.LineEdit_YoudaoKEY.setText(configDict["YOUDAO_KEY"])
+        self.LineEdit_YoudaoSECRET.setText(configDict["YOUDAO_SECRET"])
+        self.LineEdit_CaiYunSECRET.setText(configDict["CAIYUN_TOKEN"])
+        self.LineEdit_BaiduKEY.setText(configDict["BAIDU_APPID"])
+        self.LineEdit_BaiduSECRET.setText(configDict["BAIDU_SECRETKEY"])
+        self.LineEdit_TencentKEY.setText(configDict["TENCENT_SECERTID"])
+        self.LineEdit_TencentSECRET.setText(configDict["TENCENT_SECERTKEY"])
+    
+    def saveConfig(self):
+        data = {'YOUDAO_KEY': self.LineEdit_YoudaoKEY.text(), 
+                'YOUDAO_SECRET': self.LineEdit_YoudaoSECRET.text(), 
+                'CAIYUN_TOKEN': self.LineEdit_CaiYunSECRET.text(),
+                'BAIDU_APPID': self.LineEdit_BaiduKEY.text(), 
+                'BAIDU_SECRETKEY': self.LineEdit_BaiduSECRET.text(), 
+                'TENCENT_SECERTID': self.LineEdit_TencentKEY.text(), 
+                'TENCENT_SECERTKEY': self.LineEdit_TencentSECRET.text()
+                }
+        writeConfig(data)
+
+
 class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
     selectionTextChange = pyqtSignal(str)
 
@@ -98,10 +131,10 @@ class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
         self._wordList = []
         self.needToSearch = False
 
-    def setupUi(self, dictMain):
-        super(dictWindow_class, self).setupUi(dictMain)
-        dictMain.setWindowOpacity(0.9)
-        dictMain.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
+    def setupUi(self, Config):
+        super(dictWindow_class, self).setupUi(Config)
+        Config.setWindowOpacity(0.9)
+        Config.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
 
     def updateAutoSearch(self,_bool):
         self.autoSearch = _bool
@@ -171,15 +204,15 @@ class TranslatorThread(QThread):
 class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
     ocrHotkeyPressed = pyqtSignal()
 
-    def setupUi(self, OCR_Window):
-        super(TransAssistant_class, self).setupUi(OCR_Window)
-        OCR_Window.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
-        OCR_Window.setWindowOpacity(0.8)
-        OCR_Window.OCRButton.setEnabled(self.AreaInit)
-        OCR_Window.OCRButtonPlus.setEnabled(self.AreaInit)
+    def setupUi(self, Config):
+        super(TransAssistant_class, self).setupUi(Config)
+        Config.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
+        Config.setWindowOpacity(0.8)
+        Config.OCRButton.setEnabled(self.AreaInit)
+        Config.OCRButtonPlus.setEnabled(self.AreaInit)
         DesktopSize = self.screen().availableSize()
-        OCR_Window.move(DesktopSize.width() * 0.54, DesktopSize.height() * 0.41)
-        # OCR_Window.setAttribute(QtCore.Qt.WA_TranslucentBackground,True)
+        Config.move(DesktopSize.width() * 0.54, DesktopSize.height() * 0.41)
+        # Config.setAttribute(QtCore.Qt.WA_TranslucentBackground,True)
 
     def __init__(self):
         super(TransAssistant_class, self).__init__()
@@ -192,9 +225,9 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.Hotkey_OCR = "Ctrl + Space"
         self.ShortcutKeyText.setText(self.Hotkey_OCR)
         self.registerHotkey(self.Hotkey_OCR)
-        Dict_Window = dictWindow_class()
-        self.selectionTextChange = Dict_Window.selectionTextChange
-        self.dictWindow = Dict_Window
+        self.dictWindow = dictWindow_class()
+        self.configWidget = configWidget_class()
+        self.selectionTextChange = self.dictWindow.selectionTextChange
         self.OCRKeyEdit.hide(); self.confirmHotKeyButton.hide(); self.cancelHotKeyButton.hide()
         self.autoDict = self.autoDictCheckBox.isChecked()
         self.resultTextEditList = self.TransResult_0,self.TransResult_1,self.TransResult_2,self.TransResult_3
@@ -243,6 +276,10 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
     def sendHotkeyPressedSig(self, Hotkeys):
         if(Hotkeys is self.Hotkey_OCR):
             self.ocrHotkeyPressed.emit()
+
+    def showConfig(self):
+        self.configWidget.replaceWithCurrentConfig()
+        self.configWidget.show()
 
     def getScreenPos(self):
         self.hide()

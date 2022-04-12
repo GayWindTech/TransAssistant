@@ -214,6 +214,14 @@ class Ui_OCR_Window(object):
         self.cancelHotKeyButton.setWhatsThis("")
         self.cancelHotKeyButton.setAccessibleDescription("")
         self.cancelHotKeyButton.setObjectName("cancelHotKeyButton")
+        self.doTransButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.doTransButton_2.setGeometry(QtCore.QRect(760, 270, 91, 31))
+        font = QtGui.QFont()
+        font.setFamily("Microsoft YaHei UI")
+        font.setPointSize(11)
+        self.doTransButton_2.setFont(font)
+        self.doTransButton_2.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
+        self.doTransButton_2.setObjectName("doTransButton_2")
         self.changeHotKeyButton.raise_()
         self.confirmHotKeyButton.raise_()
         self.ShortcutKeyText.raise_()
@@ -237,6 +245,7 @@ class Ui_OCR_Window(object):
         self.autoTransCheckBox.raise_()
         self.doTransButton.raise_()
         self.cancelHotKeyButton.raise_()
+        self.doTransButton_2.raise_()
         OCR_Window.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(OCR_Window)
@@ -258,6 +267,7 @@ class Ui_OCR_Window(object):
         self.changeHotKeyButton.clicked.connect(OCR_Window.getIntoHotKeyChangeMode) # type: ignore
         self.confirmHotKeyButton.clicked.connect(OCR_Window.confirmHotkey) # type: ignore
         self.cancelHotKeyButton.clicked.connect(OCR_Window.cancelHotKey) # type: ignore
+        self.doTransButton_2.clicked.connect(OCR_Window.showConfig) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(OCR_Window)
         OCR_Window.setTabOrder(self.TransResult_0, self.ChooseAreaButton)
         OCR_Window.setTabOrder(self.ChooseAreaButton, self.OCRButton)
@@ -281,14 +291,14 @@ class Ui_OCR_Window(object):
         self.ChooseAreaButton.setText(_translate("OCR_Window", "选取区域"))
         self.ChosenTitleTitle.setText(_translate("OCR_Window", "已选择的区域"))
         self.PosText.setText(_translate("OCR_Window", "(0,0),(0,0)"))
-        self.OCRButton.setText(_translate("OCR_Window", "OCR"))
+        self.OCRButton.setText(_translate("OCR_Window", "识别"))
         self.SplitChooseBox.setItemText(0, _translate("OCR_Window", "sudachi"))
         self.SplitChooseBox.setItemText(1, _translate("OCR_Window", "MeCab"))
         self.SplitChooseBox.setItemText(2, _translate("OCR_Window", "kuromoji"))
         self.SplitChooseTitle.setText(_translate("OCR_Window", "分词库选择"))
         self.ShortcutKeyTitle.setText(_translate("OCR_Window", "当前全局OCR快捷键"))
         self.ShortcutKeyText.setText(_translate("OCR_Window", "Ctrl + Space"))
-        self.OCRButtonPlus.setText(_translate("OCR_Window", "OCR+"))
+        self.OCRButtonPlus.setText(_translate("OCR_Window", "识别并拼接"))
         self.showDictWindowButton.setText(_translate("OCR_Window", "查词"))
         self.autoDictCheckBox.setText(_translate("OCR_Window", "自动查词"))
         self.autoTransCheckBox.setText(_translate("OCR_Window", "自动翻译"))
@@ -300,4 +310,5 @@ class Ui_OCR_Window(object):
         self.changeHotKeyButton.setText(_translate("OCR_Window", "⚙️"))
         self.cancelHotKeyButton.setToolTip(_translate("OCR_Window", "<html><head/><body><p>取消更改快捷键</p></body></html>"))
         self.cancelHotKeyButton.setText(_translate("OCR_Window", "×"))
+        self.doTransButton_2.setText(_translate("OCR_Window", "设置"))
 from customerDefineQtClass import betterSelectionQPlainTextEdit, oneKeyQKeySequenceEdit
