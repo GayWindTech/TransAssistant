@@ -18,9 +18,9 @@ def _kuromoji(s: str) -> list:
 
 
 if(importlib.util.find_spec('unidic')):
-    print('SudachiDict: Normal')
+    print('Unidic: Normal')
 elif(importlib.util.find_spec('unidic_lite')):
-    print('SudachiDict: Lite')
+    print('Unidic: Lite')
 else:
     raise ModuleNotFoundError
 _MeCab = Tagger('-Owakati')
