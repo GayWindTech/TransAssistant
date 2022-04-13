@@ -10,10 +10,10 @@ from MojiAPI import searchWord, fetchWord
 from Segmentation import splitWords
 from dict_style import Ui_dict_Window
 from config_style import Ui_Config
-from Config import readConfig, writeConfig
+from Config import readConfig, writeConfig, isInit
 import keyboard
 # from var_dump import var_dump
-import logging
+
 
 # 字典的要求
 # 1.中间词不能是常用词汇
@@ -232,6 +232,8 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.autoDict = self.autoDictCheckBox.isChecked()
         self.resultTextEditList = self.TransResult_0,self.TransResult_1,self.TransResult_2,self.TransResult_3
         self.autoTrans = True
+        if(not isInit):
+            self.showConfig()
 
     def registerHotkey(self,hotkeys):
         keyboard.add_hotkey(hotkeys,lambda: self.sendHotkeyPressedSig(hotkeys))
@@ -289,6 +291,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.show()
         if(((self.ScreenPos[0], self.ScreenPos[1])==(self.ScreenPos[0] + self.ScreenPos[2],self.ScreenPos[1] + self.ScreenPos[3])) or 0 in (self.ScreenPos[2],self.ScreenPos[3])):
             print('非法选区，请重选！')
+            QtWidgets.QMessageBox.critical(self,"非法选区","选区不合法，请重选！")
         else:
             self.AreaInit = True
             self.OCRButton.setEnabled(self.AreaInit)
@@ -338,10 +341,6 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         if(source and (Force or self.SplitMode != 'kuromoji')):
             self.splitTextEdit.setPlainText(splitWords(source, self.SplitMode))
 
-    # def updateOCRHotkey(self, text):
-    #     print(text)
-    #     self.keyPressEvent
-
     def showDictWindow(self):
         self.selectionTextChange.emit(self.selectionText)
         self.dictWindow.inputLineEdit.editingFinished.emit()
@@ -354,30 +353,5 @@ def runGUI():
     GUI_mainWindow.show()
     GUI_APP.exec()
 
-class stdLog(object):
-    def __init__(self, name, log_level=logging.INFO):
-        self.logger = logging.getLogger(name)
-        self.log_level = log_level
-        # self.logger.addHandler(logging.FileHandler('log.log',mode='a+'))
-        self.logger.addHandler(logging.StreamHandler(sys.__stdout__))
-        self.linebuf = ''
-    
-    def write(self, buf):
-        for line in buf.rstrip().splitlines():
-            self.logger.log(self.log_level, line.rstrip())
-    
-    def flush(self):
-        pass
-    
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format='[%(asctime)s][%(levelname)s] %(message)s',
-        filename='log.log',
-    )
-
 if __name__ == "__main__":
-    _stdout = stdLog('STDOUT', logging.INFO)
-    sys.stdout = _stdout
-    _stderr = stdLog('STDERR', logging.ERROR)
-    sys.stderr = _stderr
     runGUI()

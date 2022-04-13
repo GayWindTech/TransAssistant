@@ -2,6 +2,7 @@ from yaml import CLoader as CLoader, CDumper as CDumper, load as yaml_load, dump
 import sys, os
 
 isPacked = getattr(sys, 'frozen', False)
+isInit = True
 
 configPath = f'{os.path.dirname(sys.executable)}/TranslatorConfig.yaml' if isPacked else f'{os.path.dirname(os.path.abspath(__file__))}/TranslatorConfig.yaml'
 
@@ -11,6 +12,7 @@ def initConfig() -> None:
         yaml_dump(emptyData,f,CDumper)
 
 if(not os.path.exists(configPath)):
+    isInit = False
     initConfig()
 
 def readConfig() -> dict:
