@@ -1,5 +1,4 @@
 from fugashi import Tagger # from MeCab import Tagger
-import csv
 from sudachipy import tokenizer,dictionary
 import requests
 import json
