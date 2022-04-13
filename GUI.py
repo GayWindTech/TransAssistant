@@ -5,7 +5,7 @@ from PyQt6.QtCore import pyqtSignal, QThread, QMutex, Qt
 from OCR_style import Ui_OCR_Window
 from Screenshot import getScreenPos, getScreenshot
 from OCR import getOCRResult
-from TranslatorAPI import YoudaoTranslator, CaiYunTranslator, BaiduTranslator, TencentTranslator
+from TranslatorAPI import YoudaoTranslator, CaiYunTranslator, BaiduTranslator, TencentTranslator, configRefresh
 from MojiAPI import searchWord, fetchWord
 from Segmentation import splitWords
 from dict_style import Ui_dict_Window
@@ -119,6 +119,7 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
                 'TENCENT_SECERTKEY': self.LineEdit_TencentSECRET.text()
                 }
         writeConfig(data)
+        configRefresh()
 
 
 class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
