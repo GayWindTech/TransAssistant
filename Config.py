@@ -1,7 +1,7 @@
 from yaml import CLoader as CLoader, CDumper as CDumper, load as yaml_load, dump as yaml_dump
 import sys, os
 
-isPacked = getattr(sys, 'frozen', False)
+isPacked = (getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'))
 isInit = True
 
 configPath = f'{os.path.dirname(sys.executable)}/TranslatorConfig.yaml' if isPacked else f'{os.path.dirname(os.path.abspath(__file__))}/TranslatorConfig.yaml'

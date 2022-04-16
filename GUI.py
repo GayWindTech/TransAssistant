@@ -119,6 +119,7 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
                 'TENCENT_SECERTKEY': self.LineEdit_TencentSECRET.text()
                 }
         writeConfig(data)
+        self.close()
 
 
 class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
@@ -287,15 +288,14 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.hide()
         self.ScreenPos = getScreenPos()
         self.PosText.setText(f'{(self.ScreenPos[0], self.ScreenPos[1])},'+ str((self.ScreenPos[0] + self.ScreenPos[2],self.ScreenPos[1] + self.ScreenPos[3])))
-
         self.show()
+        self.AreaInit = True
         if(((self.ScreenPos[0], self.ScreenPos[1])==(self.ScreenPos[0] + self.ScreenPos[2],self.ScreenPos[1] + self.ScreenPos[3])) or 0 in (self.ScreenPos[2],self.ScreenPos[3])):
+            self.AreaInit = False
             print('非法选区，请重选！')
             QtWidgets.QMessageBox.critical(self,"非法选区","选区不合法，请重选！")
-        else:
-            self.AreaInit = True
-            self.OCRButton.setEnabled(self.AreaInit)
-            self.OCRButtonPlus.setEnabled(self.AreaInit)
+        self.OCRButton.setEnabled(self.AreaInit)
+        self.OCRButtonPlus.setEnabled(self.AreaInit)
 
     def doAutoTrans(self):
         if(self.autoTrans):
