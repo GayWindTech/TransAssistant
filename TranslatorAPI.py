@@ -14,11 +14,14 @@ from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
 from tencentcloud.tmt.v20180321 import tmt_client, models
 
-
 from urllib3 import disable_warnings
 disable_warnings()
 
 configs = readConfig()
+
+def reloadConfig():
+    global configs
+    configs = readConfig()
 
 def truncate(input):
     if input is None:
@@ -26,7 +29,7 @@ def truncate(input):
     size = len(input)
     return input if size <= 20 else input[:10] + str(size) + input[size - 10: size]
 
-CONFIG_REMIND = "，请检查TranslatorConfig.yaml文件是否准确填写。"
+CONFIG_REMIND = "，请检查是否正确设置API。"
 UNDEFINED_ERROR_MESSAGE = "未知错误，请联系开发者"
 
 YOUDAO_ERRORCODE_DICT = {
