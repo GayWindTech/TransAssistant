@@ -146,8 +146,7 @@ class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
 
     def searchWord(self):
         self.wordsList.clear()
-        source = self.inputLineEdit.text()
-        if(source):
+        if source := self.inputLineEdit.text():
             self._wordList = searchWord(source)
             tempItemList = tuple(each[0] for each in self._wordList)
             self.wordsList.addItems(tempItemList)
@@ -288,7 +287,10 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
     def getScreenPos(self):
         self.hide()
         self.ScreenPos = getScreenPos()
-        self.PosText.setText(f'{(self.ScreenPos[0], self.ScreenPos[1])},'+ str((self.ScreenPos[0] + self.ScreenPos[2],self.ScreenPos[1] + self.ScreenPos[3])))
+        self.PosText.setText(
+            f'{(self.ScreenPos[0], self.ScreenPos[1])},{(self.ScreenPos[0] + self.ScreenPos[2], self.ScreenPos[1] + self.ScreenPos[3])}'
+        )
+
         self.show()
         self.AreaInit = True
         if(((self.ScreenPos[0], self.ScreenPos[1])==(self.ScreenPos[0] + self.ScreenPos[2],self.ScreenPos[1] + self.ScreenPos[3])) or 0 in (self.ScreenPos[2],self.ScreenPos[3])):
