@@ -208,3 +208,22 @@ def TencentTranslator(QueryText:str) -> str:
         return TENCENT_ERRORCODE_DICT.get(err.code, err.code) + err.message
     except Exception as e:
         return str(e)
+
+def GoogleTranslator(text:str) -> str:
+    try:
+        request_result = requests.get(f"https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&sl=ja&tl=zh-cn&q={text}")
+        return json.load(request_result.text)[0][0][0]
+    except Exception as e:
+        return(f"GoogleAPI暂时不可用，详情：{e}")
+
+def XiaoniuTranslator(sentence:str) -> str:
+    url = 'http://api.niutrans.com/NiuTransServer/translation?'
+    data = {"from":'ja', "to":'zh', "apikey":configs['XIAONIU_KEY'], "src_text": sentence}
+    req = requests.post(url, data=data)
+    try:
+        result_dict = json.loads(req.content.decode('utf-8'))
+        if('error_msg'in result_dict):
+            return result_dict['error_msg'] + CONFIG_REMIND
+        return result_dict['tgt_text']
+    except Exception as e:
+        return f'{UNDEFINED_ERROR_MESSAGE}，详情：{e}'
