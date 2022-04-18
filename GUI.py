@@ -90,10 +90,14 @@ def nameReplace(string: str, reverse=False):
     return keymap_replace(string, _dict)
 
 class configWidget_class(QtWidgets.QWidget, Ui_Config):
-    def __init__(self) -> None:
+    def __init__(self, parent) -> None:
         super().__init__()
         self.setupUi(self)
-    
+        self.parent = parent
+
+    def closeEvent(self, event):
+        self.parent.Status = True
+
     def setupUi(self, Config):
         super().setupUi(Config)
         Config.setWindowOpacity(0.9)
@@ -219,6 +223,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
     def __init__(self):
         super(TransAssistant_class, self).__init__()
         self.AreaInit = False
+        self.Status = True
         self.ScreenPos = [(0, 0), (0, 0)]
         self.selectionText = str()
         self.OCRText = str()
@@ -228,7 +233,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.ShortcutKeyText.setText(self.Hotkey_OCR)
         self.registerHotkey(self.Hotkey_OCR)
         self.dictWindow = dictWindow_class()
-        self.configWidget = configWidget_class()
+        self.configWidget = configWidget_class(self)
         self.selectionTextChange = self.dictWindow.selectionTextChange
         self.OCRKeyEdit.hide(); self.confirmHotKeyButton.hide(); self.cancelHotKeyButton.hide()
         self.autoDict = self.autoDictCheckBox.isChecked()
@@ -282,6 +287,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
             self.ocrHotkeyPressed.emit()
 
     def showConfig(self):
+        self.Status = False
         self.configWidget.replaceWithCurrentConfig()
         self.configWidget.show()
 
@@ -303,7 +309,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
             self.updateResults()
 
     def getOCRText(self):
-        if(self.AreaInit):
+        if(self.AreaInit and self.Status):
             self.OCRText = getOCRResult(getScreenshot(self.ScreenPos))
             self.OCRResultTextEdit.setPlainText(self.OCRText)
             self.doAutoTrans()
@@ -312,7 +318,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.OCRText = self.OCRResultTextEdit.toPlainText()
 
     def appendOCRText(self):
-        if(self.AreaInit):
+        if(self.AreaInit and self.Status):
             self.OCRText += getOCRResult(getScreenshot(self.ScreenPos))
             self.OCRResultTextEdit.setPlainText(self.OCRText)
             self.doAutoTrans()
