@@ -7,7 +7,7 @@ isInit = True
 configPath = f'{os.path.dirname(sys.executable)}/TranslatorConfig.yaml' if isPacked else f'{os.path.dirname(os.path.abspath(__file__))}/TranslatorConfig.yaml'
 
 def initConfig() -> None:
-    emptyData = {'YOUDAO_KEY': '', 'YOUDAO_SECRET': '', 'CAIYUN_TOKEN': '', 'BAIDU_APPID': '', 'BAIDU_SECRETKEY': '', 'TENCENT_SECERTID': '', 'TENCENT_SECERTKEY': ''}
+    emptyData = {'YOUDAO_KEY': '', 'YOUDAO_SECRET': '', 'CAIYUN_TOKEN': '', 'BAIDU_APPID': '', 'BAIDU_SECRETKEY': '', 'TENCENT_SECERTID': '', 'TENCENT_SECERTKEY': '', 'XIAONIU_KEY':''}
     with open(configPath,mode='w',encoding='utf-8') as f:
         yaml_dump(emptyData,f,CDumper)
 

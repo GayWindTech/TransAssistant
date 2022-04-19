@@ -94,6 +94,8 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
         super().__init__()
         self.setupUi(self)
         self.parent = parent
+        self.Hotkey_OCR = parent.Hotkey_OCR
+        self.OCRKeyEdit.hide(); self.cancelHotKeyButton.hide(); self.confirmHotKeyButton.hide();
 
     def closeEvent(self, event):
         self.parent.Status = True
@@ -104,6 +106,7 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
         Config.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
     
     def replaceWithCurrentConfig(self):
+        self.Label_ShortcutKeyText.setText(self.parent.Hotkey_OCR)
         configDict = readConfig()
         self.LineEdit_YoudaoKEY.setText(configDict["YOUDAO_KEY"])
         self.LineEdit_YoudaoSECRET.setText(configDict["YOUDAO_SECRET"])
@@ -112,6 +115,23 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
         self.LineEdit_BaiduSECRET.setText(configDict["BAIDU_SECRETKEY"])
         self.LineEdit_TencentKEY.setText(configDict["TENCENT_SECERTID"])
         self.LineEdit_TencentSECRET.setText(configDict["TENCENT_SECERTKEY"])
+    
+    def getIntoHotKeyChangeMode(self):
+        print('请摁下快捷键!')
+        self.OCRKeyEdit.show(); self.confirmHotKeyButton.show(); self.cancelHotKeyButton.show(); self.changeHotKeyButton.hide(); self.Label_ShortcutKeyText.hide()
+    
+    def confirmHotkey(self):
+        if(not self.OCRKeyEdit._string):
+            self.cancelHotKey()
+            return
+        self.Hotkey_OCR = self.OCRKeyEdit._string.replace('+',' + ')
+        self.Label_ShortcutKeyText.setText(self.OCRKeyEdit._string)
+        print(f'热键已更改为: {self.Hotkey_OCR}')
+        self.OCRKeyEdit.hide(); self.confirmHotKeyButton.hide(); self.cancelHotKeyButton.hide(); self.changeHotKeyButton.show(); self.Label_ShortcutKeyText.show()
+    
+    def cancelHotKey(self):
+        self.OCRKeyEdit.hide(); self.confirmHotKeyButton.hide(); self.cancelHotKeyButton.hide(); self.changeHotKeyButton.show(); self.Label_ShortcutKeyText.show()
+        print('已取消更改热键')
     
     def saveConfig(self):
         data = {'YOUDAO_KEY': self.LineEdit_YoudaoKEY.text(), 
@@ -123,6 +143,7 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
                 'TENCENT_SECERTKEY': self.LineEdit_TencentSECRET.text()
                 }
         writeConfig(data)
+        self.parent.changeHotkey(self.Hotkey_OCR)
         reloadConfig()
         self.close()
 
@@ -235,7 +256,6 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.dictWindow = dictWindow_class()
         self.configWidget = configWidget_class(self)
         self.selectionTextChange = self.dictWindow.selectionTextChange
-        self.OCRKeyEdit.hide(); self.confirmHotKeyButton.hide(); self.cancelHotKeyButton.hide()
         self.autoDict = self.autoDictCheckBox.isChecked()
         self.resultTextEditList = self.TransResult_0,self.TransResult_1,self.TransResult_2,self.TransResult_3
         self.autoTrans = True
@@ -246,24 +266,15 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         keyboard.add_hotkey(hotkeys,lambda: self.sendHotkeyPressedSig(hotkeys))
 
     def getIntoHotKeyChangeMode(self):
-        print('请摁下快捷键!')
-        self.OCRKeyEdit.show(); self.confirmHotKeyButton.show(); self.cancelHotKeyButton.show(); self.changeHotKeyButton.hide()
-        self._hotkeyTemp = self.Hotkey_OCR
+        self.showConfig()
+
+    def changeHotkey(self,_hotkey):
+        _hotkeyTemp = self.Hotkey_OCR
         keyboard.clear_hotkey(self.Hotkey_OCR)
-
-    def confirmHotkey(self):
-        self.Hotkey_OCR = self.OCRKeyEdit._string.replace('+',' + ')
+        self.Hotkey_OCR = _hotkey
         self.registerHotkey(self.Hotkey_OCR)
         self.ShortcutKeyText.setText(self.Hotkey_OCR)
-        print(f'热键已更改为: {self.Hotkey_OCR}')
-        self.OCRKeyEdit.hide(); self.confirmHotKeyButton.hide(); self.cancelHotKeyButton.hide(); self.changeHotKeyButton.show()
-
-    def cancelHotKey(self):
-        self.Hotkey_OCR = self._hotkeyTemp
-        self.registerHotkey(self.Hotkey_OCR)
-        self.ShortcutKeyText.setText(self.Hotkey_OCR)
-        self.OCRKeyEdit.hide(); self.confirmHotKeyButton.hide(); self.cancelHotKeyButton.hide(); self.changeHotKeyButton.show()
-        print('已取消更改热键')
+        print(f'热键已由 {_hotkeyTemp} 更改为 {self.Hotkey_OCR}')
 
     def updateSelectionText(self):
         if(self.OCRResultTextEdit.hasFocus()):
