@@ -16,3 +16,5 @@ pyinstaller==4.10
 PyWin32==303
 mecab-python3==1.0.4
 PyYAML==6.0
+aliyun-python-sdk-core-v3==2.13.33
+aliyun-python-sdk-alimt==3.1.1
