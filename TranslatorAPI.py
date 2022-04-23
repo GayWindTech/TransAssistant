@@ -14,6 +14,9 @@ from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
 from tencentcloud.tmt.v20180321 import tmt_client, models
 
+from aliyunsdkcore.client import AcsClient
+from aliyunsdkalimt.request.v20181012 import TranslateGeneralRequest
+
 from urllib3 import disable_warnings
 disable_warnings()
 
@@ -28,6 +31,11 @@ def truncate(input):
         return None
     size = len(input)
     return input if size <= 20 else input[:10] + str(size) + input[size - 10: size]
+
+NOPROXIES = {
+    "http": "",
+    "https": "",
+}
 
 CONFIG_REMIND = "，请检查是否正确设置API。"
 UNDEFINED_ERROR_MESSAGE = "未知错误，请联系开发者"
@@ -127,7 +135,7 @@ def YoudaoTranslator(QueryText: str) -> str:
     }
     _headers = {"Content-Type": "application/x-www-form-urlencoded"}
     try:
-        response = requests.post(YOUDAO_URL, data=_data, headers=_headers, verify=False, timeout=5)
+        response = requests.post(YOUDAO_URL, data=_data, headers=_headers, verify=False, timeout=5, proxies=NOPROXIES)
         return_dict = json.loads(response.content.decode("utf-8"))
         errorCode = int(return_dict['errorCode'])
         if(errorCode!=0):
@@ -152,7 +160,7 @@ def CaiYunTranslator(QueryText: str) -> str:
     }
 
     try:
-        response = requests.post(url, data=json.dumps(payload), headers=headers, verify=False)
+        response = requests.post(url, data=json.dumps(payload), headers=headers, verify=False, proxies=NOPROXIES)
     except Exception as err:
         return str(err)
     return_dict = json.loads(response.content)
@@ -174,7 +182,7 @@ def BaiduTranslator(QueryText:str) -> str:
     request_url = (f'{BAIDU_URL}?appid=' + configs['BAIDU_APPID']+ '&q=' + urllib.parse.quote(QueryText)+ '&from=' + fromLang+ '&to=' + toLang+ '&salt=' + str(salt)+ '&sign=' + sign)
 
 
-    response = requests.get(request_url, verify=False)
+    response = requests.get(request_url, verify=False, proxies=NOPROXIES)
     return_dict = json.loads(response.content.decode('utf-8'))
     try:
         return return_dict['trans_result'][0]['dst']
@@ -211,15 +219,15 @@ def TencentTranslator(QueryText:str) -> str:
 
 def GoogleTranslator(text:str) -> str:
     try:
-        request_result = requests.get(f"https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&sl=ja&tl=zh-cn&q={text}")
-        return json.load(request_result.text)[0][0][0]
+        request_result = requests.get(f"https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&sl=ja&tl=zh-cn&q={text}",verify=False,proxies=NOPROXIES)
+        return json.loads(request_result.content.decode('utf-8'))[0][0][0]
     except Exception as e:
         return(f"GoogleAPI暂时不可用，详情：{e}")
 
 def XiaoniuTranslator(sentence:str) -> str:
     url = 'http://api.niutrans.com/NiuTransServer/translation?'
     data = {"from":'ja', "to":'zh', "apikey":configs['XIAONIU_KEY'], "src_text": sentence}
-    req = requests.post(url, data=data)
+    req = requests.post(url, data=data, proxies=NOPROXIES)
     try:
         result_dict = json.loads(req.content.decode('utf-8'))
         if('error_msg'in result_dict):
@@ -227,3 +235,35 @@ def XiaoniuTranslator(sentence:str) -> str:
         return result_dict['tgt_text']
     except Exception as e:
         return f'{UNDEFINED_ERROR_MESSAGE}，详情：{e}'
+
+def AliyunTranslator(QueryText:str) -> str:
+    try:
+        client = AcsClient(
+            configs['ALIYUN_KEY'],
+            configs['ALIYUN_SECRET'],
+            "cn-hangzhou" 
+        )
+        request = TranslateGeneralRequest.TranslateGeneralRequest()
+        request.set_SourceLanguage("auto")
+        request.set_SourceText(QueryText)
+        request.set_FormatType("text")
+        request.set_TargetLanguage("zh")
+        request.set_method("POST")
+        response = client.do_action_with_exception(request)
+        tempResult = json.loads(response)
+        if(tempResult['Code'] != '200'):
+            return tempResult['Message'] + CONFIG_REMIND
+        return tempResult['Data']['Translated']
+    except Exception as e:
+        return f"{UNDEFINED_ERROR_MESSAGE}，详情：{e}"
+
+
+TranslatorMapping = {
+    '有道翻译': YoudaoTranslator,
+    '彩云小译': CaiYunTranslator,
+    '百度翻译': BaiduTranslator,
+    '腾讯云翻译': TencentTranslator,
+    'Google翻译': GoogleTranslator,
+    '小牛翻译': XiaoniuTranslator,
+    '阿里云翻译': AliyunTranslator
+}

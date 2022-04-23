@@ -29,6 +29,7 @@ class Ui_OCR_Window(object):
         font.setKerning(True)
         self.OCRResultTextEdit.setFont(font)
         self.OCRResultTextEdit.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.CursorShape.IBeamCursor))
+        self.OCRResultTextEdit.setPlainText("")
         self.OCRResultTextEdit.setObjectName("OCRResultTextEdit")
         self.TransResult_0 = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.TransResult_0.setGeometry(QtCore.QRect(30, 190, 721, 71))
@@ -255,7 +256,7 @@ class Ui_OCR_Window(object):
     def retranslateUi(self, OCR_Window):
         _translate = QtCore.QCoreApplication.translate
         OCR_Window.setWindowTitle(_translate("OCR_Window", "TransAssistant"))
-        self.OCRResultTextEdit.setPlainText(_translate("OCR_Window", "请先选取OCR区域，使用鼠标划选后按回车确认↑"))
+        self.OCRResultTextEdit.setPlaceholderText(_translate("OCR_Window", "请先选取OCR区域，使用鼠标划选后按回车确认↑"))
         self.ChooseAreaButton.setToolTip(_translate("OCR_Window", "<html><head/><body><p><span style=\" font-size:10pt;\">按Enter确认选取区域</span></p></body></html>"))
         self.ChooseAreaButton.setText(_translate("OCR_Window", "选取区域"))
         self.ChosenTitleTitle.setText(_translate("OCR_Window", "已选择的区域"))

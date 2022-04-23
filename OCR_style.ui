@@ -48,6 +48,9 @@
      <cursorShape>IBeamCursor</cursorShape>
     </property>
     <property name="plainText">
+     <string/>
+    </property>
+    <property name="placeholderText">
      <string>请先选取OCR区域，使用鼠标划选后按回车确认↑</string>
     </property>
    </widget>

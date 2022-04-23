@@ -8,10 +8,15 @@ import importlib
 disable_warnings()
 from Config import isPacked
 
+NOPROXIES = {
+    "http": "",
+    "https": "",
+}
+
 def _kuromoji(s: str) -> list:
     url = "https://www.atilika.org/kuromoji/rest/tokenizer/tokenize"
     datas = {"text": s, "mode": 0}
-    req = requests.post(url, data=datas, verify=False, proxies=None)
+    req = requests.post(url, data=datas, verify=False, proxies=NOPROXIES)
     # var_dump(json.loads(req.content.decode('utf-8'))['tokens'])
     return (each["surface"] for each in json.loads(req.content.decode("utf-8"))["tokens"] )
 

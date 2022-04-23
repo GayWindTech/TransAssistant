@@ -6,19 +6,19 @@ isInit = True
 
 configPath = f'{os.path.dirname(sys.executable)}/TranslatorConfig.yaml' if isPacked else f'{os.path.dirname(os.path.abspath(__file__))}/TranslatorConfig.yaml'
 
-def initConfig() -> None:
-    emptyData = {'YOUDAO_KEY': '', 'YOUDAO_SECRET': '', 'CAIYUN_TOKEN': '', 'BAIDU_APPID': '', 'BAIDU_SECRETKEY': '', 'TENCENT_SECERTID': '', 'TENCENT_SECERTKEY': '', 'XIAONIU_KEY':''}
+def writeConfig(data:dict) -> None:
     with open(configPath,mode='w',encoding='utf-8') as f:
-        yaml_dump(emptyData,f,CDumper)
-
-if(not os.path.exists(configPath)):
-    isInit = False
-    initConfig()
+        yaml_dump(data,f,CDumper)
 
 def readConfig() -> dict:
     with open(configPath,encoding='utf-8') as f:
         return yaml_load(f,CLoader)
 
-def writeConfig(data:dict) -> None:
-    with open(configPath,mode='w',encoding='utf-8') as f:
-        yaml_dump(data,f,CDumper)
+def initConfig() -> None:
+    emptyData = {'YOUDAO_KEY': '', 'YOUDAO_SECRET': '', 'CAIYUN_TOKEN': '', 'BAIDU_APPID': '', 'BAIDU_SECRETKEY': '', 'TENCENT_SECERTID': '', 'TENCENT_SECERTKEY': '', 'XIAONIU_KEY':'', 'ALIYUN_KEY':'', 'ALIYUN_SECRET':'', 'SELECTED_TRANSLATORS':[], 'Hotkey_OCR':'Ctrl + Space'}
+    writeConfig(emptyData)
+
+if(not os.path.exists(configPath)):
+    isInit = False
+    print('Config file not found, creating a new one...')
+    initConfig()

@@ -1,59 +1,20 @@
 # -*- coding: utf-8 -*-
+import contextlib
 import sys
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import pyqtSignal, QThread, QMutex, Qt
 from OCR_style import Ui_OCR_Window
 from Screenshot import getScreenPos, getScreenshot
 from OCR import getOCRResult
-from TranslatorAPI import YoudaoTranslator, CaiYunTranslator, BaiduTranslator, TencentTranslator, reloadConfig
+from TranslatorAPI import TranslatorMapping, reloadConfig
 from MojiAPI import searchWord, fetchWord
 from Segmentation import splitWords
 from dict_style import Ui_dict_Window
 from config_style import Ui_Config
 from Config import readConfig, writeConfig, isInit
 import keyboard
+from customerDefineDict import ZhNameDict, JPNameDict
 # from var_dump import var_dump
-
-
-# 字典的要求
-# 1.中间词不能是常用词汇
-# 2.中间词要尽量保证在中日互译时不会产生歧义
-# 3.中间词不能在中日互译时发生繁简转换
-# 4.要实现贪婪匹配，子串应在母串之后出现
-JPNameDict = {
-    "モブ美さん": "佐藤",
-    "モブ美": "佐藤",
-    "モブ男さん": "田中",
-    "モブ男くん": "田中",
-    "モブ男": "田中",
-    "モブくん": "中村",
-    "失恋フラグさん": "井上",
-    "失恋フラグ": "井上",
-    "フラグちゃん": "山本",
-    "死亡フラグさん": "小林",
-    "死亡フラグ": "小林",
-    "恋愛フラグさん": "伊藤",
-    "恋愛フラグ": "伊藤",
-    "生存フラグさん": "加藤",
-    "生存フラグ": "加藤",
-    "しーちゃん": "森中",
-    "せーちゃん": "石川",
-    "れんれん": "松下",
-}
-ZhNameDict = {
-    "佐藤": "小美",
-    "田中": "路人男",
-    "中村": "路人君",
-    "井上": "失恋flag",
-    "山本": "flag酱",
-    "小林": "死亡flag",
-    "伊藤": "恋爱flag",
-    "加藤": "生存flag",
-    "森中": "死酱",
-    "石川": "生酱",
-    "松下": "恋恋",
-}
-
 
 def keymap_replace(
     string: str,
@@ -64,10 +25,9 @@ def keymap_replace(
 ) -> str:
     """Replace parts of a string based on a dictionary.
 
-    This function takes a string a dictionary of
-    replacement mappings. For example, if I supplied
-    the string "Hello.", and the mappings
-    {"He": "Cia", ".": "!"}, it would return " Ciallo!".
+    This function takes a string a dictionary of replacement mappings. 
+    For example, if I supplied the string "Hello." and the mappings {"He": "Cia", ".": "!"}, 
+    it would return " Ciallo!".
 
     Keyword arguments:
     string       -- The string to replace characters in.
@@ -93,9 +53,22 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
     def __init__(self, parent) -> None:
         super().__init__()
         self.setupUi(self)
+        self.ListWidget_SelectedSource.setDragDropMode(QtWidgets.QAbstractItemView.DragDropMode.InternalMove)
         self.parent = parent
         self.Hotkey_OCR = parent.Hotkey_OCR
-        self.OCRKeyEdit.hide(); self.cancelHotKeyButton.hide(); self.confirmHotKeyButton.hide();
+        self.OCRKeyEdit.hide(); self.cancelHotKeyButton.hide(); self.confirmHotKeyButton.hide()
+        self.LineEditMapping = {
+            'YOUDAO_KEY': self.LineEdit_YoudaoKEY,
+            'YOUDAO_SECRET': self.LineEdit_YoudaoSECRET,
+            'CAIYUN_TOKEN': self.LineEdit_CaiYunTOKEN,
+            'BAIDU_APPID': self.LineEdit_BaiduAPPID,
+            'BAIDU_SECRETKEY': self.LineEdit_BaiduSECRETKEY,
+            'TENCENT_SECERTID': self.LineEdit_TencentKEY,
+            'TENCENT_SECERTKEY': self.LineEdit_TencentSECRET,
+            'XIAONIU_KEY': self.LineEdit_XiaoNiuKEY,
+            'ALIYUN_KEY': self.LineEdit_AliYunKEY,
+            'ALIYUN_SECRET': self.LineEdit_AliYunSECRET
+        }
 
     def closeEvent(self, event):
         self.parent.Status = True
@@ -108,14 +81,48 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
     def replaceWithCurrentConfig(self):
         self.Label_ShortcutKeyText.setText(self.parent.Hotkey_OCR)
         configDict = readConfig()
-        self.LineEdit_YoudaoKEY.setText(configDict["YOUDAO_KEY"])
-        self.LineEdit_YoudaoSECRET.setText(configDict["YOUDAO_SECRET"])
-        self.LineEdit_CaiYunSECRET.setText(configDict["CAIYUN_TOKEN"])
-        self.LineEdit_BaiduKEY.setText(configDict["BAIDU_APPID"])
-        self.LineEdit_BaiduSECRET.setText(configDict["BAIDU_SECRETKEY"])
-        self.LineEdit_TencentKEY.setText(configDict["TENCENT_SECERTID"])
-        self.LineEdit_TencentSECRET.setText(configDict["TENCENT_SECERTKEY"])
-    
+        for each in self.LineEditMapping:
+            self.LineEditMapping[each].setText(configDict[each])
+        _willBeAddTranslator = list(TranslatorMapping)
+        [_willBeAddTranslator.remove(each) for each in configDict['SELECTED_TRANSLATORS']]
+        for eachTranslator in _willBeAddTranslator:
+            self.ListWidget_SelectableSource.addItem(eachTranslator)
+        for each in configDict['SELECTED_TRANSLATORS']:
+            self.ListWidget_SelectedSource.addItem(each)
+
+    def addTranslator(self):
+        if(self.ListWidget_SelectableSource.currentItem()):
+            self.ListWidget_SelectedSource.addItem(self.ListWidget_SelectableSource.currentItem().text())
+            self.ListWidget_SelectableSource.takeItem(self.ListWidget_SelectableSource.currentRow())
+        self.checkSelectedTranslatorCount()
+
+    def removeTranslator(self):
+        if(self.ListWidget_SelectedSource.currentItem()):
+            self.ListWidget_SelectableSource.addItem(self.ListWidget_SelectedSource.currentItem().text())
+            self.ListWidget_SelectedSource.takeItem(self.ListWidget_SelectedSource.currentRow())
+        self.checkSelectedTranslatorCount()
+
+    def upTranslator(self):
+        if(self.ListWidget_SelectedSource.currentItem()):
+            _currentRow = self.ListWidget_SelectedSource.currentRow()
+            self.ListWidget_SelectedSource.insertItem(self.ListWidget_SelectedSource.currentRow()-1, self.ListWidget_SelectedSource.takeItem(self.ListWidget_SelectedSource.currentRow()))
+            self.ListWidget_SelectedSource.setCurrentRow(_currentRow-1)
+
+    def downTranslator(self):
+        if(self.ListWidget_SelectedSource.currentItem()):
+            _currentRow = self.ListWidget_SelectedSource.currentRow()
+            self.ListWidget_SelectedSource.insertItem(self.ListWidget_SelectedSource.currentRow()+1, self.ListWidget_SelectedSource.takeItem(self.ListWidget_SelectedSource.currentRow()))
+            self.ListWidget_SelectedSource.setCurrentRow(_currentRow+1)
+
+    def getCurrentSelectedTranslator(self):
+        return [self.ListWidget_SelectedSource.item(i).text() for i in range(self.ListWidget_SelectedSource.count())]
+
+    def checkSelectedTranslatorCount(self):
+        if self.ListWidget_SelectedSource.count() >= 4:
+            self.PushButton_SourceEnable.setEnabled(False)
+        else:
+            self.PushButton_SourceEnable.setEnabled(True)
+
     def getIntoHotKeyChangeMode(self):
         print('请摁下快捷键!')
         self.OCRKeyEdit.show(); self.confirmHotKeyButton.show(); self.cancelHotKeyButton.show(); self.changeHotKeyButton.hide(); self.Label_ShortcutKeyText.hide()
@@ -126,7 +133,7 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
             return
         self.Hotkey_OCR = self.OCRKeyEdit._string.replace('+',' + ')
         self.Label_ShortcutKeyText.setText(self.OCRKeyEdit._string)
-        print(f'热键已更改为: {self.Hotkey_OCR}')
+        print(f'热键将更改为: {self.Hotkey_OCR}')
         self.OCRKeyEdit.hide(); self.confirmHotKeyButton.hide(); self.cancelHotKeyButton.hide(); self.changeHotKeyButton.show(); self.Label_ShortcutKeyText.show()
     
     def cancelHotKey(self):
@@ -134,16 +141,12 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
         print('已取消更改热键')
     
     def saveConfig(self):
-        data = {'YOUDAO_KEY': self.LineEdit_YoudaoKEY.text(), 
-                'YOUDAO_SECRET': self.LineEdit_YoudaoSECRET.text(), 
-                'CAIYUN_TOKEN': self.LineEdit_CaiYunSECRET.text(),
-                'BAIDU_APPID': self.LineEdit_BaiduKEY.text(), 
-                'BAIDU_SECRETKEY': self.LineEdit_BaiduSECRET.text(), 
-                'TENCENT_SECERTID': self.LineEdit_TencentKEY.text(), 
-                'TENCENT_SECERTKEY': self.LineEdit_TencentSECRET.text()
-                }
+        data = {each: self.LineEditMapping[each].text() for each in self.LineEditMapping}
+        data['SELECTED_TRANSLATORS'] = self.getCurrentSelectedTranslator()
+        data['Hotkey_OCR'] = self.Hotkey_OCR
         writeConfig(data)
         self.parent.changeHotkey(self.Hotkey_OCR)
+        self.parent.updateTranslatorList(self.getCurrentSelectedTranslator())
         reloadConfig()
         self.close()
 
@@ -214,17 +217,15 @@ MutexList = [QMutex(),QMutex(),QMutex(),QMutex()]
 class TranslatorThread(QThread):
     _signal = pyqtSignal(int, str)
 
-    def __init__(self, source: str, translatorType: int, aimTextEdit: int):
+    def __init__(self, source: str, translatorType: str, aimTextEdit: int):
         super().__init__()
-        self.TranslatorList = [
-            YoudaoTranslator, CaiYunTranslator, BaiduTranslator, TencentTranslator]
         self.source = source
         self.translatorType = translatorType
         self.aimTextEdit = aimTextEdit
 
     def run(self):
         MutexList[self.aimTextEdit].lock()
-        result = self.TranslatorList[self.translatorType](self.source)
+        result = TranslatorMapping[self.translatorType](self.source)
         self._signal.emit(self.aimTextEdit, result)
         MutexList[self.aimTextEdit].unlock()
 
@@ -243,21 +244,23 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
 
     def __init__(self):
         super(TransAssistant_class, self).__init__()
+        self.ConfigDict = readConfig()
         self.AreaInit = False
         self.Status = True
         self.ScreenPos = [(0, 0), (0, 0)]
         self.selectionText = str()
         self.OCRText = str()
         self.setupUi(self)
+        self.OCRResultTextEdit.setPlainText('')
         self.SplitMode = "sudachi"
-        self.Hotkey_OCR = "Ctrl + Space"
-        self.ShortcutKeyText.setText(self.Hotkey_OCR)
-        self.registerHotkey(self.Hotkey_OCR)
+        self.Hotkey_OCR = self.ConfigDict['Hotkey_OCR']
+        self.changeHotkey(self.Hotkey_OCR)
         self.dictWindow = dictWindow_class()
         self.configWidget = configWidget_class(self)
         self.selectionTextChange = self.dictWindow.selectionTextChange
         self.autoDict = self.autoDictCheckBox.isChecked()
         self.resultTextEditList = self.TransResult_0,self.TransResult_1,self.TransResult_2,self.TransResult_3
+        self.updateTranslatorList(self.ConfigDict['SELECTED_TRANSLATORS'])
         self.autoTrans = True
         if(not isInit):
             self.showConfig()
@@ -270,11 +273,17 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
 
     def changeHotkey(self,_hotkey):
         _hotkeyTemp = self.Hotkey_OCR
-        keyboard.clear_hotkey(self.Hotkey_OCR)
-        self.Hotkey_OCR = _hotkey
-        self.registerHotkey(self.Hotkey_OCR)
-        self.ShortcutKeyText.setText(self.Hotkey_OCR)
-        print(f'热键已由 {_hotkeyTemp} 更改为 {self.Hotkey_OCR}')
+        with contextlib.suppress(Exception):
+            keyboard.clear_hotkey(self.Hotkey_OCR)
+        try:
+            self.registerHotkey(_hotkey)
+            self.Hotkey_OCR = _hotkey
+            self.ShortcutKeyText.setText(self.Hotkey_OCR)
+            print(f'当前快捷键： {self.Hotkey_OCR}')
+        except Exception:
+            with contextlib.suppress(Exception):
+                self.registerHotkey(_hotkeyTemp)
+            print(f'设置{_hotkey}为快捷键失败')
 
     def updateSelectionText(self):
         if(self.OCRResultTextEdit.hasFocus()):
@@ -312,6 +321,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
             self.AreaInit = False
             print('非法选区，请重选！')
             QtWidgets.QMessageBox.critical(self,"非法选区","选区不合法，请重选！")
+        self.OCRResultTextEdit.setPlaceholderText('')
         self.OCRButton.setEnabled(self.AreaInit)
         self.OCRButtonPlus.setEnabled(self.AreaInit)
 
@@ -343,12 +353,19 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.updateSplitTextEdit(True)
         if(source):
             source = nameReplace(source, False)
-            self.t0,self.t1,self.t2,self.t3 = TranslatorThread(source,0,0),TranslatorThread(source,1,1),TranslatorThread(source,2,2),TranslatorThread(source,3,3)
-            self.t0._signal.connect(self.updateResultTextEdit)
-            self.t1._signal.connect(self.updateResultTextEdit)
-            self.t2._signal.connect(self.updateResultTextEdit)
-            self.t3._signal.connect(self.updateResultTextEdit)
-            self.t0.start(); self.t1.start(); self.t2.start(); self.t3.start()
+            self.TranslatorTreadList = [TranslatorThread(source, eachTranslator, n) for n, eachTranslator in enumerate(self.TranslatorList)]
+            for eachTread in self.TranslatorTreadList:
+                eachTread._signal.connect(self.updateResultTextEdit)
+                eachTread.start()
+
+    def updateTranslatorList(self, _list:list):
+        self.TranslatorList = _list
+        print(f'当前翻译源为：{self.TranslatorList}')
+        n = _list.__len__()
+        if n < 4:
+            (each.setEnabled(False) for each in self.resultTextEditList[n-4:])
+        else:
+            (each.setEnabled(True) for each in self.resultTextEditList)
 
     def updateSplitMode(self, mode):
         self.SplitMode = mode
