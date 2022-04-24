@@ -847,7 +847,6 @@
   <slot>updateAutoTransBool(bool)</slot>
   <slot>doAutoTrans()</slot>
   <slot>updateSplitTextEdit()</slot>
-  <slot>print()</slot>
   <slot>updateOCRText()</slot>
   <slot>getIntoHotKeyChangeMode()</slot>
   <slot>confirmHotkey()</slot>

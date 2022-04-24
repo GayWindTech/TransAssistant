@@ -79,6 +79,8 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
         Config.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
     
     def replaceWithCurrentConfig(self):
+        self.ListWidget_SelectableSource.clear()
+        self.ListWidget_SelectedSource.clear()
         self.Label_ShortcutKeyText.setText(self.parent.Hotkey_OCR)
         configDict = readConfig()
         for each in self.LineEditMapping:
@@ -141,6 +143,9 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
         print('已取消更改热键')
     
     def saveConfig(self):
+        if(not self.getCurrentSelectedTranslator()):
+            QtWidgets.QMessageBox.critical(self,"配置有误","至少选择一个翻译源！")
+            return
         data = {each: self.LineEditMapping[each].text() for each in self.LineEditMapping}
         data['SELECTED_TRANSLATORS'] = self.getCurrentSelectedTranslator()
         data['Hotkey_OCR'] = self.Hotkey_OCR
@@ -251,6 +256,8 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.selectionText = str()
         self.OCRText = str()
         self.setupUi(self)
+        self.defaultWidth, self.defaultHeight = self.width(), self.height()
+        self.defaultX, self.defaultY = self.geometry().x(), self.geometry().y()
         self.OCRResultTextEdit.setPlainText('')
         self.SplitMode = "sudachi"
         self.Hotkey_OCR = self.ConfigDict['Hotkey_OCR']
@@ -321,7 +328,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
             self.AreaInit = False
             print('非法选区，请重选！')
             QtWidgets.QMessageBox.critical(self,"非法选区","选区不合法，请重选！")
-        self.OCRResultTextEdit.setPlaceholderText('')
+        if self.AreaInit: self.OCRResultTextEdit.setPlaceholderText('')
         self.OCRButton.setEnabled(self.AreaInit)
         self.OCRButtonPlus.setEnabled(self.AreaInit)
 
@@ -361,11 +368,17 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
     def updateTranslatorList(self, _list:list):
         self.TranslatorList = _list
         print(f'当前翻译源为：{self.TranslatorList}')
-        n = _list.__len__()
-        if n < 4:
-            (each.setEnabled(False) for each in self.resultTextEditList[n-4:])
+        [self.resultTextEditList[n].setPlaceholderText(eachTranslator) for n, eachTranslator in enumerate(self.TranslatorList)]
+        _len = _list.__len__()
+        if _len < 4:
+            [each.setVisible(False) for each in self.resultTextEditList[_len-4:]]
+            n = 80*(4-_list.__len__())
+            self.setFixedSize(self.defaultWidth, self.defaultHeight-n)
+            self.move(self.defaultX, self.defaultY+n)
         else:
-            (each.setEnabled(True) for each in self.resultTextEditList)
+            [each.setVisible(True) for each in self.resultTextEditList]
+            self.setFixedSize(self.defaultWidth, self.defaultHeight)
+            self.move(self.defaultX, self.defaultY)
 
     def updateSplitMode(self, mode):
         self.SplitMode = mode
