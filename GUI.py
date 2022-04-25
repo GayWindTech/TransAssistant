@@ -371,8 +371,9 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         [self.resultTextEditList[n].setPlaceholderText(eachTranslator) for n, eachTranslator in enumerate(self.TranslatorList)]
         _len = _list.__len__()
         if _len < 4:
+            if _len == 0: _len = 1
             [each.setVisible(False) for each in self.resultTextEditList[_len-4:]]
-            n = 80*(4-_list.__len__())
+            n = 80*(4-_len)
             self.setFixedSize(self.defaultWidth, self.defaultHeight-n)
             self.move(self.defaultX, self.defaultY+n)
         else:
