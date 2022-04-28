@@ -12,7 +12,7 @@ import cv2
 from urllib3 import disable_warnings
 disable_warnings()
 
-from Config import readConfig
+from Config import readConfig, NOPROXIES
 configs = readConfig()
 
 def reloadOCRConfig():
@@ -93,7 +93,7 @@ def checkSecretAvailable(appId: str, apiSecret: str, apiKey: str) -> bool:
     request_url = assemble_ws_auth_url(url, "POST", apiKey, apiSecret)
     headers = {'content-type': "application/json", 'host': 'api.xf-yun.com', 'app_id': appId}
     try:
-        response = requests.post(request_url, data=json.dumps(_body), headers=headers,verify=False)
+        response = requests.post(request_url, data=json.dumps(_body), headers=headers, verify=False, proxies=NOPROXIES)
         return json.loads(response.content.decode())['header']['code'] == 10009
     except Exception:
         return False
@@ -105,7 +105,7 @@ def getOCRResult(img) -> str:
     request_url = assemble_ws_auth_url(url, "POST", configs['OCR_KEY'], configs['OCR_SECRET'])
     headers = {'content-type': "application/json", 'host': 'api.xf-yun.com', 'app_id': configs['OCR_APPID']}
     try:
-        response = requests.post(request_url, data=json.dumps(body), headers=headers,verify=False)
+        response = requests.post(request_url, data=json.dumps(body), headers=headers, verify=False, proxies=NOPROXIES)
         tempResult = json.loads(response.content.decode())
         finalResult = base64.b64decode(tempResult['payload']['result']['text']).decode()
         finalResult = finalResult.replace(" ", "").replace("\n", "").replace("\t", "").strip()
@@ -116,7 +116,7 @@ def getOCRResult(img) -> str:
 
 def getOCRSecret() -> tuple:
     url = "aHR0cDovL3hmLmFrYS50b2RheS92My91c2VyX2luZm8ucGhwP29wZW5faWQ9ZmZkNjI2NDM0NDI1NDQ5MDk3YzcxZmUwMGJmYTBmNTU="
-    return tuple((eachDict['appId'], eachDict['apiSecret2'], eachDict['apiKey2']) for eachDict in requests.get(base64.b64decode(url)).json()['data']['all_share'] if(eachDict['apiKey2'] and eachDict['apiSecret2']))
+    return tuple((eachDict['appId'], eachDict['apiSecret2'], eachDict['apiKey2']) for eachDict in requests.get(base64.b64decode(url), verify=False, proxies=NOPROXIES).json()['data']['all_share'] if(eachDict['apiKey2'] and eachDict['apiSecret2']))
 
 def getVaildOCRSecert() -> tuple:
     return tuple(each for each in getOCRSecret() if(checkSecretAvailable(each[0], each[1], each[2])))

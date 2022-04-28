@@ -1,7 +1,7 @@
 import random
 
 import urllib
-from Config import readConfig
+from Config import readConfig, NOPROXIES
 import requests
 import time
 import uuid
@@ -32,10 +32,6 @@ def truncate(input):
     size = len(input)
     return input if size <= 20 else input[:10] + str(size) + input[size - 10: size]
 
-NOPROXIES = {
-    "http": "",
-    "https": "",
-}
 
 CONFIG_REMIND = "，请检查是否正确设置API。"
 UNDEFINED_ERROR_MESSAGE = "未知错误，请联系开发者"

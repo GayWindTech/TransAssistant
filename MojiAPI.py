@@ -2,15 +2,11 @@
 import itertools
 import requests
 import json
+from Config import NOPROXIES
 # from var_dump import var_dump
 from urllib3 import disable_warnings
 
 disable_warnings()
-
-NOPROXIES = {
-    "http": "",
-    "https": "",
-}
 
 def searchWord(word: str) -> list:
     try:

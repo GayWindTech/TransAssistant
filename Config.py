@@ -1,6 +1,11 @@
 from yaml import CLoader as CLoader, CDumper as CDumper, load as yaml_load, dump as yaml_dump
 import sys, os
 
+NOPROXIES = {
+    "http": "",
+    "https": "",
+}
+
 isPacked = (getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'))
 isInit = True
 

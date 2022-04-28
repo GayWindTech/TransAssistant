@@ -6,12 +6,7 @@ from urllib3 import disable_warnings
 from os import path
 import importlib
 disable_warnings()
-from Config import isPacked
-
-NOPROXIES = {
-    "http": "",
-    "https": "",
-}
+from Config import isPacked, NOPROXIES
 
 def _kuromoji(s: str) -> list:
     url = "https://www.atilika.org/kuromoji/rest/tokenizer/tokenize"
