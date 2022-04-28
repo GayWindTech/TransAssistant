@@ -13,6 +13,15 @@
     <height>503</height>
    </rect>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>459</width>
+    <height>1000</height>
+   </size>
+  </property>
+  <property name="mouseTracking">
+   <bool>true</bool>
+  </property>
   <property name="windowTitle">
    <string>配置</string>
   </property>
@@ -27,6 +36,18 @@
      <width>471</width>
      <height>501</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>471</width>
+     <height>16777215</height>
+    </size>
    </property>
    <property name="focusPolicy">
     <enum>Qt::WheelFocus</enum>
@@ -47,9 +68,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>-376</y>
+      <y>-551</y>
       <width>450</width>
-      <height>890</height>
+      <height>1050</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -650,12 +671,12 @@
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
-    <widget class="QLabel" name="Label_APISecretSetting">
+    <widget class="QLabel" name="Label_TranslatorAPISecretSetting">
      <property name="geometry">
       <rect>
        <x>20</x>
        <y>60</y>
-       <width>141</width>
+       <width>171</width>
        <height>20</height>
       </rect>
      </property>
@@ -667,7 +688,7 @@
       </font>
      </property>
      <property name="text">
-      <string>API密钥设置：</string>
+      <string>翻译API密钥设置：</string>
      </property>
     </widget>
     <widget class="QLabel" name="Label_HotkeySetting">
@@ -1040,6 +1061,155 @@
       <string>白嫖腾讯翻译君</string>
      </property>
     </widget>
+    <widget class="Line" name="Line_4">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>870</y>
+       <width>441</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Label_TranslatorAPISecretSetting_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>890</y>
+       <width>221</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>16</pointsize>
+       <underline>false</underline>
+      </font>
+     </property>
+     <property name="text">
+      <string>文字识别API密钥设置：</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="LineEdit_OCRAPPID">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>940</y>
+       <width>411</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="placeholderText">
+      <string>请输入科大讯飞OCR AppId</string>
+     </property>
+     <property name="clearButtonEnabled">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="LineEdit_OCRSECRET">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>970</y>
+       <width>411</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="placeholderText">
+      <string>请输入科大讯飞OCR Secret</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="LineEdit_OCRKEY">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>1000</y>
+       <width>411</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="placeholderText">
+      <string>请输入科大讯飞OCR Key</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Label_Tencent_2">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>920</y>
+       <width>131</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>科大讯飞OCRAPI</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="PushButton_SourceEnable_2">
+     <property name="geometry">
+      <rect>
+       <x>340</x>
+       <y>900</y>
+       <width>101</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="text">
+      <string>获取白嫖密钥</string>
+     </property>
+    </widget>
    </widget>
   </widget>
  </widget>
@@ -1060,7 +1230,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>246</x>
-     <y>205</y>
+     <y>20</y>
     </hint>
     <hint type="destinationlabel">
      <x>612</x>
@@ -1076,7 +1246,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>299</x>
-     <y>202</y>
+     <y>20</y>
     </hint>
     <hint type="destinationlabel">
      <x>890</x>
@@ -1092,7 +1262,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>264</x>
-     <y>204</y>
+     <y>20</y>
     </hint>
     <hint type="destinationlabel">
      <x>1077</x>
@@ -1108,7 +1278,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>390</x>
-     <y>-356</y>
+     <y>-540</y>
     </hint>
     <hint type="destinationlabel">
      <x>929</x>
@@ -1124,7 +1294,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>181</x>
-     <y>289</y>
+     <y>100</y>
     </hint>
     <hint type="destinationlabel">
      <x>-227</x>
@@ -1140,7 +1310,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>390</x>
-     <y>277</y>
+     <y>100</y>
     </hint>
     <hint type="destinationlabel">
      <x>1335</x>
@@ -1156,7 +1326,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>350</x>
-     <y>484</y>
+     <y>290</y>
     </hint>
     <hint type="destinationlabel">
      <x>795</x>
@@ -1172,11 +1342,27 @@
    <hints>
     <hint type="sourcelabel">
      <x>404</x>
-     <y>479</y>
+     <y>290</y>
     </hint>
     <hint type="destinationlabel">
      <x>595</x>
      <y>394</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>PushButton_SourceEnable_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Config</receiver>
+   <slot>showGetSecretWidget()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>342</x>
+     <y>360</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>696</x>
+     <y>321</y>
     </hint>
    </hints>
   </connection>
@@ -1191,5 +1377,6 @@
   <slot>checkSelectedTranslatorCount()</slot>
   <slot>upTranslator()</slot>
   <slot>downTranslator()</slot>
+  <slot>showGetSecretWidget()</slot>
  </slots>
 </ui>

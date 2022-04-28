@@ -13,6 +13,12 @@
     <height>546</height>
    </rect>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>864</width>
+    <height>1000</height>
+   </size>
+  </property>
   <property name="font">
    <font>
     <family>Microsoft YaHei UI</family>

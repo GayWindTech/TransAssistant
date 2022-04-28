@@ -14,6 +14,7 @@ class Ui_OCR_Window(object):
         OCR_Window.setObjectName("OCR_Window")
         OCR_Window.setEnabled(True)
         OCR_Window.resize(864, 546)
+        OCR_Window.setMaximumSize(QtCore.QSize(864, 1000))
         font = QtGui.QFont()
         font.setFamily("Microsoft YaHei UI")
         OCR_Window.setFont(font)

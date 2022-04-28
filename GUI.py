@@ -4,9 +4,10 @@ import sys
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import pyqtSignal, QThread, QMutex, Qt
 from OCR_style import Ui_OCR_Window
+from getSecret_style import Ui_getSecretWidget
 from Screenshot import getScreenPos, getScreenshot
-from OCR import getOCRResult
-from TranslatorAPI import TranslatorMapping, reloadConfig
+from OCR import getOCRResult, getOCRSecret, checkSecretAvailable, reloadOCRConfig
+from TranslatorAPI import TranslatorMapping, reloadTranslatorConfig
 from MojiAPI import searchWord, fetchWord
 from Segmentation import splitWords
 from dict_style import Ui_dict_Window
@@ -49,6 +50,45 @@ def nameReplace(string: str, reverse=False):
     _dict = ZhNameDict if reverse else JPNameDict
     return keymap_replace(string, _dict)
 
+class getSecretWidget_class(QtWidgets.QWidget, Ui_getSecretWidget):
+    def __init__(self, parent) -> None:
+        super().__init__()
+        self.setupUi(self)
+        self.parent = parent
+    
+    def setupUi(self, Config):
+        super().setupUi(Config)
+        Config.setWindowOpacity(0.9)
+        Config.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
+    
+    def fillListWithSecret(self):
+        self.secretList = getOCRSecret()
+        self.ListWidget_Secrets.addItems((each[1] for each in self.secretList))
+    
+    def checkSecret(self):
+        _tempList = self.secretList[self.ListWidget_Secrets.currentRow()]
+        self.ListWidget_Secrets.item(self.ListWidget_Secrets.currentRow()).setBackground(Qt.GlobalColor.gray)
+        if(checkSecretAvailable(_tempList[0], _tempList[1], _tempList[2])):
+            self.ListWidget_Secrets.item(self.ListWidget_Secrets.currentRow()).setBackground(Qt.GlobalColor.green)
+            self.PushButton_Confirm.setEnabled(True)
+            return
+        self.ListWidget_Secrets.item(self.ListWidget_Secrets.currentRow()).setBackground(Qt.GlobalColor.red)
+        self.PushButton_Confirm.setEnabled(False)
+    
+    def checkCurrectIsAvailable(self):
+        if(self.ListWidget_Secrets.item(self.ListWidget_Secrets.currentRow()).background().color() == Qt.GlobalColor.green):
+            self.PushButton_Confirm.setEnabled(True)
+            return
+        self.PushButton_Confirm.setEnabled(False)
+    
+    def save(self):
+        _APPID, _SECRET, _KEY = self.secretList[self.ListWidget_Secrets.currentRow()]
+        self.parent.LineEdit_OCRAPPID.setText(_APPID)
+        self.parent.LineEdit_OCRSECRET.setText(_SECRET)
+        self.parent.LineEdit_OCRKEY.setText(_KEY)
+        print('OCR密钥已设置！')
+        self.close()
+
 class configWidget_class(QtWidgets.QWidget, Ui_Config):
     def __init__(self, parent) -> None:
         super().__init__()
@@ -67,11 +107,16 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
             'TENCENT_SECERTKEY': self.LineEdit_TencentSECRET,
             'XIAONIU_KEY': self.LineEdit_XiaoNiuKEY,
             'ALIYUN_KEY': self.LineEdit_AliYunKEY,
-            'ALIYUN_SECRET': self.LineEdit_AliYunSECRET
+            'ALIYUN_SECRET': self.LineEdit_AliYunSECRET,
+            'OCR_APPID': self.LineEdit_OCRAPPID,
+            'OCR_SECRET': self.LineEdit_OCRSECRET,
+            'OCR_KEY': self.LineEdit_OCRKEY,
         }
+        self.getSecretWidget = getSecretWidget_class(self)
 
     def closeEvent(self, event):
         self.parent.Status = True
+        self.parent.setEnabled(True)
 
     def setupUi(self, Config):
         super().setupUi(Config)
@@ -85,9 +130,7 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
         configDict = readConfig()
         for each in self.LineEditMapping:
             self.LineEditMapping[each].setText(configDict[each])
-        _willBeAddTranslator = list(TranslatorMapping)
-        [_willBeAddTranslator.remove(each) for each in configDict['SELECTED_TRANSLATORS']]
-        for eachTranslator in _willBeAddTranslator:
+        for eachTranslator in [each for each in TranslatorMapping if each not in configDict['SELECTED_TRANSLATORS']]:
             self.ListWidget_SelectableSource.addItem(eachTranslator)
         for each in configDict['SELECTED_TRANSLATORS']:
             self.ListWidget_SelectedSource.addItem(each)
@@ -142,6 +185,9 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
         self.OCRKeyEdit.hide(); self.confirmHotKeyButton.hide(); self.cancelHotKeyButton.hide(); self.changeHotKeyButton.show(); self.Label_ShortcutKeyText.show()
         print('已取消更改热键')
     
+    def showGetSecretWidget(self):
+        self.getSecretWidget.show()
+    
     def saveConfig(self):
         if(not self.getCurrentSelectedTranslator()):
             QtWidgets.QMessageBox.critical(self,"配置有误","至少选择一个翻译源！")
@@ -152,7 +198,7 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
         writeConfig(data)
         self.parent.changeHotkey(self.Hotkey_OCR)
         self.parent.updateTranslatorList(self.getCurrentSelectedTranslator())
-        reloadConfig()
+        reloadOCRConfig(); reloadTranslatorConfig()
         self.close()
 
 
@@ -315,13 +361,14 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
 
     def showConfig(self):
         self.Status = False
+        self.setEnabled(self.Status)
         self.configWidget.replaceWithCurrentConfig()
         self.configWidget.show()
 
     def getScreenPos(self):
         self.hide()
         self.ScreenPos = getScreenPos()
-        self.PosText.setText(f'{(self.ScreenPos[0], self.ScreenPos[1])},'+ str((self.ScreenPos[0] + self.ScreenPos[2],self.ScreenPos[1] + self.ScreenPos[3])))
+        self.PosText.setText(f'{(self.ScreenPos[0], self.ScreenPos[1])},{(self.ScreenPos[0] + self.ScreenPos[2], self.ScreenPos[1] + self.ScreenPos[3])}')
         self.show()
         self.AreaInit = True
         if(((self.ScreenPos[0], self.ScreenPos[1])==(self.ScreenPos[0] + self.ScreenPos[2],self.ScreenPos[1] + self.ScreenPos[3])) or 0 in (self.ScreenPos[2],self.ScreenPos[3])):
@@ -398,7 +445,6 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
 def runGUI():
     GUI_APP = QtWidgets.QApplication(sys.argv)
     GUI_mainWindow = TransAssistant_class()
-    GUI_mainWindow.setFixedSize(GUI_mainWindow.width(), GUI_mainWindow.height())
     GUI_mainWindow.show()
     GUI_APP.exec()
 

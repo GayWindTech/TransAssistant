@@ -15,7 +15,7 @@ def readConfig() -> dict:
         return yaml_load(f,CLoader)
 
 def initConfig() -> None:
-    emptyData = {'YOUDAO_KEY': '', 'YOUDAO_SECRET': '', 'CAIYUN_TOKEN': '', 'BAIDU_APPID': '', 'BAIDU_SECRETKEY': '', 'TENCENT_SECERTID': '', 'TENCENT_SECERTKEY': '', 'XIAONIU_KEY':'', 'ALIYUN_KEY':'', 'ALIYUN_SECRET':'', 'SELECTED_TRANSLATORS':[], 'Hotkey_OCR':'Ctrl + Space'}
+    emptyData = {'YOUDAO_KEY': '', 'YOUDAO_SECRET': '', 'CAIYUN_TOKEN': '', 'BAIDU_APPID': '', 'BAIDU_SECRETKEY': '', 'TENCENT_SECERTID': '', 'TENCENT_SECERTKEY': '', 'XIAONIU_KEY':'', 'ALIYUN_KEY':'', 'ALIYUN_SECRET':'', 'SELECTED_TRANSLATORS':[], 'Hotkey_OCR':'Ctrl + Space', 'OCR_APPID':'c788b7aa', 'OCR_SECRET': 'ODFmODQwZWJmZDhlNTIzOTljNGI3OTcy', 'OCR_KEY': '7ec53833f14724cffb810c14e72eef0d'}
     writeConfig(emptyData)
 
 if(not os.path.exists(configPath)):

@@ -22,7 +22,7 @@ disable_warnings()
 
 configs = readConfig()
 
-def reloadConfig():
+def reloadTranslatorConfig():
     global configs
     configs = readConfig()
 
