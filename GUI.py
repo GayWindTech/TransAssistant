@@ -112,6 +112,12 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
             'OCR_SECRET': self.LineEdit_OCRSECRET,
             'OCR_KEY': self.LineEdit_OCRKEY,
         }
+        self.FreeRiderMapping = {
+                'YOUDAO_FREE_RIDER': self.CheckBox_Youdao,
+                'CAIYUN_FREE_RIDER': self.CheckBox_CaiYun,
+                'BAIDU_FREE_RIDER': self.CheckBox_Baidu,
+                'TENCENT_FREE_RIDER': self.CheckBox_Tencent,
+        }
         self.getSecretWidget = getSecretWidget_class(self)
 
     def closeEvent(self, event):
@@ -128,8 +134,8 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
         self.ListWidget_SelectedSource.clear()
         self.Label_ShortcutKeyText.setText(self.parent.Hotkey_OCR)
         configDict = readConfig()
-        for each in self.LineEditMapping:
-            self.LineEditMapping[each].setText(configDict[each])
+        [self.LineEditMapping[each].setText(configDict[each]) for each in self.LineEditMapping]
+        [self.FreeRiderMapping[each].setChecked(configDict[each]) for each in self.FreeRiderMapping]
         for eachTranslator in [each for each in TranslatorMapping if each not in configDict['SELECTED_TRANSLATORS']]:
             self.ListWidget_SelectableSource.addItem(eachTranslator)
         for each in configDict['SELECTED_TRANSLATORS']:
@@ -193,6 +199,7 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
             QtWidgets.QMessageBox.critical(self,"配置有误","至少选择一个翻译源！")
             return
         data = {each: self.LineEditMapping[each].text() for each in self.LineEditMapping}
+        data.update({each: self.FreeRiderMapping[each].isChecked() for each in self.FreeRiderMapping})
         data['SELECTED_TRANSLATORS'] = self.getCurrentSelectedTranslator()
         data['Hotkey_OCR'] = self.Hotkey_OCR
         writeConfig(data)
@@ -276,6 +283,7 @@ class TranslatorThread(QThread):
 
     def run(self):
         MutexList[self.aimTextEdit].lock()
+        self._signal.emit(self.aimTextEdit, '')
         result = TranslatorMapping[self.translatorType](self.source)
         self._signal.emit(self.aimTextEdit, result)
         MutexList[self.aimTextEdit].unlock()

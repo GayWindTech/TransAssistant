@@ -111,7 +111,7 @@ TENCENT_ERRORCODE_DICT = {
 CAIYUN_ERRORCODE_DICT = {'Invalid token': f'Token无效{CONFIG_REMIND}'}
 
 def YoudaoTranslator(QueryText: str) -> str:
-    YOUDAO_URL = "https://openapi.youdao.com/api"
+    YOUDAO_URL = "https://aidemo.youdao.com/trans" if configs['YOUDAO_FREE_RIDER'] else "https://openapi.youdao.com/api"
     curtime = str(int(time.time()))
     salt = str(uuid.uuid1())
     signStr = configs['YOUDAO_KEY'] + truncate(QueryText) + salt + curtime + configs['YOUDAO_SECRET']
@@ -143,6 +143,9 @@ def YoudaoTranslator(QueryText: str) -> str:
 
 def CaiYunTranslator(QueryText: str) -> str:
     url = "https://api.interpreter.caiyunai.com/v1/translator"
+    CAIYUN_TOKEN = configs['CAIYUN_TOKEN']
+    if(configs['CAIYUN_FREE_RIDER']):
+        CAIYUN_TOKEN = 'ukiw3nrioeilf0mlpam7'
     QueryText = [QueryText]
     payload = {
         "source": QueryText,
@@ -152,7 +155,7 @@ def CaiYunTranslator(QueryText: str) -> str:
     }
     headers = {
         "content-type": "application/json",
-        "x-authorization": f"token {configs['CAIYUN_TOKEN']}",
+        "x-authorization": f"token {CAIYUN_TOKEN}",
     }
 
     try:
@@ -169,14 +172,18 @@ def CaiYunTranslator(QueryText: str) -> str:
 
 
 def BaiduTranslator(QueryText:str) -> str:
+    BAIDU_APPID = configs['BAIDU_APPID']
+    BAIDU_SECRETKEY = configs['BAIDU_SECRETKEY']
     BAIDU_URL = 'https://api.fanyi.baidu.com/api/trans/vip/translate'
+    if(configs['BAIDU_FREE_RIDER']):
+        BAIDU_APPID = '20151211000007653'
+        BAIDU_SECRETKEY = 'IFJB6jBORFuMmVGDRude'
     fromLang = 'auto'
     toLang = 'zh'
     salt = random.randint(32768, 65536)
-    sign = configs['BAIDU_APPID'] + QueryText + str(salt) + configs['BAIDU_SECRETKEY']
+    sign = BAIDU_APPID + QueryText + str(salt) + BAIDU_SECRETKEY
     sign = hashlib.md5(sign.encode()).hexdigest()
-    request_url = (f'{BAIDU_URL}?appid=' + configs['BAIDU_APPID']+ '&q=' + urllib.parse.quote(QueryText)+ '&from=' + fromLang+ '&to=' + toLang+ '&salt=' + str(salt)+ '&sign=' + sign)
-
+    request_url = f'{BAIDU_URL}?appid={BAIDU_APPID}&q={urllib.parse.quote(QueryText)}&from={fromLang}&to={toLang}&salt={str(salt)}&sign={sign}'
 
     response = requests.get(request_url, verify=False, proxies=NOPROXIES)
     return_dict = json.loads(response.content.decode('utf-8'))

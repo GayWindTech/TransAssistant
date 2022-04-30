@@ -68,7 +68,7 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>-551</y>
+      <y>-480</y>
       <width>450</width>
       <height>1050</height>
      </rect>
@@ -977,7 +977,7 @@
       <string>请输入阿里云翻译API_KEY</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox">
+    <widget class="QCheckBox" name="CheckBox_Youdao">
      <property name="geometry">
       <rect>
        <x>330</x>
@@ -998,7 +998,7 @@
       <string>白嫖有道翻译</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_2">
+    <widget class="QCheckBox" name="CheckBox_CaiYun">
      <property name="geometry">
       <rect>
        <x>330</x>
@@ -1019,7 +1019,7 @@
       <string>白嫖彩云小译</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_3">
+    <widget class="QCheckBox" name="CheckBox_Baidu">
      <property name="geometry">
       <rect>
        <x>330</x>
@@ -1040,7 +1040,10 @@
       <string>白嫖百度翻译</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_4">
+    <widget class="QCheckBox" name="CheckBox_Tencent">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>330</x>
@@ -1059,6 +1062,9 @@
      </property>
      <property name="text">
       <string>白嫖腾讯翻译君</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="Line" name="Line_4">
@@ -1230,7 +1236,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>246</x>
-     <y>20</y>
+     <y>91</y>
     </hint>
     <hint type="destinationlabel">
      <x>612</x>
@@ -1246,7 +1252,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>299</x>
-     <y>20</y>
+     <y>91</y>
     </hint>
     <hint type="destinationlabel">
      <x>890</x>
@@ -1262,7 +1268,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>264</x>
-     <y>20</y>
+     <y>91</y>
     </hint>
     <hint type="destinationlabel">
      <x>1077</x>
@@ -1278,7 +1284,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>390</x>
-     <y>-540</y>
+     <y>-469</y>
     </hint>
     <hint type="destinationlabel">
      <x>929</x>
@@ -1294,7 +1300,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>181</x>
-     <y>100</y>
+     <y>171</y>
     </hint>
     <hint type="destinationlabel">
      <x>-227</x>
@@ -1310,7 +1316,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>390</x>
-     <y>100</y>
+     <y>171</y>
     </hint>
     <hint type="destinationlabel">
      <x>1335</x>
@@ -1326,7 +1332,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>350</x>
-     <y>290</y>
+     <y>361</y>
     </hint>
     <hint type="destinationlabel">
      <x>795</x>
@@ -1342,7 +1348,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>404</x>
-     <y>290</y>
+     <y>361</y>
     </hint>
     <hint type="destinationlabel">
      <x>595</x>
@@ -1358,11 +1364,43 @@
    <hints>
     <hint type="sourcelabel">
      <x>342</x>
-     <y>360</y>
+     <y>421</y>
     </hint>
     <hint type="destinationlabel">
      <x>696</x>
      <y>321</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ListWidget_SelectableSource</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>Config</receiver>
+   <slot>addTranslator()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>56</x>
+     <y>239</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-47</x>
+     <y>255</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ListWidget_SelectedSource</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>Config</receiver>
+   <slot>removeTranslator()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>318</x>
+     <y>303</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>720</x>
+     <y>286</y>
     </hint>
    </hints>
   </connection>
