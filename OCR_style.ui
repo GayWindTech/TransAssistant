@@ -512,6 +512,40 @@
      <string>设置</string>
     </property>
    </widget>
+   <widget class="QListWidget" name="replaceListWidget">
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>60</y>
+      <width>30</width>
+      <height>70</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Microsoft YaHei UI</family>
+      <pointsize>17</pointsize>
+     </font>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="autoScrollMargin">
+     <number>16</number>
+    </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::DoubleClicked</set>
+    </property>
+    <property name="showDropIndicator" stdset="0">
+     <bool>false</bool>
+    </property>
+    <property name="textElideMode">
+     <enum>Qt::ElideMiddle</enum>
+    </property>
+   </widget>
    <zorder>changeHotKeyButton</zorder>
    <zorder>ShortcutKeyText</zorder>
    <zorder>OCRResultTextEdit</zorder>
@@ -533,6 +567,7 @@
    <zorder>autoTransCheckBox</zorder>
    <zorder>doTransButton</zorder>
    <zorder>doTransButton_2</zorder>
+   <zorder>replaceListWidget</zorder>
   </widget>
  </widget>
  <customwidgets>
@@ -543,6 +578,7 @@
    <slots>
     <signal>selectedFinish()</signal>
     <signal>focusOut()</signal>
+    <signal>callContextMenu()</signal>
     <slot>clearSelection()</slot>
    </slots>
   </customwidget>
@@ -837,6 +873,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>OCRResultTextEdit</sender>
+   <signal>callContextMenu()</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>showReplaceListWidget()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>41</x>
+     <y>119</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>123</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>OCRResultTextEdit</sender>
+   <signal>focusOut()</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>hideReplaceListWidget()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>131</x>
+     <y>89</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>272</x>
+     <y>46</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>replaceListWidget</sender>
+   <signal>clicked(QModelIndex)</signal>
+   <receiver>OCR_Window</receiver>
+   <slot>replaceKana()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>736</x>
+     <y>71</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>856</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>ocrHotkeyPressed()</signal>
@@ -858,5 +942,8 @@
   <slot>confirmHotkey()</slot>
   <slot>cancelHotKey()</slot>
   <slot>showConfig()</slot>
+  <slot>showReplaceListWidget()</slot>
+  <slot>hideReplaceListWidget()</slot>
+  <slot>replaceKana()</slot>
  </slots>
 </ui>

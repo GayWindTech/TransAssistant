@@ -16,6 +16,7 @@ class betterSelectionQPlainTextEdit(QPlainTextEdit):
     mouseRelease = pyqtSignal()
     selectedFinish = pyqtSignal()
     focusOut = pyqtSignal()
+    callContextMenu = pyqtSignal()
     def __init__(self, parent=None):
         super().__init__(parent)
     def mouseReleaseEvent(self,event):
@@ -28,5 +29,10 @@ class betterSelectionQPlainTextEdit(QPlainTextEdit):
         self.focusOut.emit()
     def clearSelection(self):
         _cursor = self.textCursor()
+        self.selectionArea = _cursor.selectionEnd(), _cursor.selectionStart()
         _cursor.clearSelection()
         self.setTextCursor(_cursor)
+    def contextMenuEvent(self, e) -> None:
+        self.callContextMenu.emit()
+        _cursor = self.textCursor()
+        self.selectionArea = _cursor.selectionEnd(), _cursor.selectionStart()

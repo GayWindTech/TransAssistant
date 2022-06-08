@@ -198,6 +198,19 @@ class Ui_OCR_Window(object):
         self.doTransButton_2.setFont(font)
         self.doTransButton_2.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
         self.doTransButton_2.setObjectName("doTransButton_2")
+        self.replaceListWidget = QtWidgets.QListWidget(self.centralwidget)
+        self.replaceListWidget.setGeometry(QtCore.QRect(720, 60, 30, 70))
+        font = QtGui.QFont()
+        font.setFamily("Microsoft YaHei UI")
+        font.setPointSize(17)
+        self.replaceListWidget.setFont(font)
+        self.replaceListWidget.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.replaceListWidget.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.replaceListWidget.setAutoScrollMargin(16)
+        self.replaceListWidget.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.DoubleClicked)
+        self.replaceListWidget.setProperty("showDropIndicator", False)
+        self.replaceListWidget.setTextElideMode(QtCore.Qt.TextElideMode.ElideMiddle)
+        self.replaceListWidget.setObjectName("replaceListWidget")
         self.changeHotKeyButton.raise_()
         self.ShortcutKeyText.raise_()
         self.OCRResultTextEdit.raise_()
@@ -219,6 +232,7 @@ class Ui_OCR_Window(object):
         self.autoTransCheckBox.raise_()
         self.doTransButton.raise_()
         self.doTransButton_2.raise_()
+        self.replaceListWidget.raise_()
         OCR_Window.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(OCR_Window)
@@ -239,6 +253,9 @@ class Ui_OCR_Window(object):
         self.OCRResultTextEdit.textChanged.connect(OCR_Window.updateOCRText) # type: ignore
         self.changeHotKeyButton.clicked.connect(OCR_Window.getIntoHotKeyChangeMode) # type: ignore
         self.doTransButton_2.clicked.connect(OCR_Window.showConfig) # type: ignore
+        self.OCRResultTextEdit.callContextMenu.connect(OCR_Window.showReplaceListWidget) # type: ignore
+        self.OCRResultTextEdit.focusOut.connect(OCR_Window.hideReplaceListWidget) # type: ignore
+        self.replaceListWidget.clicked['QModelIndex'].connect(OCR_Window.replaceKana) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(OCR_Window)
         OCR_Window.setTabOrder(self.TransResult_0, self.ChooseAreaButton)
         OCR_Window.setTabOrder(self.ChooseAreaButton, self.OCRButton)

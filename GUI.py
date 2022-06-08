@@ -2,7 +2,7 @@
 import contextlib
 import sys
 from PyQt6 import QtWidgets
-from PyQt6.QtCore import pyqtSignal, QThread, QMutex, Qt
+from PyQt6.QtCore import pyqtSignal, QThread, QMutex, Qt, QPoint
 from OCR_style import Ui_OCR_Window
 from getSecret_style import Ui_getSecretWidget
 from Screenshot import getScreenPos, getScreenshot
@@ -14,7 +14,7 @@ from dict_style import Ui_dict_Window
 from config_style import Ui_Config
 from Config import readConfig, writeConfig, isInit
 import keyboard
-from customerDefineDict import ZhNameDict, JPNameDict
+from customerDefineDict import ZhNameDict, JPNameDict, hirakanaList, katakanaList
 # from var_dump import var_dump
 
 def keymap_replace(
@@ -45,6 +45,8 @@ def keymap_replace(
         )
     return replaced_string
 
+def getSimilarKana(kana: str) -> list:
+    return [similarKana for similarKana in katakanaList+hirakanaList if kana in similarKana]
 
 def nameReplace(string: str, reverse=False):
     _dict = ZhNameDict if reverse else JPNameDict
@@ -310,6 +312,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.selectionText = str()
         self.OCRText = str()
         self.setupUi(self)
+        self.replaceListWidget.hide()
         self.defaultWidth, self.defaultHeight = self.width(), self.height()
         self.defaultX, self.defaultY = self.geometry().x(), self.geometry().y()
         self.OCRResultTextEdit.setPlainText('')
@@ -320,7 +323,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.configWidget = configWidget_class(self)
         self.selectionTextChange = self.dictWindow.selectionTextChange
         self.autoDict = self.autoDictCheckBox.isChecked()
-        self.resultTextEditList = self.TransResult_0,self.TransResult_1,self.TransResult_2,self.TransResult_3
+        self.resultTextEditList = self.TransResult_0, self.TransResult_1, self.TransResult_2, self.TransResult_3
         self.updateTranslatorList(self.ConfigDict['SELECTED_TRANSLATORS'])
         self.autoTrans = True
         if(not isInit):
@@ -353,6 +356,32 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
             self.selectionText = self.splitTextEdit.textCursor().selectedText()
         if(self.autoDict):
             self.showDictWindow()
+
+    def showReplaceListWidget(self):
+        selectedText = self.OCRResultTextEdit.textCursor().selectedText()
+        if(len(selectedText) != 1 or self.autoDict):
+            self.replaceListWidget.hide()
+            return
+        similarKanaList = getSimilarKana(selectedText)
+        if(not similarKanaList):
+            self.replaceListWidget.hide()
+            return
+        similarKanaList = list(similarKanaList[0])
+        similarKanaList.remove(selectedText)
+        if len(similarKanaList) == 1: self.replaceListWidget.setFixedSize(35,35)
+        else: self.replaceListWidget.setFixedSize(35,70)
+        self.replaceListWidget.clear()
+        self.replaceListWidget.addItems(similarKanaList)
+        self.replaceListWidget.show()
+        self.replaceListWidget.move(self.OCRResultTextEdit.mapToParent(QPoint(self.OCRResultTextEdit.cursorRect().left(),self.OCRResultTextEdit.cursorRect().bottom())))
+
+    def hideReplaceListWidget(self):
+        self.replaceListWidget.hide()
+
+    def replaceKana(self):
+        _pos = min(self.OCRResultTextEdit.selectionArea)
+        nowText = self.OCRResultTextEdit.toPlainText()
+        self.OCRResultTextEdit.setPlainText(nowText[:_pos] + self.replaceListWidget.currentItem().text() + nowText[_pos+1:])
 
     def updateAutoTransBool(self,_bool):
         self.autoTrans = _bool
