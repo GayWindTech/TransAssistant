@@ -1,6 +1,6 @@
-﻿keyboard == 0.13.5
+keyboard == 0.13.5
 PyQt6>=6.3.0
-requests==2.27.1
+requests==2.31.0
 unidic==1.1.0
 unidic-lite==1.0.8
 SudachiDict-full==20211220
