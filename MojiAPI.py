@@ -20,7 +20,7 @@ def searchWord(word: str) -> list:
             "langEnv": "zh-CN_ja",
             "needWords": True,
             "_ClientVersion": "js2.12.0",
-            "_SessionToken": "r:1e9b36707888bfcfc7c0b6349df75761",
+            "_SessionToken": "r:ac5e644394986753026f2e6fb76a1cc5",
             "_ApplicationId": "E62VyFVLMiW7kvbtVq3p",
         }
         req = requests.post(APIURL, json=JsonDict, headers=hd, verify=False,proxies=NOPROXIES)
@@ -31,7 +31,7 @@ def searchWord(word: str) -> list:
     except Exception as err:
         return [(f'未知错误,：{str(err)}', '0')]
 
-def fetchWord(id: str) -> dict:
+def fetchWord(id: str) -> tuple|str:
     try:
         APIURL = "https://api.mojidict.com/parse/functions/fetchWord_v2"
         hd = {
@@ -47,9 +47,9 @@ def fetchWord(id: str) -> dict:
         req = requests.post(APIURL, json=JsonDict, headers=hd, verify=False, proxies=NOPROXIES)
         return parseFetchResult(json.loads(req.content.decode("utf-8"))["result"])
     except Exception as e:
-        return f'发生了错误，请向开发者报告：{str(e)}'
+        return f'发生了错误，请向开发者报告：{str(e)} File "MojiAPI.py", in fetchWord'
 
-def parseFetchResult(resultTemp: dict) -> tuple:
+def parseFetchResult(resultTemp: dict) -> tuple|str:
     try:
         excerpt = resultTemp['word']['excerpt']
         spell = resultTemp['word']['spell']
@@ -58,12 +58,12 @@ def parseFetchResult(resultTemp: dict) -> tuple:
         detailDict = [[eachDetail['objectId'] for eachDetail in resultTemp['details']],{eachDetail['objectId']: [eachDetail['title'],[],{}] for eachDetail in resultTemp['details']}]
         for eachSubDetails in resultTemp['subdetails']:
             if(eachSubDetails['detailsId'] in detailDict[1]):
-                detailDict[1][eachSubDetails['detailsId']][1].append(eachSubDetails['objectId'])
-                detailDict[1][eachSubDetails['detailsId']][2][eachSubDetails['objectId']] = [eachSubDetails['title'],[]]
+                detailDict[1][eachSubDetails['detailsId']][1].append(eachSubDetails['objectId']) # type: ignore
+                detailDict[1][eachSubDetails['detailsId']][2][eachSubDetails['objectId']] = [eachSubDetails['title'],[]] # type: ignore
         if ('examples' in resultTemp):
             for eachExample, eachDetailId in itertools.product(resultTemp['examples'], detailDict[0]):
-                if(eachExample['subdetailsId'] in detailDict[1][eachDetailId][1]):
-                    detailDict[1][eachDetailId][2][eachExample['subdetailsId']][1].append((eachExample['title'],eachExample['trans']))
+                if(eachExample['subdetailsId'] in detailDict[1][eachDetailId][1]): # type: ignore
+                    detailDict[1][eachDetailId][2][eachExample['subdetailsId']][1].append((eachExample['title'],eachExample['trans'])) # type: ignore
         return ((spell,excerpt,pron,accent.replace('◎','⓪')),detailDict)
     except Exception as err:
-        return f'发生了错误，请向开发者报告：{str(err)}'
+        return f'发生了错误，请向开发者报告：{str(err)} File "MojiAPI.py", in parseFetchResult'
