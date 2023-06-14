@@ -136,8 +136,10 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
         self.ListWidget_SelectedSource.clear()
         self.Label_ShortcutKeyText.setText(self.parent.Hotkey_OCR)
         configDict = readConfig()
-        [self.LineEditMapping[each].setText(configDict[each]) for each in self.LineEditMapping]
-        [self.FreeRiderMapping[each].setChecked(configDict[each]) for each in self.FreeRiderMapping]
+        for each in self.LineEditMapping:
+            self.LineEditMapping[each].setText(configDict[each])
+        for each in self.FreeRiderMapping:
+            self.FreeRiderMapping[each].setChecked(configDict[each])
         for eachTranslator in [each for each in TranslatorMapping if each not in configDict['SELECTED_TRANSLATORS']]:
             self.ListWidget_SelectableSource.addItem(eachTranslator)
         for each in configDict['SELECTED_TRANSLATORS']:
@@ -173,8 +175,10 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
     def checkSelectedTranslatorCount(self):
         if self.ListWidget_SelectedSource.count() >= 4:
             self.PushButton_SourceEnable.setEnabled(False)
+            self.ListWidget_SelectableSource.setEnabled(False)
         else:
             self.PushButton_SourceEnable.setEnabled(True)
+            self.ListWidget_SelectableSource.setEnabled(True)
 
     def getIntoHotKeyChangeMode(self):
         print('请摁下快捷键!')
@@ -455,11 +459,12 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         
         for n, eachTranslator in enumerate(self.TranslatorList):
             self.resultTextEditList[n].setPlaceholderText(eachTranslator)
-        
+
         _len = _list.__len__()
         if _len < 4:
             if _len == 0: _len = 1
-
+            for each in self.resultTextEditList[:_len]:
+                each.setVisible(True)
             for each in self.resultTextEditList[_len-4:]:
                 each.setVisible(False)
 
