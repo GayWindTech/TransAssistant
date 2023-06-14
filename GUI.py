@@ -56,7 +56,7 @@ class getSecretWidget_class(QtWidgets.QWidget, Ui_getSecretWidget):
     def __init__(self, parent) -> None:
         super().__init__()
         self.setupUi(self)
-        self.parent = parent
+        self.parent = parent # type: ignore
     
     def setupUi(self, Config):
         super().setupUi(Config)
@@ -96,7 +96,7 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
         super().__init__()
         self.setupUi(self)
         self.ListWidget_SelectedSource.setDragDropMode(QtWidgets.QAbstractItemView.DragDropMode.InternalMove)
-        self.parent = parent
+        self.parent = parent # type: ignore
         self.Hotkey_OCR = parent.Hotkey_OCR
         self.OCRKeyEdit.hide(); self.cancelHotKeyButton.hide(); self.confirmHotKeyButton.hide()
         self.LineEditMapping = {
@@ -201,8 +201,8 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
             QtWidgets.QMessageBox.critical(self,"配置有误","至少选择一个翻译源！")
             return
         data = {each: self.LineEditMapping[each].text() for each in self.LineEditMapping}
-        data.update({each: self.FreeRiderMapping[each].isChecked() for each in self.FreeRiderMapping})
-        data['SELECTED_TRANSLATORS'] = self.getCurrentSelectedTranslator()
+        data.update({each: self.FreeRiderMapping[each].isChecked() for each in self.FreeRiderMapping}) # type: ignore
+        data['SELECTED_TRANSLATORS'] = self.getCurrentSelectedTranslator() # type: ignore
         data['Hotkey_OCR'] = self.Hotkey_OCR
         writeConfig(data)
         self.parent.changeHotkey(self.Hotkey_OCR)
@@ -300,7 +300,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         Config.OCRButton.setEnabled(self.AreaInit)
         Config.OCRButtonPlus.setEnabled(self.AreaInit)
         DesktopSize = self.screen().availableSize()
-        Config.move(DesktopSize.width() * 0.54, DesktopSize.height() * 0.41)
+        Config.move((DesktopSize.width() * 0.54).__int__(), (DesktopSize.height() * 0.41).__int__())
         # Config.setAttribute(QtCore.Qt.WA_TranslucentBackground,True)
 
     def __init__(self):
@@ -452,16 +452,23 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
     def updateTranslatorList(self, _list:list):
         self.TranslatorList = _list
         print(f'当前翻译源为：{self.TranslatorList}')
-        [self.resultTextEditList[n].setPlaceholderText(eachTranslator) for n, eachTranslator in enumerate(self.TranslatorList)]
+        
+        for n, eachTranslator in enumerate(self.TranslatorList):
+            self.resultTextEditList[n].setPlaceholderText(eachTranslator)
+        
         _len = _list.__len__()
         if _len < 4:
             if _len == 0: _len = 1
-            [each.setVisible(False) for each in self.resultTextEditList[_len-4:]]
+
+            for each in self.resultTextEditList[_len-4:]:
+                each.setVisible(False)
+
             n = 80*(4-_len)
             self.setFixedSize(self.defaultWidth, self.defaultHeight-n)
             self.move(self.defaultX, self.defaultY+n)
         else:
-            [each.setVisible(True) for each in self.resultTextEditList]
+            for each in self.resultTextEditList:
+                each.setVisible(True)
             self.setFixedSize(self.defaultWidth, self.defaultHeight)
             self.move(self.defaultX, self.defaultY)
 
@@ -472,7 +479,7 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
     def updateSplitTextEdit(self,Force=False):
         source = self.OCRResultTextEdit.toPlainText()
         if(source and (Force or self.SplitMode != 'kuromoji')):
-            self.splitTextEdit.setPlainText(splitWords(source, self.SplitMode))
+            self.splitTextEdit.setPlainText(splitWords(source, self.SplitMode)) # type: ignore
 
     def showDictWindow(self):
         self.selectionTextChange.emit(self.selectionText)

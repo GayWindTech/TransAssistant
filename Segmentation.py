@@ -1,14 +1,15 @@
-from fugashi import Tagger # from MeCab import Tagger
+from typing import Generator
+from fugashi import Tagger # from MeCab import Tagger # type: ignore
 from sudachipy import tokenizer,dictionary
 import requests
 import json
 from urllib3 import disable_warnings
 from os import path
-import importlib
+import importlib.util
 disable_warnings()
 from Config import isPacked, NOPROXIES
 
-def _kuromoji(s: str) -> list:
+def _kuromoji(s: str) -> Generator:
     url = "https://www.atilika.org/kuromoji/rest/tokenizer/tokenize"
     datas = {"text": s, "mode": 0}
     req = requests.post(url, data=datas, verify=False, proxies=NOPROXIES)
