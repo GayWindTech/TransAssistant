@@ -24,19 +24,19 @@ jobs:
         run: pip install -r requirements.txt ; python -m unidic download ;
         
       - name: dl upx
-        run: certutil -urlcache -split -f https://github.com/upx/upx/releases/download/v3.96/upx-3.96-win64.zip upx.zip ; 7z x upx.zip
+        run: python .github\getLatestUPX.py; 7z x upx.zip; mv upx-* upx;
       
       - name: pack:full
-        run: pyinstaller --upx-dir upx-3.96-win64 TransAssistant_full.spec -y ; mv dist/TransAssistant_full ./ ; 7z a -t7z TransAssistant_full.7z TransAssistant_full
+        run: pyinstaller --upx-dir upx TransAssistant_full.spec -y ; mv dist/TransAssistant_full ./ ; 7z a -t7z TransAssistant_full.7z TransAssistant_full
         
       - name: pack:core
-        run: pyinstaller --upx-dir upx-3.96-win64 TransAssistant_core.spec -y ; mv dist/TransAssistant_core ./ ; 7z a -t7z TransAssistant_core.7z TransAssistant_core
+        run: pyinstaller --upx-dir upx TransAssistant_core.spec -y ; mv dist/TransAssistant_core ./ ; 7z a -t7z TransAssistant_core.7z TransAssistant_core
 
       - name: pack:core-lite
-        run: pyinstaller --upx-dir upx-3.96-win64 TransAssistant_core-lite.spec -y ; mv dist/TransAssistant_core-lite ./ ; 7z a -t7z TransAssistant_core-lite.7z TransAssistant_core-lite
+        run: pyinstaller --upx-dir upx TransAssistant_core-lite.spec -y ; mv dist/TransAssistant_core-lite ./ ; 7z a -t7z TransAssistant_core-lite.7z TransAssistant_core-lite
 
       - name: pack:small
-        run: pyinstaller --upx-dir upx-3.96-win64 TransAssistant_small.spec -y ; mv dist/TransAssistant_small ./ ; 7z a -t7z TransAssistant_small.7z TransAssistant_small
+        run: pyinstaller --upx-dir upx TransAssistant_small.spec -y ; mv dist/TransAssistant_small ./ ; 7z a -t7z TransAssistant_small.7z TransAssistant_small
         
       - name: upload
         uses: actions/upload-artifact@v3
