@@ -38,7 +38,8 @@ def initConfig() -> None:
                 'YOUDAO_FREE_RIDER': False,
                 'CAIYUN_FREE_RIDER': False,
                 'BAIDU_FREE_RIDER': False,
-                'TENCENT_FREE_RIDER': False}
+                'TENCENT_FREE_RIDER': False,
+                'OPACITY': 95}
     writeConfig(emptyData)
 
 if(not os.path.exists(configPath)):

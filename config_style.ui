@@ -68,9 +68,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>-551</y>
+      <y>-651</y>
       <width>450</width>
-      <height>1050</height>
+      <height>1150</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -1086,7 +1086,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
-    <widget class="QLabel" name="Label_TranslatorAPISecretSetting_2">
+    <widget class="QLabel" name="Label_OCRAPISetting">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -1175,7 +1175,7 @@
       <string>请输入科大讯飞OCR Key</string>
      </property>
     </widget>
-    <widget class="QLabel" name="Label_Tencent_2">
+    <widget class="QLabel" name="Label_XunFei">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -1216,6 +1216,120 @@
       <string>获取白嫖密钥</string>
      </property>
     </widget>
+    <widget class="QSlider" name="horizontalSlider_Opacity">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>1090</y>
+       <width>241</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="mouseTracking">
+      <bool>false</bool>
+     </property>
+     <property name="tabletTracking">
+      <bool>false</bool>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::WheelFocus</enum>
+     </property>
+     <property name="minimum">
+      <number>20</number>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>100</number>
+     </property>
+     <property name="tracking">
+      <bool>true</bool>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="tickPosition">
+      <enum>QSlider::NoTicks</enum>
+     </property>
+    </widget>
+    <widget class="Line" name="Line_5">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>1040</y>
+       <width>441</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Label_OpacitySetting">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>1060</y>
+       <width>221</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>16</pointsize>
+       <underline>false</underline>
+      </font>
+     </property>
+     <property name="text">
+      <string>窗口不透明度设置：</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Label_XunFei_2">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>1090</y>
+       <width>111</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>当前不透明度为：</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="spinBox_Opacity">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>1090</y>
+       <width>42</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>20</number>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>100</number>
+     </property>
+    </widget>
    </widget>
   </widget>
  </widget>
@@ -1236,7 +1350,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>246</x>
-     <y>91</y>
+     <y>-80</y>
     </hint>
     <hint type="destinationlabel">
      <x>612</x>
@@ -1252,7 +1366,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>299</x>
-     <y>91</y>
+     <y>-80</y>
     </hint>
     <hint type="destinationlabel">
      <x>890</x>
@@ -1268,7 +1382,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>264</x>
-     <y>91</y>
+     <y>-80</y>
     </hint>
     <hint type="destinationlabel">
      <x>1077</x>
@@ -1284,7 +1398,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>390</x>
-     <y>-469</y>
+     <y>-640</y>
     </hint>
     <hint type="destinationlabel">
      <x>929</x>
@@ -1300,7 +1414,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>181</x>
-     <y>171</y>
+     <y>0</y>
     </hint>
     <hint type="destinationlabel">
      <x>-227</x>
@@ -1316,7 +1430,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>390</x>
-     <y>171</y>
+     <y>0</y>
     </hint>
     <hint type="destinationlabel">
      <x>1335</x>
@@ -1332,7 +1446,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>350</x>
-     <y>361</y>
+     <y>190</y>
     </hint>
     <hint type="destinationlabel">
      <x>795</x>
@@ -1348,7 +1462,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>404</x>
-     <y>361</y>
+     <y>190</y>
     </hint>
     <hint type="destinationlabel">
      <x>595</x>
@@ -1364,7 +1478,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>342</x>
-     <y>421</y>
+     <y>250</y>
     </hint>
     <hint type="destinationlabel">
      <x>696</x>
@@ -1380,7 +1494,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>56</x>
-     <y>239</y>
+     <y>20</y>
     </hint>
     <hint type="destinationlabel">
      <x>-47</x>
@@ -1396,11 +1510,59 @@
    <hints>
     <hint type="sourcelabel">
      <x>318</x>
-     <y>303</y>
+     <y>20</y>
     </hint>
     <hint type="destinationlabel">
      <x>720</x>
      <y>286</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_Opacity</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>Config</receiver>
+   <slot>changeSpinBoxOpacity()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>261</x>
+     <y>456</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>394</x>
+     <y>743</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_Opacity</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>Config</receiver>
+   <slot>changeHorizontalSliderOpacity()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>158</x>
+     <y>449</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>249</x>
+     <y>641</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_Opacity</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>Config</receiver>
+   <slot>changeSpinBoxOpacity()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>244</x>
+     <y>454</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>372</x>
+     <y>564</y>
     </hint>
    </hints>
   </connection>
@@ -1416,5 +1578,7 @@
   <slot>upTranslator()</slot>
   <slot>downTranslator()</slot>
   <slot>showGetSecretWidget()</slot>
+  <slot>changeSpinBoxOpacity()</slot>
+  <slot>changeHorizontalSliderOpacity()</slot>
  </slots>
 </ui>

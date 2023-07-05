@@ -125,17 +125,26 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
     def closeEvent(self, event):
         self.parent.Status = True
         self.parent.setEnabled(True)
+        if ((data := readConfig()) != self.getConfig()):
+            reply = QtWidgets.QMessageBox.warning (self, '设置尚未保存',
+                        "是否保存再关闭窗口?", QtWidgets.QMessageBox.StandardButton.Save |
+                        QtWidgets.QMessageBox.StandardButton.Discard, QtWidgets.QMessageBox.StandardButton.Discard)
+            if reply == QtWidgets.QMessageBox.StandardButton.Save:
+                self.saveConfig()
+            else:
+                self.parent.changeOpacity(data['OPACITY'])
 
     def setupUi(self, Config):
         super().setupUi(Config)
-        Config.setWindowOpacity(0.9)
+        Config.setWindowOpacity(1)
         Config.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
     
     def replaceWithCurrentConfig(self):
         self.ListWidget_SelectableSource.clear()
         self.ListWidget_SelectedSource.clear()
-        self.Label_ShortcutKeyText.setText(self.parent.Hotkey_OCR)
+        self.Label_ShortcutKeyText.setText(self.Hotkey_OCR)
         configDict = readConfig()
+        self.spinBox_Opacity.setValue(configDict['OPACITY'])
         for each in self.LineEditMapping:
             self.LineEditMapping[each].setText(configDict[each])
         for each in self.FreeRiderMapping:
@@ -200,19 +209,32 @@ class configWidget_class(QtWidgets.QWidget, Ui_Config):
     def showGetSecretWidget(self):
         self.getSecretWidget.show()
     
-    def saveConfig(self):
+    def getConfig(self) -> dict|None:
         if(not self.getCurrentSelectedTranslator()):
             QtWidgets.QMessageBox.critical(self,"配置有误","至少选择一个翻译源！")
-            return
+            return None
         data = {each: self.LineEditMapping[each].text() for each in self.LineEditMapping}
         data.update({each: self.FreeRiderMapping[each].isChecked() for each in self.FreeRiderMapping}) # type: ignore
         data['SELECTED_TRANSLATORS'] = self.getCurrentSelectedTranslator() # type: ignore
         data['Hotkey_OCR'] = self.Hotkey_OCR
+        data['OPACITY'] = self.horizontalSlider_Opacity.value()
+        return data
+
+    def saveConfig(self):
+        if (data := self.getConfig()) is None:
+            return
         writeConfig(data)
         self.parent.changeHotkey(self.Hotkey_OCR)
         self.parent.updateTranslatorList(self.getCurrentSelectedTranslator())
         reloadOCRConfig(); reloadTranslatorConfig()
         self.close()
+    
+    def changeHorizontalSliderOpacity(self, value):
+        self.horizontalSlider_Opacity.setValue(value)
+        self.parent.changeOpacity(value)
+    
+    def changeSpinBoxOpacity(self, _value):
+            self.spinBox_Opacity.setValue(self.horizontalSlider_Opacity.value())
 
 
 class dictWindow_class(QtWidgets.QMainWindow, Ui_dict_Window):
@@ -300,11 +322,11 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
     def setupUi(self, Config):
         super(TransAssistant_class, self).setupUi(Config)
         Config.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
-        Config.setWindowOpacity(0.8)
         Config.OCRButton.setEnabled(self.AreaInit)
         Config.OCRButtonPlus.setEnabled(self.AreaInit)
         DesktopSize = self.screen().availableSize()
         Config.move((DesktopSize.width() * 0.54).__int__(), (DesktopSize.height() * 0.41).__int__())
+        self.changeOpacity(self.ConfigDict['OPACITY'])
         # Config.setAttribute(QtCore.Qt.WA_TranslucentBackground,True)
 
     def __init__(self):
@@ -490,6 +512,9 @@ class TransAssistant_class(QtWidgets.QMainWindow, Ui_OCR_Window):
         self.selectionTextChange.emit(self.selectionText)
         self.dictWindow.inputLineEdit.editingFinished.emit()
         self.dictWindow.show()
+    
+    def changeOpacity(self, value):
+        self.setWindowOpacity(value/100)
 
 def runGUI():
     GUI_APP = QtWidgets.QApplication(sys.argv)
